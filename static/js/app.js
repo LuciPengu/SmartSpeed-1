@@ -235,27 +235,192 @@ function showStep4() {
         </div>
     `).join('');
 
-    document.getElementById('orientation-list').innerHTML = assessmentData.orientation_questions.map(q => `
-        <div class="question-item">
-            <span>${q.question}</span>
-            <div class="question-toggle">
-                <button class="toggle-btn" data-id="${q.id}" data-correct="true" onclick="toggleQuestion(this, '${q.id}', 'orientation')">Correct</button>
-                <button class="toggle-btn incorrect" data-id="${q.id}" data-correct="false" onclick="toggleQuestion(this, '${q.id}', 'orientation')">Incorrect</button>
+    document.getElementById('orientation-list').innerHTML = assessmentData.orientation_questions.map(q => {
+        if (q.input_type === 'select') {
+            return `
+                <div class="question-item self-admin">
+                    <label>${q.question}</label>
+                    <select id="orientation-${q.id}" data-id="${q.id}">
+                        <option value="">-- Select --</option>
+                        ${q.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                    </select>
+                </div>
+            `;
+        } else {
+            return `
+                <div class="question-item self-admin">
+                    <label>${q.question}</label>
+                    <input type="number" id="orientation-${q.id}" data-id="${q.id}" 
+                           min="${q.min || ''}" max="${q.max || ''}" placeholder="Enter number">
+                </div>
+            `;
+        }
+    }).join('');
+
+    document.getElementById('memory-list').innerHTML = `
+        <div class="memory-test">
+            <div class="memory-words-display" id="memory-words-display">
+                <p><strong>Memorize these 5 words:</strong></p>
+                <div class="word-list">
+                    ${assessmentData.memory_words.map(word => `<span class="memory-word">${word}</span>`).join('')}
+                </div>
+                <p class="memory-timer" id="memory-timer">Time remaining: <span id="timer-count">10</span> seconds</p>
+                <button class="btn secondary" id="hide-words-btn" onclick="hideMemoryWords()">I've memorized them</button>
+            </div>
+            <div class="memory-recall hidden" id="memory-recall">
+                <p><strong>Type the words you remember (one per line):</strong></p>
+                <textarea id="recalled-words" rows="5" placeholder="Enter each word on a new line"></textarea>
             </div>
         </div>
-    `).join('');
+    `;
 
-    document.getElementById('memory-list').innerHTML = assessmentData.memory_questions.map(q => `
-        <div class="question-item">
-            <span>${q.question}</span>
-            <div class="question-toggle">
-                <button class="toggle-btn" data-id="${q.id}" data-correct="true" onclick="toggleQuestion(this, '${q.id}', 'memory')">Correct</button>
-                <button class="toggle-btn incorrect" data-id="${q.id}" data-correct="false" onclick="toggleQuestion(this, '${q.id}', 'memory')">Incorrect</button>
-            </div>
-        </div>
-    `).join('');
-
+    startMemoryTimer();
+    initEyeTrackingTest();
     document.getElementById('submit-assessment-btn').addEventListener('click', submitAssessment);
+}
+
+let memoryTimerInterval = null;
+
+function startMemoryTimer() {
+    let seconds = 10;
+    memoryTimerInterval = setInterval(() => {
+        seconds--;
+        const timerEl = document.getElementById('timer-count');
+        if (timerEl) timerEl.textContent = seconds;
+        if (seconds <= 0) {
+            hideMemoryWords();
+        }
+    }, 1000);
+}
+
+function hideMemoryWords() {
+    if (memoryTimerInterval) {
+        clearInterval(memoryTimerInterval);
+        memoryTimerInterval = null;
+    }
+    document.getElementById('memory-words-display').classList.add('hidden');
+    document.getElementById('memory-recall').classList.remove('hidden');
+}
+
+let eyeTrackingResult = { completed: false, difficulty: 0 };
+
+function initEyeTrackingTest() {
+    const container = document.getElementById('eye-tracking-container');
+    container.innerHTML = `
+        <div class="eye-tracking-test">
+            <div class="eye-test-instructions" id="eye-test-instructions">
+                <p>This test evaluates your ability to track a moving target smoothly.</p>
+                <p><strong>Instructions:</strong></p>
+                <ol>
+                    <li>Keep your head still</li>
+                    <li>Follow the red dot with your eyes only</li>
+                    <li>The dot will move in an H-pattern</li>
+                </ol>
+                <button class="btn primary" onclick="startEyeTrackingTest()">Start Eye Tracking Test</button>
+            </div>
+            <div class="eye-test-canvas-container hidden" id="eye-test-canvas-container">
+                <canvas id="eye-tracking-canvas" width="400" height="300"></canvas>
+                <p id="eye-test-progress">Following target...</p>
+            </div>
+            <div class="eye-test-result hidden" id="eye-test-result">
+                <p><strong>How difficult was it to follow the dot smoothly?</strong></p>
+                <div class="difficulty-scale">
+                    <button class="difficulty-btn" data-difficulty="0" onclick="setEyeTrackingDifficulty(0)">Easy (No difficulty)</button>
+                    <button class="difficulty-btn" data-difficulty="1" onclick="setEyeTrackingDifficulty(1)">Mild difficulty</button>
+                    <button class="difficulty-btn" data-difficulty="2" onclick="setEyeTrackingDifficulty(2)">Moderate difficulty</button>
+                    <button class="difficulty-btn" data-difficulty="3" onclick="setEyeTrackingDifficulty(3)">Severe difficulty / Could not follow</button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+let eyeTrackingAnimationId = null;
+
+function startEyeTrackingTest() {
+    document.getElementById('eye-test-instructions').classList.add('hidden');
+    document.getElementById('eye-test-canvas-container').classList.remove('hidden');
+    
+    const canvas = document.getElementById('eye-tracking-canvas');
+    const ctx = canvas.getContext('2d');
+    
+    const points = [
+        { x: 50, y: 150 },
+        { x: 50, y: 50 },
+        { x: 200, y: 50 },
+        { x: 200, y: 150 },
+        { x: 200, y: 250 },
+        { x: 350, y: 250 },
+        { x: 350, y: 150 },
+        { x: 350, y: 50 }
+    ];
+    
+    let currentPoint = 0;
+    let progress = 0;
+    const speed = 0.02;
+    
+    function animate() {
+        ctx.fillStyle = '#1a1a2e';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        for (let i = 0; i < points.length - 1; i++) {
+            ctx.moveTo(points[i].x, points[i].y);
+            ctx.lineTo(points[i + 1].x, points[i + 1].y);
+        }
+        ctx.stroke();
+        
+        const start = points[currentPoint];
+        const end = points[(currentPoint + 1) % points.length];
+        
+        const x = start.x + (end.x - start.x) * progress;
+        const y = start.y + (end.y - start.y) * progress;
+        
+        ctx.beginPath();
+        ctx.arc(x, y, 15, 0, Math.PI * 2);
+        ctx.fillStyle = '#e94560';
+        ctx.fill();
+        
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, Math.PI * 2);
+        ctx.fillStyle = '#fff';
+        ctx.fill();
+        
+        progress += speed;
+        
+        if (progress >= 1) {
+            progress = 0;
+            currentPoint++;
+            
+            if (currentPoint >= points.length - 1) {
+                cancelAnimationFrame(eyeTrackingAnimationId);
+                endEyeTrackingTest();
+                return;
+            }
+        }
+        
+        eyeTrackingAnimationId = requestAnimationFrame(animate);
+    }
+    
+    animate();
+}
+
+function endEyeTrackingTest() {
+    document.getElementById('eye-test-canvas-container').classList.add('hidden');
+    document.getElementById('eye-test-result').classList.remove('hidden');
+}
+
+function setEyeTrackingDifficulty(difficulty) {
+    eyeTrackingResult = { completed: true, difficulty: difficulty };
+    
+    document.querySelectorAll('.difficulty-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (parseInt(btn.dataset.difficulty) === difficulty) {
+            btn.classList.add('active');
+        }
+    });
 }
 
 function updateSymptomValue(id) {
@@ -271,6 +436,12 @@ function toggleQuestion(btn, id, section) {
 }
 
 async function submitAssessment() {
+    if (!eyeTrackingResult.completed) {
+        if (!confirm('You have not completed the eye tracking test or selected a difficulty rating. Do you want to submit without it? Your assessment may be less accurate.')) {
+            return;
+        }
+    }
+    
     const redFlags = Array.from(document.querySelectorAll('#red-flags-list input[type="checkbox"]')).map(cb => ({
         id: cb.dataset.id,
         present: cb.checked
@@ -282,26 +453,29 @@ async function submitAssessment() {
     }));
 
     const orientation = assessmentData.orientation_questions.map(q => {
-        const correctBtn = document.querySelector(`#orientation-list .toggle-btn[data-id="${q.id}"][data-correct="true"]`);
+        const input = document.getElementById(`orientation-${q.id}`);
         return {
             id: q.id,
-            correct: correctBtn ? correctBtn.classList.contains('active') : false
+            answer: input ? input.value : ''
         };
     });
 
-    const memory = assessmentData.memory_questions.map(q => {
-        const correctBtn = document.querySelector(`#memory-list .toggle-btn[data-id="${q.id}"][data-correct="true"]`);
-        return {
-            id: q.id,
-            correct: correctBtn ? correctBtn.classList.contains('active') : false
-        };
-    });
+    const recalledWordsText = document.getElementById('recalled-words').value;
+    const recalledWords = recalledWordsText.split('\n').map(w => w.trim()).filter(w => w.length > 0);
+    const originalWords = assessmentData.memory_words;
 
     try {
         const response = await fetch('/api/concussion-assessment/evaluate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ red_flags: redFlags, symptoms, orientation, memory })
+            body: JSON.stringify({ 
+                red_flags: redFlags, 
+                symptoms, 
+                orientation, 
+                recalled_words: recalledWords,
+                original_words: originalWords,
+                eye_tracking: eyeTrackingResult
+            })
         });
 
         const result = await response.json();
@@ -405,6 +579,10 @@ function showStep5(result) {
                 <div class="score-item">
                     <div class="score-value">${result.orientation_score}/${result.orientation_max}</div>
                     <div class="score-label">Orientation Score</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-value">${result.eye_tracking_result || 'N/A'}</div>
+                    <div class="score-label">Eye Tracking</div>
                 </div>
                 <div class="score-item">
                     <div class="score-value">${result.memory_score}/${result.memory_max}</div>

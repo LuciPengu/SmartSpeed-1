@@ -37,39 +37,55 @@ RED_FLAGS = [
     {"id": "restlessness", "name": "Increasing restlessness, agitation or combativeness", "critical": True}
 ]
 
-MEMORY_QUESTIONS = [
-    {"id": "venue", "question": "What venue are we at today?", "category": "orientation"},
-    {"id": "half", "question": "Which half/round is it now?", "category": "orientation"},
-    {"id": "scored_last", "question": "Who scored/hit last in this match?", "category": "memory"},
-    {"id": "last_opponent", "question": "What team/opponent did you face last week?", "category": "memory"},
-    {"id": "win_last", "question": "Did your team win the last match?", "category": "memory"}
+MEMORY_WORD_LISTS = [
+    ["elbow", "apple", "carpet", "saddle", "bubble"],
+    ["candle", "paper", "sugar", "sandwich", "wagon"],
+    ["baby", "monkey", "perfume", "sunset", "iron"],
+    ["finger", "penny", "blanket", "lemon", "insect"]
 ]
 
 ORIENTATION_QUESTIONS = [
-    {"id": "month", "question": "What month is it?", "points": 1},
-    {"id": "date", "question": "What is the date today?", "points": 1},
-    {"id": "day", "question": "What is the day of the week?", "points": 1},
-    {"id": "year", "question": "What year is it?", "points": 1},
-    {"id": "time", "question": "What time is it right now? (within 1 hour)", "points": 1}
+    {"id": "month", "question": "What month is it?", "input_type": "select", 
+     "options": ["January", "February", "March", "April", "May", "June", 
+                 "July", "August", "September", "October", "November", "December"]},
+    {"id": "date", "question": "What is today's date (day of month)?", "input_type": "number", "min": 1, "max": 31},
+    {"id": "day", "question": "What day of the week is it?", "input_type": "select",
+     "options": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]},
+    {"id": "year", "question": "What year is it?", "input_type": "number", "min": 2020, "max": 2030}
 ]
 
 
 def get_assessment_questions() -> Dict[str, Any]:
+    import random
+    from datetime import datetime
+    
+    word_list = random.choice(MEMORY_WORD_LISTS)
+    
+    now = datetime.now()
+    correct_answers = {
+        "month": now.strftime("%B"),
+        "date": now.day,
+        "day": now.strftime("%A"),
+        "year": now.year
+    }
+    
     return {
         "red_flags": RED_FLAGS,
         "symptoms": SCAT5_SYMPTOMS,
-        "memory_questions": MEMORY_QUESTIONS,
+        "memory_words": word_list,
         "orientation_questions": ORIENTATION_QUESTIONS,
+        "correct_answers": correct_answers,
         "instructions": {
-            "symptoms": "Rate each symptom from 0 (none) to 6 (severe)",
-            "red_flags": "Check if any of these warning signs are present",
-            "memory": "Answer each question correctly (yes/no)",
-            "orientation": "Answer each question correctly (yes/no)"
+            "symptoms": "Rate each symptom from 0 (none) to 6 (severe) based on how you feel RIGHT NOW",
+            "red_flags": "Check if you are experiencing any of these warning signs",
+            "memory": "You will be shown 5 words. Try to memorize them. You will be asked to recall them later.",
+            "orientation": "Answer each question to the best of your ability"
         }
     }
 
 
 def evaluate_assessment(responses: Dict[str, Any]) -> Dict[str, Any]:
+    from datetime import datetime
     
     red_flags_present = []
     for flag in responses.get('red_flags', []):
@@ -91,31 +107,58 @@ def evaluate_assessment(responses: Dict[str, Any]) -> Dict[str, Any]:
                 'severity': severity
             })
     
+    now = datetime.now()
+    correct_answers = {
+        "month": now.strftime("%B"),
+        "date": now.day,
+        "day": now.strftime("%A"),
+        "year": now.year
+    }
+    
     orientation_score = 0
-    for question in responses.get('orientation', []):
-        if question.get('correct', False):
-            orientation_score += 1
+    for answer in responses.get('orientation', []):
+        q_id = answer.get('id')
+        user_answer = answer.get('answer')
+        if q_id in correct_answers:
+            correct = correct_answers[q_id]
+            if q_id in ['date', 'year']:
+                try:
+                    if int(user_answer) == int(correct):
+                        orientation_score += 1
+                except:
+                    pass
+            else:
+                if str(user_answer).lower() == str(correct).lower():
+                    orientation_score += 1
     
     memory_score = 0
-    for question in responses.get('memory', []):
-        if question.get('correct', False):
+    original_words = set(w.lower() for w in responses.get('original_words', []))
+    recalled_words = responses.get('recalled_words', [])
+    for word in recalled_words:
+        if word.lower().strip() in original_words:
             memory_score += 1
+    
+    eye_tracking = responses.get('eye_tracking', {})
+    eye_tracking_completed = eye_tracking.get('completed', False)
+    eye_tracking_difficulty = eye_tracking.get('difficulty', 0)
     
     if red_flags_present:
         urgency = 'emergency'
         recommendation = 'EMERGENCY: Red flag symptoms detected. Seek immediate medical attention. Do not continue any physical activity.'
-    elif symptom_severity > 50 or symptom_total > 10:
+    elif symptom_severity > 50 or symptom_total > 10 or eye_tracking_difficulty >= 3:
         urgency = 'high'
         recommendation = 'HIGH CONCERN: Significant symptoms present. Medical evaluation strongly recommended before any return to activity.'
-    elif symptom_severity > 25 or symptom_total > 5 or orientation_score < 3:
+    elif symptom_severity > 25 or symptom_total > 5 or orientation_score < 3 or memory_score < 3 or eye_tracking_difficulty >= 2:
         urgency = 'moderate'
         recommendation = 'MODERATE CONCERN: Notable symptoms present. Rest and monitor. Consider medical evaluation if symptoms persist or worsen.'
-    elif symptom_total > 0:
+    elif symptom_total > 0 or eye_tracking_difficulty >= 1:
         urgency = 'low'
         recommendation = 'LOW CONCERN: Mild symptoms present. Rest recommended. Monitor symptoms and seek medical attention if they worsen.'
     else:
         urgency = 'none'
         recommendation = 'No concerning symptoms reported. However, symptoms can develop later. Continue to monitor and rest as appropriate.'
+    
+    eye_tracking_labels = ['No difficulty', 'Mild difficulty', 'Moderate difficulty', 'Severe difficulty']
     
     return {
         'urgency_level': urgency,
@@ -126,9 +169,12 @@ def evaluate_assessment(responses: Dict[str, Any]) -> Dict[str, Any]:
         'max_symptom_severity': 132,
         'symptom_details': sorted(symptom_details, key=lambda x: x['severity'], reverse=True),
         'orientation_score': orientation_score,
-        'orientation_max': 5,
+        'orientation_max': 4,
         'memory_score': memory_score,
         'memory_max': 5,
+        'eye_tracking_completed': eye_tracking_completed,
+        'eye_tracking_difficulty': eye_tracking_difficulty,
+        'eye_tracking_result': eye_tracking_labels[min(eye_tracking_difficulty, 3)] if eye_tracking_completed else 'Not completed',
         'recommendation': recommendation,
         'disclaimer': 'This is a screening tool only, not a medical diagnosis. A concussion should only be diagnosed by a qualified healthcare professional. Always seek professional medical evaluation after any suspected head injury.'
     }

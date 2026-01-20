@@ -31,11 +31,12 @@ A web application that analyzes sparring/boxing footage to detect punch impacts,
    - Power index (V × A)
    - Puncher's weight
    - Cumulative impact effects
-5. **Concussion Screening**: SCAT5-based assessment including:
+5. **Concussion Screening**: Self-administered SCAT5-based assessment including:
    - Red flag symptoms
-   - 22 symptom evaluation
-   - Orientation questions
-   - Memory questions
+   - 22 symptom evaluation (0-6 severity scale)
+   - Self-validated orientation questions (dropdowns/numeric inputs)
+   - Memory test (5-word recall after 10-second display)
+   - Interactive eye tracking test (H-pattern smooth pursuit with self-reported difficulty)
 
 ## API Endpoints
 - `GET /` - Main web interface
