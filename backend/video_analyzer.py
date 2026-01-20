@@ -1,0 +1,332 @@
+import cv2
+import mediapipe as mp
+import numpy as np
+from ultralytics import YOLO
+from mediapipe.tasks import python
+from mediapipe.tasks.python import vision
+import os
+from collections import deque
+from typing import List, Dict, Any
+import uuid
+
+MODEL_PATH = 'pose_landmarker_heavy.task'
+
+class VelocityTracker:
+    def __init__(self, window_size=5, fps=30.0):
+        self.window_size = window_size
+        self.fps = fps
+        self.frame_time = 1.0 / fps
+        self.position_history = {
+            'left': deque(maxlen=window_size),
+            'right': deque(maxlen=window_size)
+        }
+        self.time_history = deque(maxlen=window_size)
+        self.velocity_history = {
+            'left': deque(maxlen=window_size),
+            'right': deque(maxlen=window_size)
+        }
+        self.acceleration_history = {
+            'left': deque(maxlen=window_size),
+            'right': deque(maxlen=window_size)
+        }
+
+    def update(self, left_pos, right_pos, timestamp):
+        left_pos_2d = np.array([left_pos[0], left_pos[1]])
+        right_pos_2d = np.array([right_pos[0], right_pos[1]])
+
+        if len(self.position_history['left']) >= 1:
+            prev_time = list(self.time_history)[-1]
+            dt = (timestamp - prev_time) / 1000.0
+
+            if dt < 0.001:
+                dt = self.frame_time
+
+            if dt > 0.001:
+                left_vel = (left_pos_2d - list(self.position_history['left'])[-1]) / dt
+                right_vel = (right_pos_2d - list(self.position_history['right'])[-1]) / dt
+
+                if len(self.velocity_history['left']) >= 1:
+                    prev_left_vel = list(self.velocity_history['left'])[-1]
+                    prev_right_vel = list(self.velocity_history['right'])[-1]
+
+                    left_accel = (left_vel - prev_left_vel) / dt
+                    right_accel = (right_vel - prev_right_vel) / dt
+
+                    self.acceleration_history['left'].append(left_accel)
+                    self.acceleration_history['right'].append(right_accel)
+
+                self.velocity_history['left'].append(left_vel)
+                self.velocity_history['right'].append(right_vel)
+
+        self.position_history['left'].append(left_pos_2d)
+        self.position_history['right'].append(right_pos_2d)
+        self.time_history.append(timestamp)
+
+    def get_velocity(self, hand='left'):
+        if len(self.velocity_history[hand]) < 1:
+            return 0.0, np.array([0.0, 0.0])
+
+        velocities = np.array(list(self.velocity_history[hand]))
+        avg_velocity = np.mean(velocities, axis=0)
+        speed = np.linalg.norm(avg_velocity)
+
+        return speed, avg_velocity
+
+    def get_peak_velocity(self, hand='left'):
+        if len(self.velocity_history[hand]) < 1:
+            return 0.0
+
+        velocities = np.array(list(self.velocity_history[hand]))
+        speeds = np.linalg.norm(velocities, axis=1)
+        return np.max(speeds)
+
+    def get_peak_acceleration(self, hand='left'):
+        if len(self.acceleration_history[hand]) < 1:
+            return 0.0
+
+        accelerations = np.array(list(self.acceleration_history[hand]))
+        accel_magnitudes = np.linalg.norm(accelerations, axis=1)
+        return np.max(accel_magnitudes)
+
+    def calculate_power_index(self, hand='left'):
+        peak_vel = self.get_peak_velocity(hand)
+        peak_accel = self.get_peak_acceleration(hand)
+        return peak_vel * peak_accel
+
+
+def get_2d_distance(p1, p2):
+    return np.sqrt((p1.x - p2.x)**2 + (p1.y - p2.y)**2)
+
+
+def get_torso_height(landmarks):
+    left_shoulder = landmarks[11]
+    right_shoulder = landmarks[12]
+    shoulder_mid_y = (left_shoulder.y + right_shoulder.y) / 2
+
+    left_hip = landmarks[23]
+    right_hip = landmarks[24]
+    hip_mid_y = (left_hip.y + right_hip.y) / 2
+
+    torso_height = abs(hip_mid_y - shoulder_mid_y)
+    return torso_height
+
+
+def get_head_size(landmarks):
+    nose = landmarks[0]
+    left_ear = landmarks[7]
+    right_ear = landmarks[8]
+
+    dist_left = get_2d_distance(nose, left_ear)
+    dist_right = get_2d_distance(nose, right_ear)
+
+    head_size = (dist_left + dist_right) / 2
+    return head_size
+
+
+def analyze_video(video_path: str, output_folder: str = "static/frames", 
+                  impact_threshold: float = 0.4, min_punch_speed: float = 0.015,
+                  velocity_window: int = 5) -> Dict[str, Any]:
+    
+    session_id = str(uuid.uuid4())[:8]
+    session_folder = os.path.join(output_folder, session_id)
+    os.makedirs(session_folder, exist_ok=True)
+
+    yolo_model = YOLO('yolov8n.pt')
+
+    base_options = python.BaseOptions(model_asset_path=MODEL_PATH)
+    options = vision.PoseLandmarkerOptions(
+        base_options=base_options,
+        running_mode=vision.RunningMode.VIDEO,
+        num_poses=2
+    )
+    landmarker = vision.PoseLandmarker.create_from_options(options)
+
+    cap = cv2.VideoCapture(video_path)
+    fps = cap.get(cv2.CAP_PROP_FPS)
+
+    if fps <= 0 or fps > 1000:
+        fps = 30.0
+
+    frame_count = 0
+    impact_count = 0
+    velocity_trackers = {0: VelocityTracker(velocity_window, fps), 
+                         1: VelocityTracker(velocity_window, fps)}
+    impact_log = []
+
+    while cap.isOpened():
+        success, frame = cap.read()
+        if not success: 
+            break
+
+        timestamp_ms = int(frame_count * (1000 / fps))
+        frame_count += 1
+        impact_detected = False
+        impact_details = {}
+
+        yolo_results = yolo_model(frame, classes=0, verbose=False)
+        for r in yolo_results:
+            for box in r.boxes:
+                x1, y1, x2, y2 = map(int, box.xyxy[0])
+                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 255), 2)
+
+        mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+
+        try:
+            detection_result = landmarker.detect_for_video(mp_image, timestamp_ms)
+        except Exception as e:
+            continue
+
+        if detection_result.pose_landmarks:
+            for idx, landmarks in enumerate(detection_result.pose_landmarks):
+                for landmark in landmarks:
+                    cx, cy = int(landmark.x * frame.shape[1]), int(landmark.y * frame.shape[0])
+                    cv2.circle(frame, (cx, cy), 3, (0, 255, 0), -1)
+
+            for fighter_idx in [0, 1]:
+                if len(detection_result.pose_landmarks) > fighter_idx:
+                    left_wrist = detection_result.pose_landmarks[fighter_idx][15]
+                    right_wrist = detection_result.pose_landmarks[fighter_idx][16]
+
+                    left_pos = np.array([left_wrist.x, left_wrist.y, left_wrist.z])
+                    right_pos = np.array([right_wrist.x, right_wrist.y, right_wrist.z])
+
+                    velocity_trackers[fighter_idx].update(left_pos, right_pos, timestamp_ms)
+
+            if len(detection_result.pose_landmarks) >= 2:
+                h, w = frame.shape[:2]
+
+                for fighter_idx in [0, 1]:
+                    opponent_idx = 1 - fighter_idx
+
+                    try:
+                        opponent_torso_height = get_torso_height(detection_result.pose_landmarks[opponent_idx])
+                    except:
+                        continue
+
+                    if opponent_torso_height < 0.01:
+                        continue
+
+                    normalization_scale = opponent_torso_height
+
+                    left_wrist = detection_result.pose_landmarks[fighter_idx][15]
+                    right_wrist = detection_result.pose_landmarks[fighter_idx][16]
+                    opponent_nose = detection_result.pose_landmarks[opponent_idx][0]
+
+                    wrist_l_px = (int(left_wrist.x * w), int(left_wrist.y * h))
+                    wrist_r_px = (int(right_wrist.x * w), int(right_wrist.y * h))
+                    nose_px = (int(opponent_nose.x * w), int(opponent_nose.y * h))
+
+                    dist_left_raw = get_2d_distance(left_wrist, opponent_nose)
+                    dist_right_raw = get_2d_distance(right_wrist, opponent_nose)
+
+                    dist_left_normalized = dist_left_raw / normalization_scale
+                    dist_right_normalized = dist_right_raw / normalization_scale
+
+                    left_speed_peak = velocity_trackers[fighter_idx].get_peak_velocity('left')
+                    right_speed_peak = velocity_trackers[fighter_idx].get_peak_velocity('right')
+
+                    left_accel_peak = velocity_trackers[fighter_idx].get_peak_acceleration('left')
+                    right_accel_peak = velocity_trackers[fighter_idx].get_peak_acceleration('right')
+
+                    left_power_index = velocity_trackers[fighter_idx].calculate_power_index('left')
+                    right_power_index = velocity_trackers[fighter_idx].calculate_power_index('right')
+
+                    left_peak_normalized = left_speed_peak / normalization_scale
+                    right_peak_normalized = right_speed_peak / normalization_scale
+
+                    left_accel_normalized = left_accel_peak / normalization_scale
+                    right_accel_normalized = right_accel_peak / normalization_scale
+
+                    left_power_normalized = left_power_index / (normalization_scale ** 2)
+                    right_power_normalized = right_power_index / (normalization_scale ** 2)
+
+                    def get_color(distance):
+                        if distance < impact_threshold:
+                            return (0, 0, 255)
+                        elif distance < impact_threshold * 1.5:
+                            return (0, 165, 255)
+                        elif distance < impact_threshold * 2:
+                            return (0, 255, 255)
+                        else:
+                            return (0, 255, 0)
+
+                    color_left = get_color(dist_left_normalized)
+                    color_right = get_color(dist_right_normalized)
+
+                    cv2.line(frame, wrist_l_px, nose_px, color_left, 2)
+                    cv2.line(frame, wrist_r_px, nose_px, color_right, 2)
+
+                    head_landmarks = [0, 7, 8]
+
+                    for head_idx in head_landmarks:
+                        opponent_head = detection_result.pose_landmarks[opponent_idx][head_idx]
+
+                        left_dist_raw = get_2d_distance(left_wrist, opponent_head)
+                        left_dist_norm = left_dist_raw / normalization_scale
+
+                        if left_dist_norm < impact_threshold and left_speed_peak > min_punch_speed:
+                            impact_detected = True
+                            impact_details = {
+                                'fighter': fighter_idx + 1,
+                                'hand': 'LEFT',
+                                'distance': float(left_dist_norm),
+                                'velocity': float(left_peak_normalized),
+                                'velocity_raw': float(left_speed_peak),
+                                'acceleration': float(left_accel_normalized),
+                                'acceleration_raw': float(left_accel_peak),
+                                'power_index': float(left_power_normalized),
+                                'frame': frame_count,
+                                'time': timestamp_ms / 1000.0
+                            }
+                            break
+
+                        right_dist_raw = get_2d_distance(right_wrist, opponent_head)
+                        right_dist_norm = right_dist_raw / normalization_scale
+
+                        if right_dist_norm < impact_threshold and right_speed_peak > min_punch_speed:
+                            impact_detected = True
+                            impact_details = {
+                                'fighter': fighter_idx + 1,
+                                'hand': 'RIGHT',
+                                'distance': float(right_dist_norm),
+                                'velocity': float(right_peak_normalized),
+                                'velocity_raw': float(right_speed_peak),
+                                'acceleration': float(right_accel_normalized),
+                                'acceleration_raw': float(right_accel_peak),
+                                'power_index': float(right_power_normalized),
+                                'frame': frame_count,
+                                'time': timestamp_ms / 1000.0
+                            }
+                            break
+
+                    if impact_detected:
+                        break
+
+        if impact_detected:
+            impact_count += 1
+            
+            cv2.putText(frame, "IMPACT!", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 255), 4)
+            detail_text = f"{impact_details['hand']} | V:{impact_details['velocity']:.1f}T/s A:{impact_details['acceleration']:.1f}T/s²"
+            cv2.putText(frame, detail_text, (50, 140), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
+
+            filename = f'impact_{impact_count:03d}_frame_{frame_count:05d}.jpg'
+            output_path = os.path.join(session_folder, filename)
+            cv2.imwrite(output_path, frame)
+            
+            impact_details['image_path'] = f"/static/frames/{session_id}/{filename}"
+            impact_details['id'] = impact_count
+            impact_log.append(impact_details)
+
+    cap.release()
+    landmarker.close()
+
+    result = {
+        'session_id': session_id,
+        'fps': fps,
+        'total_frames': frame_count,
+        'duration': frame_count / fps,
+        'impacts': impact_log,
+        'impact_count': impact_count
+    }
+
+    return result
