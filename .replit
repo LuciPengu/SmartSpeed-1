@@ -14,6 +14,7 @@ requiredFiles = [".replit", "replit.nix"]
 [deployment]
 run = ["python", "-m", "uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "5000"]
 deploymentTarget = "autoscale"
+build = ["pip", "install", "-r", "requirements.txt"]
 
 [agent]
 expertMode = true
