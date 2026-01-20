@@ -37,10 +37,33 @@ class VelocityTracker:
             'left': deque(maxlen=window_size),
             'right': deque(maxlen=window_size)
         }
+        self.last_reliable_pos = {'left': None, 'right': None}
+        self.smoothed_pos = {'left': None, 'right': None}
+        self.smoothing_alpha = 0.7
 
-    def update(self, left_pos, right_pos, timestamp):
+    def update(self, left_pos, right_pos, timestamp, left_visibility=1.0, right_visibility=1.0):
         left_pos_2d = np.array([left_pos[0], left_pos[1]])
         right_pos_2d = np.array([right_pos[0], right_pos[1]])
+        
+        if left_visibility > 0.5:
+            self.last_reliable_pos['left'] = left_pos_2d.copy()
+        elif self.last_reliable_pos['left'] is not None:
+            left_pos_2d = self.last_reliable_pos['left']
+            
+        if right_visibility > 0.5:
+            self.last_reliable_pos['right'] = right_pos_2d.copy()
+        elif self.last_reliable_pos['right'] is not None:
+            right_pos_2d = self.last_reliable_pos['right']
+        
+        if self.smoothed_pos['left'] is None:
+            self.smoothed_pos['left'] = left_pos_2d.copy()
+        else:
+            self.smoothed_pos['left'] = self.smoothing_alpha * left_pos_2d + (1 - self.smoothing_alpha) * self.smoothed_pos['left']
+            
+        if self.smoothed_pos['right'] is None:
+            self.smoothed_pos['right'] = right_pos_2d.copy()
+        else:
+            self.smoothed_pos['right'] = self.smoothing_alpha * right_pos_2d + (1 - self.smoothing_alpha) * self.smoothed_pos['right']
 
         if len(self.position_history['left']) >= 1:
             prev_time = list(self.time_history)[-1]
@@ -100,10 +123,19 @@ class VelocityTracker:
         peak_vel = self.get_peak_velocity(hand)
         peak_accel = self.get_peak_acceleration(hand)
         return peak_vel * peak_accel
+    
+    def get_smoothed_position(self, hand='left'):
+        if self.smoothed_pos[hand] is not None:
+            return self.smoothed_pos[hand]
+        return None
 
 
 def get_2d_distance(p1, p2):
     return np.sqrt((p1.x - p2.x)**2 + (p1.y - p2.y)**2)
+
+
+def get_2d_distance_from_arrays(p1_arr, p2_landmark):
+    return np.sqrt((p1_arr[0] - p2_landmark.x)**2 + (p1_arr[1] - p2_landmark.y)**2)
 
 
 def get_torso_height(landmarks):
@@ -193,10 +225,6 @@ def analyze_video(video_path: str, output_folder: str = "static/frames",
             continue
 
         if detection_result.pose_landmarks:
-            num_poses = len(detection_result.pose_landmarks)
-            if frame_count in [20, 21, 22, 23, 24]:
-                print(f"Frame {frame_count}: Detected {num_poses} poses")
-            
             for idx, landmarks in enumerate(detection_result.pose_landmarks):
                 for landmark in landmarks:
                     cx, cy = int(landmark.x * frame.shape[1]), int(landmark.y * frame.shape[0])
@@ -209,8 +237,11 @@ def analyze_video(video_path: str, output_folder: str = "static/frames",
 
                     left_pos = np.array([left_wrist.x, left_wrist.y, left_wrist.z])
                     right_pos = np.array([right_wrist.x, right_wrist.y, right_wrist.z])
+                    
+                    left_vis = getattr(left_wrist, 'visibility', 1.0) if hasattr(left_wrist, 'visibility') else 1.0
+                    right_vis = getattr(right_wrist, 'visibility', 1.0) if hasattr(right_wrist, 'visibility') else 1.0
 
-                    velocity_trackers[fighter_idx].update(left_pos, right_pos, timestamp_ms)
+                    velocity_trackers[fighter_idx].update(left_pos, right_pos, timestamp_ms, left_vis, right_vis)
 
             if len(detection_result.pose_landmarks) >= 2:
                 h, w = frame.shape[:2]
@@ -239,6 +270,16 @@ def analyze_video(video_path: str, output_folder: str = "static/frames",
 
                     dist_left_raw = get_2d_distance(left_wrist, opponent_nose)
                     dist_right_raw = get_2d_distance(right_wrist, opponent_nose)
+                    
+                    smoothed_left = velocity_trackers[fighter_idx].get_smoothed_position('left')
+                    smoothed_right = velocity_trackers[fighter_idx].get_smoothed_position('right')
+                    
+                    if smoothed_left is not None:
+                        dist_left_smoothed = get_2d_distance_from_arrays(smoothed_left, opponent_nose)
+                        dist_left_raw = min(dist_left_raw, dist_left_smoothed)
+                    if smoothed_right is not None:
+                        dist_right_smoothed = get_2d_distance_from_arrays(smoothed_right, opponent_nose)
+                        dist_right_raw = min(dist_right_raw, dist_right_smoothed)
 
                     dist_left_normalized = dist_left_raw / normalization_scale
                     dist_right_normalized = dist_right_raw / normalization_scale
@@ -249,12 +290,6 @@ def analyze_video(video_path: str, output_folder: str = "static/frames",
                     left_accel_peak = velocity_trackers[fighter_idx].get_peak_acceleration('left')
                     right_accel_peak = velocity_trackers[fighter_idx].get_peak_acceleration('right')
                     
-                    if frame_count == 22:
-                        print(f"Frame 22 - Fighter {fighter_idx+1} punching Fighter {opponent_idx+1}:")
-                        print(f"  LEFT wrist to head: dist={dist_left_normalized:.3f}, vel={left_speed_peak:.4f}")
-                        print(f"  RIGHT wrist to head: dist={dist_right_normalized:.3f}, vel={right_speed_peak:.4f}")
-                        print(f"  Threshold: {impact_threshold}, Min speed: {min_punch_speed}")
-
                     left_power_index = velocity_trackers[fighter_idx].calculate_power_index('left')
                     right_power_index = velocity_trackers[fighter_idx].calculate_power_index('right')
 
