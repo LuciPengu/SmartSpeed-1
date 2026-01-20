@@ -52,7 +52,8 @@ class MemoryTestRequest(BaseModel):
 @app.get("/", response_class=HTMLResponse)
 async def read_root():
     with open("frontend/index.html", "r") as f:
-        return f.read()
+        content = f.read()
+    return HTMLResponse(content=content, headers={"Cache-Control": "no-cache, no-store, must-revalidate"})
 
 
 @app.get("/api/health")
