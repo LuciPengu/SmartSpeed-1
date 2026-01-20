@@ -62,6 +62,9 @@ async def favicon():
     return Response(status_code=204)
 
 
+MAX_FILE_SIZE_MB = 50
+MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
+
 @app.post("/api/upload")
 async def upload_video(file: UploadFile = File(...)):
     filename_str = file.filename or ""
@@ -73,8 +76,12 @@ async def upload_video(file: UploadFile = File(...)):
     filename = f"{session_id}{file_extension}"
     filepath = os.path.join(UPLOAD_DIR, filename)
     
+    file_content = await file.read()
+    if len(file_content) > MAX_FILE_SIZE_BYTES:
+        raise HTTPException(status_code=400, detail=f"File too large. Maximum size is {MAX_FILE_SIZE_MB}MB.")
+    
     with open(filepath, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+        buffer.write(file_content)
     
     try:
         result = analyze_video(filepath)

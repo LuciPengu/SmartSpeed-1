@@ -36,12 +36,20 @@ function initializeUpload() {
     });
 }
 
+const MAX_FILE_SIZE_MB = 50;
+
 async function handleFileUpload(file) {
     const validTypes = ['.mp4', '.avi', '.mov', '.mkv'];
     const fileExt = '.' + file.name.split('.').pop().toLowerCase();
     
     if (!validTypes.includes(fileExt)) {
         alert('Please upload a valid video file (MP4, AVI, MOV, or MKV)');
+        return;
+    }
+    
+    const fileSizeMB = file.size / (1024 * 1024);
+    if (fileSizeMB > MAX_FILE_SIZE_MB) {
+        alert(`File too large. Maximum size is ${MAX_FILE_SIZE_MB}MB. Your file is ${fileSizeMB.toFixed(1)}MB.`);
         return;
     }
 
