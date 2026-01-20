@@ -132,7 +132,7 @@ def get_head_size(landmarks):
 
 
 def analyze_video(video_path: str, output_folder: str = "static/frames", 
-                  impact_threshold: float = 0.6, min_punch_speed: float = 0.015,
+                  impact_threshold: float = 0.4, min_punch_speed: float = 0.015,
                   velocity_window: int = 5) -> Dict[str, Any]:
     
     verify_models()
@@ -153,7 +153,10 @@ def analyze_video(video_path: str, output_folder: str = "static/frames",
     options = vision.PoseLandmarkerOptions(
         base_options=base_options,
         running_mode=vision.RunningMode.VIDEO,
-        num_poses=2
+        num_poses=2,
+        min_pose_detection_confidence=0.3,
+        min_pose_presence_confidence=0.3,
+        min_tracking_confidence=0.3
     )
     landmarker = vision.PoseLandmarker.create_from_options(options)
 
