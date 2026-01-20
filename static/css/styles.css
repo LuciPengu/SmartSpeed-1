@@ -1016,3 +1016,181 @@ header h1 {
     margin-top: 25px;
     flex-wrap: wrap;
 }
+
+/* Memory Test Styles */
+.baseline-info {
+    margin-bottom: 25px;
+}
+
+.baseline-found {
+    background: rgba(76, 175, 80, 0.2);
+    border: 1px solid rgba(76, 175, 80, 0.4);
+    border-radius: 10px;
+    padding: 15px 20px;
+    color: #81c784;
+}
+
+.baseline-prompt {
+    text-align: center;
+    padding: 30px;
+}
+
+.baseline-prompt h3 {
+    color: #ff9800;
+    margin-bottom: 15px;
+}
+
+.baseline-prompt .note {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9em;
+    margin: 15px 0 25px;
+}
+
+.memory-words {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    padding: 30px;
+}
+
+.memory-word {
+    background: linear-gradient(135deg, #4fc3f7, #29b6f6);
+    color: #1a1a2e;
+    padding: 15px 25px;
+    border-radius: 10px;
+    font-size: 1.4em;
+    font-weight: 600;
+}
+
+.countdown {
+    text-align: center;
+    font-size: 1.3em;
+    color: #ff9800;
+    margin-top: 20px;
+}
+
+#recalled-words {
+    width: 100%;
+    max-width: 400px;
+    padding: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    font-size: 1.1em;
+    resize: vertical;
+    margin: 20px auto;
+    display: block;
+}
+
+#recalled-words:focus {
+    outline: none;
+    border-color: #4fc3f7;
+}
+
+#memory-test-area {
+    text-align: center;
+}
+
+#memory-test-area h3 {
+    color: #4fc3f7;
+    margin-bottom: 15px;
+}
+
+/* Final Results Styles */
+.final-results-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.result-section {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.result-section h3 {
+    color: #e94560;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.risk-overview-mini {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.impact-stats-mini {
+    flex: 1;
+    min-width: 200px;
+}
+
+.impact-stats-mini p {
+    margin: 8px 0;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.memory-result {
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.memory-result.good {
+    background: rgba(76, 175, 80, 0.15);
+    border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.memory-result.caution {
+    background: rgba(255, 152, 0, 0.15);
+    border: 1px solid rgba(255, 152, 0, 0.3);
+}
+
+.memory-result.concern {
+    background: rgba(244, 67, 54, 0.15);
+    border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+.memory-status {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.score-value.positive {
+    color: #4caf50;
+}
+
+.score-value.negative {
+    color: #f44336;
+}
+
+.disclaimer-section {
+    background: rgba(255, 152, 0, 0.1);
+    border-color: rgba(255, 152, 0, 0.3);
+}
+
+.combined-risk-summary {
+    margin-top: 20px;
+}
+
+.combined-risk-summary h3 {
+    color: #4fc3f7;
+    margin-bottom: 15px;
+}
+
+.impact-details-table.compact {
+    font-size: 0.9em;
+}
+
+.impact-details-table.compact th,
+.impact-details-table.compact td {
+    padding: 8px 10px;
+}

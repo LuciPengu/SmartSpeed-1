@@ -10,7 +10,7 @@ import shutil
 
 from backend.video_analyzer import analyze_video
 from backend.risk_calculator import calculate_brain_injury_risk
-from backend.concussion_assessment import get_assessment_questions, evaluate_assessment
+from backend.concussion_assessment import get_assessment_questions, evaluate_assessment, get_memory_test_words, evaluate_memory_test
 
 app = FastAPI(title="Punch Impact Analyzer", version="1.0.0")
 
@@ -41,7 +41,12 @@ class AssessmentRequest(BaseModel):
     red_flags: List[Dict[str, Any]]
     symptoms: List[Dict[str, Any]]
     orientation: List[Dict[str, Any]]
-    memory: List[Dict[str, Any]]
+
+
+class MemoryTestRequest(BaseModel):
+    recalled_words: List[str]
+    original_words: List[str]
+    baseline_score: Optional[int] = None
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -134,11 +139,25 @@ async def evaluate_concussion(request: AssessmentRequest):
     responses = {
         "red_flags": request.red_flags,
         "symptoms": request.symptoms,
-        "orientation": request.orientation,
-        "memory": request.memory
+        "orientation": request.orientation
     }
     
     result = evaluate_assessment(responses)
+    return result
+
+
+@app.get("/api/memory-test/words")
+async def get_memory_words():
+    return get_memory_test_words()
+
+
+@app.post("/api/memory-test/evaluate")
+async def evaluate_memory(request: MemoryTestRequest):
+    result = evaluate_memory_test(
+        request.recalled_words,
+        request.original_words,
+        request.baseline_score
+    )
     return result
 
 

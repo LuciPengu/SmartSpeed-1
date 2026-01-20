@@ -56,10 +56,7 @@ ORIENTATION_QUESTIONS = [
 
 
 def get_assessment_questions() -> Dict[str, Any]:
-    import random
     from datetime import datetime
-    
-    word_list = random.choice(MEMORY_WORD_LISTS)
     
     now = datetime.now()
     correct_answers = {
@@ -72,15 +69,22 @@ def get_assessment_questions() -> Dict[str, Any]:
     return {
         "red_flags": RED_FLAGS,
         "symptoms": SCAT5_SYMPTOMS,
-        "memory_words": word_list,
         "orientation_questions": ORIENTATION_QUESTIONS,
         "correct_answers": correct_answers,
         "instructions": {
             "symptoms": "Rate each symptom from 0 (none) to 6 (severe) based on how you feel RIGHT NOW",
             "red_flags": "Check if you are experiencing any of these warning signs",
-            "memory": "You will be shown 5 words. Try to memorize them. You will be asked to recall them later.",
             "orientation": "Answer each question to the best of your ability"
         }
+    }
+
+
+def get_memory_test_words() -> Dict[str, Any]:
+    import random
+    word_list = random.choice(MEMORY_WORD_LISTS)
+    return {
+        "words": word_list,
+        "instructions": "You will be shown 5 words for 10 seconds. Try to memorize them. You will then be asked to recall them."
     }
 
 
@@ -131,43 +135,21 @@ def evaluate_assessment(responses: Dict[str, Any]) -> Dict[str, Any]:
                 if str(user_answer).lower() == str(correct).lower():
                     orientation_score += 1
     
-    memory_score = 0
-    original_words = set(w.lower() for w in responses.get('original_words', []))
-    recalled_words = responses.get('recalled_words', [])
-    for word in recalled_words:
-        if word.lower().strip() in original_words:
-            memory_score += 1
-    
-    eye_tracking = responses.get('eye_tracking', {})
-    eye_tracking_completed = eye_tracking.get('completed', False)
-    eye_tracking_difficulty = eye_tracking.get('difficulty', 0)
-    eye_tracking_score = eye_tracking.get('trackingScore')
-    eye_tracking_used_webcam = eye_tracking.get('usedWebcam', False)
-    
     if red_flags_present:
         urgency = 'emergency'
         recommendation = 'EMERGENCY: Red flag symptoms detected. Seek immediate medical attention. Do not continue any physical activity.'
-    elif symptom_severity > 50 or symptom_total > 10 or eye_tracking_difficulty >= 3:
+    elif symptom_severity > 50 or symptom_total > 10:
         urgency = 'high'
         recommendation = 'HIGH CONCERN: Significant symptoms present. Medical evaluation strongly recommended before any return to activity.'
-    elif symptom_severity > 25 or symptom_total > 5 or orientation_score < 3 or memory_score < 3 or eye_tracking_difficulty >= 2:
+    elif symptom_severity > 25 or symptom_total > 5 or orientation_score < 3:
         urgency = 'moderate'
         recommendation = 'MODERATE CONCERN: Notable symptoms present. Rest and monitor. Consider medical evaluation if symptoms persist or worsen.'
-    elif symptom_total > 0 or eye_tracking_difficulty >= 1:
+    elif symptom_total > 0:
         urgency = 'low'
         recommendation = 'LOW CONCERN: Mild symptoms present. Rest recommended. Monitor symptoms and seek medical attention if they worsen.'
     else:
         urgency = 'none'
         recommendation = 'No concerning symptoms reported. However, symptoms can develop later. Continue to monitor and rest as appropriate.'
-    
-    eye_tracking_labels = ['No difficulty', 'Mild difficulty', 'Moderate difficulty', 'Severe difficulty']
-    
-    if eye_tracking_used_webcam and eye_tracking_score is not None:
-        eye_tracking_display = f"{eye_tracking_score}% tracking"
-    elif eye_tracking_completed:
-        eye_tracking_display = eye_tracking_labels[min(eye_tracking_difficulty, 3)]
-    else:
-        eye_tracking_display = 'Not completed'
     
     return {
         'urgency_level': urgency,
@@ -179,13 +161,42 @@ def evaluate_assessment(responses: Dict[str, Any]) -> Dict[str, Any]:
         'symptom_details': sorted(symptom_details, key=lambda x: x['severity'], reverse=True),
         'orientation_score': orientation_score,
         'orientation_max': 4,
-        'memory_score': memory_score,
-        'memory_max': 5,
-        'eye_tracking_completed': eye_tracking_completed,
-        'eye_tracking_difficulty': eye_tracking_difficulty,
-        'eye_tracking_score': eye_tracking_score,
-        'eye_tracking_used_webcam': eye_tracking_used_webcam,
-        'eye_tracking_result': eye_tracking_display,
         'recommendation': recommendation,
         'disclaimer': 'This is a screening tool only, not a medical diagnosis. A concussion should only be diagnosed by a qualified healthcare professional. Always seek professional medical evaluation after any suspected head injury.'
     }
+
+
+def evaluate_memory_test(recalled_words: List[str], original_words: List[str], baseline_score: int | None = None) -> Dict[str, Any]:
+    original_set = set(w.lower() for w in original_words)
+    correct_count = 0
+    
+    for word in recalled_words:
+        if word.lower().strip() in original_set:
+            correct_count += 1
+    
+    result = {
+        'current_score': correct_count,
+        'max_score': len(original_words),
+        'words_recalled': recalled_words,
+        'original_words': original_words
+    }
+    
+    if baseline_score is not None:
+        result['baseline_score'] = baseline_score
+        result['score_difference'] = correct_count - baseline_score
+        
+        if correct_count >= baseline_score:
+            result['comparison'] = 'at_or_above_baseline'
+            result['memory_status'] = 'Your memory performance is at or above your baseline level.'
+        elif correct_count >= baseline_score - 1:
+            result['comparison'] = 'slightly_below_baseline'
+            result['memory_status'] = 'Your memory performance is slightly below your baseline. This may be normal variation, but monitor for other symptoms.'
+        else:
+            result['comparison'] = 'below_baseline'
+            result['memory_status'] = 'Your memory performance is notably below your baseline. This could indicate cognitive effects from impact. Consider medical evaluation.'
+    else:
+        result['baseline_score'] = None
+        result['comparison'] = 'no_baseline'
+        result['memory_status'] = 'No baseline available for comparison. Consider creating a baseline when you are healthy and well-rested.'
+    
+    return result
