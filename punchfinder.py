@@ -9,7 +9,7 @@ from collections import deque
 
 # --- CONFIGURATION ---
 VIDEO_SOURCE = 'sparring.mp4' 
-IMPACT_THRESHOLD_RATIO = 0.4b  # Ratio of torso height (40% = close to head)
+IMPACT_THRESHOLD_RATIO = 0.4  # Ratio of torso height (40% = close to head)
 MODEL_PATH = 'pose_landmarker_heavy.task'
 OUTPUT_FOLDER = 'frames'
 MIN_PUNCH_SPEED = 0.015
