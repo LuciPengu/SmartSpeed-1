@@ -11,6 +11,14 @@ import uuid
 
 MODEL_PATH = 'pose_landmarker_heavy.task'
 
+
+def verify_models():
+    missing = []
+    if not os.path.exists(MODEL_PATH):
+        missing.append(f"Pose model: {MODEL_PATH}")
+    if missing:
+        raise FileNotFoundError(f"Required model files not found: {', '.join(missing)}. Please ensure model files are in the project root.")
+
 class VelocityTracker:
     def __init__(self, window_size=5, fps=30.0):
         self.window_size = window_size
@@ -125,13 +133,21 @@ def get_head_size(landmarks):
 
 def analyze_video(video_path: str, output_folder: str = "static/frames", 
                   impact_threshold: float = 0.4, min_punch_speed: float = 0.015,
-                  velocity_window: int = 5) -> Dict[str, Any]:
+                  velocity_window: int = 5, max_frames: int = 3000) -> Dict[str, Any]:
+    
+    verify_models()
+    
+    if not os.path.exists(video_path):
+        raise FileNotFoundError(f"Video file not found: {video_path}")
     
     session_id = str(uuid.uuid4())[:8]
     session_folder = os.path.join(output_folder, session_id)
     os.makedirs(session_folder, exist_ok=True)
 
-    yolo_model = YOLO('yolov8n.pt')
+    try:
+        yolo_model = YOLO('yolov8n.pt')
+    except Exception as e:
+        raise RuntimeError(f"Failed to load YOLO model: {str(e)}")
 
     base_options = python.BaseOptions(model_asset_path=MODEL_PATH)
     options = vision.PoseLandmarkerOptions(
@@ -156,6 +172,9 @@ def analyze_video(video_path: str, output_folder: str = "static/frames",
     while cap.isOpened():
         success, frame = cap.read()
         if not success: 
+            break
+        
+        if frame_count >= max_frames:
             break
 
         timestamp_ms = int(frame_count * (1000 / fps))
