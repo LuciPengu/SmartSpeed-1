@@ -10,7 +10,7 @@
     <div class="container">
         <header>
             <h1>Punch Impact Analyzer</h1>
-            <p class="subtitle">Analyze sparring footage and assess injury risk</p>
+            <p class="subtitle">Upload sparring footage to analyze punch impacts and assess injury risk</p>
         </header>
 
         <div id="step-1" class="step active">
@@ -55,20 +55,18 @@
                 <h2>Brain Injury Risk Assessment</h2>
             </div>
             <div id="risk-results"></div>
-            <div class="next-steps-prompt">
-                <p>Based on the punch analysis, complete a concussion screening assessment.</p>
-                <button id="start-assessment-btn" class="btn primary">Take SCAT5 Concussion Screening</button>
-                <button class="btn secondary" onclick="restartAnalysis()">Start New Analysis</button>
-            </div>
+            <button id="start-assessment-btn" class="btn primary">Take Concussion Screening Assessment</button>
         </div>
 
         <div id="step-4" class="step hidden">
             <div class="step-header">
                 <span class="step-number">4</span>
-                <h2>SCAT5 Concussion Screening</h2>
+                <h2>Concussion Screening Assessment</h2>
             </div>
-            <p class="warning">This is a screening tool only, not a medical diagnosis. Always consult a healthcare professional.</p>
-
+            <div class="assessment-intro">
+                <p class="warning">This is based on the SCAT5 protocol. It is a screening tool only, not a medical diagnosis.</p>
+            </div>
+            
             <div id="red-flags-section" class="assessment-section">
                 <h3>Red Flag Symptoms</h3>
                 <p class="section-description">If any of these are present, seek immediate medical attention.</p>
@@ -83,8 +81,14 @@
 
             <div id="orientation-section" class="assessment-section">
                 <h3>Orientation Questions</h3>
-                <p class="section-description">Answer the following questions</p>
+                <p class="section-description">Mark each question as correctly answered or not</p>
                 <div id="orientation-list"></div>
+            </div>
+
+            <div id="memory-section" class="assessment-section">
+                <h3>Memory Questions</h3>
+                <p class="section-description">Mark each question as correctly answered or not</p>
+                <div id="memory-list"></div>
             </div>
 
             <button id="submit-assessment-btn" class="btn primary">Submit Assessment</button>
@@ -93,59 +97,10 @@
         <div id="step-5" class="step hidden">
             <div class="step-header">
                 <span class="step-number">5</span>
-                <h2>SCAT5 Results</h2>
+                <h2>Assessment Results</h2>
             </div>
             <div id="assessment-results"></div>
-            <div class="next-steps-prompt">
-                <p>Continue to memory baseline testing to compare against your healthy baseline.</p>
-                <button id="start-memory-test-btn" class="btn primary">Take Memory Baseline Test</button>
-            </div>
-        </div>
-
-        <div id="step-6" class="step hidden">
-            <div class="step-header">
-                <span class="step-number">6</span>
-                <h2>Memory Baseline Test</h2>
-            </div>
-            <p class="section-description">This test compares your current memory performance to your healthy baseline.</p>
-            
-            <div id="baseline-status" class="baseline-info"></div>
-
-            <div id="memory-test-area" class="assessment-section">
-                <div id="memory-study-phase" class="hidden">
-                    <h3>Memorize These Words</h3>
-                    <p>You have 10 seconds to memorize the following words:</p>
-                    <div id="memory-words-display" class="memory-words"></div>
-                    <div id="memory-countdown" class="countdown"></div>
-                </div>
-
-                <div id="memory-recall-phase" class="hidden">
-                    <h3>Recall the Words</h3>
-                    <p>Type each word you remember (one per line):</p>
-                    <textarea id="recalled-words" rows="5" placeholder="Enter each word on a new line"></textarea>
-                    <button id="submit-memory-btn" class="btn primary">Submit Memory Test</button>
-                </div>
-            </div>
-
-            <div id="no-baseline-section" class="hidden">
-                <div class="baseline-prompt">
-                    <h3>No Baseline Found</h3>
-                    <p>You don't have a memory baseline recorded. Would you like to create one now?</p>
-                    <p class="note">A baseline should ideally be created when you are healthy and well-rested, before any potential head injury.</p>
-                    <button id="create-baseline-btn" class="btn primary">Create Baseline Now</button>
-                    <button id="skip-baseline-btn" class="btn secondary">Skip Memory Test</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="step-7" class="step hidden">
-            <div class="step-header">
-                <h2>Complete Assessment Results</h2>
-            </div>
-            <div id="final-results"></div>
-            <div class="results-actions">
-                <button class="btn primary" onclick="restartAnalysis()">Start New Analysis</button>
-            </div>
+            <button id="restart-btn" class="btn secondary">Start New Analysis</button>
         </div>
     </div>
 
