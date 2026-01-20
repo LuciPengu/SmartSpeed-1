@@ -3,6 +3,7 @@ modules = ["python-3.11"]
 
 [nix]
 channel = "stable-25_05"
+packages = ["xorg.libxcb", "xorg.libX11", "libGL", "libGLU"]
 
 [unitTest]
 language = "python3"
@@ -16,3 +17,26 @@ deploymentTarget = "cloudrun"
 
 [agent]
 expertMode = true
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Punch Finder"
+
+[[workflows.workflow]]
+name = "Punch Finder"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python punchfinder.py"
+
+[workflows.workflow.metadata]
+outputType = "console"
