@@ -610,3 +610,17 @@ header h1 {
     margin-bottom: 15px;
     color: #4fc3f7;
 }
+
+/* Pre-assessment message */
+.pre-assessment-message {
+    text-align: center;
+    padding: 30px;
+    background: rgba(79, 195, 247, 0.1);
+    border-radius: 12px;
+    border: 1px solid rgba(79, 195, 247, 0.3);
+}
+
+.pre-assessment-message p {
+    margin: 10px 0;
+    font-size: 1.1rem;
+}

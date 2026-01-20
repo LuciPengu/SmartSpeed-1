@@ -191,55 +191,10 @@ function showStep3(riskData) {
     document.getElementById('step-3').classList.remove('hidden');
 
     const riskHtml = `
-        <div class="risk-overview">
-            <div class="risk-gauge">
-                <div class="risk-level ${riskData.overall_risk}">${riskData.overall_risk}</div>
-                <div class="risk-percentage">${riskData.risk_percentage}%</div>
-                <div class="summary-label">Estimated Injury Risk</div>
-            </div>
-            <div class="risk-details">
-                <div class="risk-recommendation">
-                    <strong>Recommendation:</strong><br>
-                    ${riskData.recommendation}
-                </div>
-                <div class="impact-stats">
-                    <p>Selected Impacts: <strong>${riskData.impact_count}</strong></p>
-                    <p>Max Single Impact Force: <strong>${riskData.max_single_impact_force.toFixed(1)} N</strong></p>
-                    <p>Total Cumulative Force: <strong>${riskData.total_force_estimate.toFixed(1)} N</strong></p>
-                    <p>Puncher Weight: <strong>${riskData.puncher_weight_kg} kg</strong></p>
-                </div>
-            </div>
+        <div class="pre-assessment-message">
+            <p><strong>${riskData.impact_count} punch impacts</strong> have been analyzed.</p>
+            <p>Before viewing the full results, please complete a quick concussion screening assessment.</p>
         </div>
-        
-        <h3>Impact Details</h3>
-        <table class="impact-details-table">
-            <thead>
-                <tr>
-                    <th>Frame</th>
-                    <th>Time</th>
-                    <th>Hand</th>
-                    <th>Est. Force (N)</th>
-                    <th>G-Force</th>
-                    <th>Risk Level</th>
-                    <th>Injury Prob.</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${riskData.impact_details.map(d => `
-                    <tr>
-                        <td>${d.frame}</td>
-                        <td>${d.time.toFixed(2)}s</td>
-                        <td>${d.hand}</td>
-                        <td>${d.estimated_force_newtons.toFixed(1)}</td>
-                        <td>${d.g_force.toFixed(1)}</td>
-                        <td class="risk-level ${d.risk_level}">${d.risk_level}</td>
-                        <td>${d.injury_probability.toFixed(1)}%</td>
-                    </tr>
-                `).join('')}
-            </tbody>
-        </table>
-        
-        <p class="disclaimer">${riskData.disclaimer}</p>
     `;
 
     document.getElementById('risk-results').innerHTML = riskHtml;
