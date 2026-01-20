@@ -64,11 +64,12 @@ async def favicon():
 
 @app.post("/api/upload")
 async def upload_video(file: UploadFile = File(...)):
-    if not file.filename.endswith(('.mp4', '.avi', '.mov', '.mkv')):
+    filename_str = file.filename or ""
+    if not filename_str.endswith(('.mp4', '.avi', '.mov', '.mkv')):
         raise HTTPException(status_code=400, detail="Invalid file format. Please upload a video file.")
     
     session_id = str(uuid.uuid4())[:8]
-    file_extension = os.path.splitext(file.filename)[1]
+    file_extension = os.path.splitext(filename_str)[1]
     filename = f"{session_id}{file_extension}"
     filepath = os.path.join(UPLOAD_DIR, filename)
     

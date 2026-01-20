@@ -1,7 +1,7 @@
 let currentSession = null;
 let selectedImpacts = new Set();
 let assessmentData = null;
-let savedRiskData = null;
+let assessmentResult = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     initializeUpload();
@@ -73,12 +73,12 @@ async function handleFileUpload(file) {
         }
 
         progressFill.style.width = '100%';
-        progressText.textContent = 'Analysis complete!';
+        progressText.textContent = 'Analysis complete! Loading concussion screening...';
 
         const data = await response.json();
         currentSession = data;
 
-        setTimeout(() => showStep2(data), 500);
+        setTimeout(() => loadConcussionAssessment(), 500);
 
     } catch (error) {
         alert('Error: ' + error.message);
@@ -87,178 +87,19 @@ async function handleFileUpload(file) {
     }
 }
 
-function showStep2(data) {
-    document.getElementById('step-1').classList.add('hidden');
-    document.getElementById('step-2').classList.remove('hidden');
-
-    const summaryHtml = `
-        <div class="summary-item">
-            <div class="summary-value">${data.impact_count}</div>
-            <div class="summary-label">Impacts Detected</div>
-        </div>
-        <div class="summary-item">
-            <div class="summary-value">${data.duration.toFixed(2)}s</div>
-            <div class="summary-label">Video Duration</div>
-        </div>
-        <div class="summary-item">
-            <div class="summary-value">${data.total_frames}</div>
-            <div class="summary-label">Total Frames</div>
-        </div>
-        <div class="summary-item">
-            <div class="summary-value">${data.fps.toFixed(1)}</div>
-            <div class="summary-label">FPS</div>
-        </div>
-    `;
-    document.getElementById('results-summary').innerHTML = summaryHtml;
-
-    const impactsGrid = document.getElementById('impacts-grid');
-    
-    if (data.impacts.length === 0) {
-        impactsGrid.innerHTML = '<p>No punch impacts were detected in this video. Try uploading a different video with clearer fighting footage.</p>';
-        return;
-    }
-
-    impactsGrid.innerHTML = data.impacts.map(impact => `
-        <div class="impact-card" data-id="${impact.id}" onclick="toggleImpact(${impact.id})">
-            <img src="${impact.image_path}" alt="Impact ${impact.id}">
-            <div class="impact-info">
-                <div class="impact-title">
-                    <span>Fighter ${impact.fighter} - Frame ${impact.frame}</span>
-                    <span class="impact-hand">${impact.hand}</span>
-                </div>
-                <div class="impact-stats">
-                    <div>Time: <span class="impact-stat-value">${impact.time.toFixed(2)}s</span></div>
-                    <div>Velocity: <span class="impact-stat-value">${impact.velocity.toFixed(1)} T/s</span></div>
-                    <div>Accel: <span class="impact-stat-value">${impact.acceleration.toFixed(1)} T/s²</span></div>
-                    <div>Power: <span class="impact-stat-value">${impact.power_index.toFixed(1)}</span></div>
-                </div>
-            </div>
-        </div>
-    `).join('');
-
-    document.getElementById('calculate-risk-btn').addEventListener('click', calculateRisk);
-}
-
-function toggleImpact(id) {
-    const card = document.querySelector(`.impact-card[data-id="${id}"]`);
-    
-    if (selectedImpacts.has(id)) {
-        selectedImpacts.delete(id);
-        card.classList.remove('selected');
-    } else {
-        selectedImpacts.add(id);
-        card.classList.add('selected');
-    }
-
-    document.getElementById('calculate-risk-btn').disabled = selectedImpacts.size === 0;
-}
-
-async function calculateRisk() {
-    const weight = parseFloat(document.getElementById('puncher-weight').value);
-    
-    if (isNaN(weight) || weight < 40 || weight > 200) {
-        alert('Please enter a valid weight between 40 and 200 kg');
-        return;
-    }
-
-    try {
-        const response = await fetch('/api/calculate-risk', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                session_id: currentSession.session_id,
-                selected_impact_ids: Array.from(selectedImpacts),
-                puncher_weight_kg: weight
-            })
-        });
-
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.detail || 'Calculation failed');
-        }
-
-        const riskData = await response.json();
-        showStep3(riskData);
-
-    } catch (error) {
-        alert('Error: ' + error.message);
-    }
-}
-
-function showStep3(riskData) {
-    savedRiskData = riskData;
-    document.getElementById('step-2').classList.add('hidden');
-    document.getElementById('step-3').classList.remove('hidden');
-
-    const riskHtml = `
-        <div class="risk-overview">
-            <div class="risk-gauge">
-                <div class="risk-level ${riskData.overall_risk}">${riskData.overall_risk}</div>
-                <div class="risk-percentage">${riskData.risk_percentage}%</div>
-                <div class="summary-label">Estimated Injury Risk</div>
-            </div>
-            <div class="risk-details">
-                <div class="risk-recommendation">
-                    <strong>Recommendation:</strong><br>
-                    ${riskData.recommendation}
-                </div>
-                <div class="impact-stats">
-                    <p>Selected Impacts: <strong>${riskData.impact_count}</strong></p>
-                    <p>Max Single Impact Force: <strong>${riskData.max_single_impact_force.toFixed(1)} N</strong></p>
-                    <p>Total Cumulative Force: <strong>${riskData.total_force_estimate.toFixed(1)} N</strong></p>
-                    <p>Puncher Weight: <strong>${riskData.puncher_weight_kg} kg</strong></p>
-                </div>
-            </div>
-        </div>
-        
-        <h3>Impact Details</h3>
-        <table class="impact-details-table">
-            <thead>
-                <tr>
-                    <th>Frame</th>
-                    <th>Time</th>
-                    <th>Hand</th>
-                    <th>Est. Force (N)</th>
-                    <th>G-Force</th>
-                    <th>Risk Level</th>
-                    <th>Injury Prob.</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${riskData.impact_details.map(d => `
-                    <tr>
-                        <td>${d.frame}</td>
-                        <td>${d.time.toFixed(2)}s</td>
-                        <td>${d.hand}</td>
-                        <td>${d.estimated_force_newtons.toFixed(1)}</td>
-                        <td>${d.g_force.toFixed(1)}</td>
-                        <td class="risk-level ${d.risk_level}">${d.risk_level}</td>
-                        <td>${d.injury_probability.toFixed(1)}%</td>
-                    </tr>
-                `).join('')}
-            </tbody>
-        </table>
-        
-        <p class="disclaimer">${riskData.disclaimer}</p>
-    `;
-
-    document.getElementById('risk-results').innerHTML = riskHtml;
-    document.getElementById('start-assessment-btn').addEventListener('click', loadConcussionAssessment);
-}
-
 async function loadConcussionAssessment() {
     try {
         const response = await fetch('/api/concussion-assessment');
         assessmentData = await response.json();
-        showStep4();
+        showStep2();
     } catch (error) {
         alert('Error loading assessment: ' + error.message);
     }
 }
 
-function showStep4() {
-    document.getElementById('step-3').classList.add('hidden');
-    document.getElementById('step-4').classList.remove('hidden');
+function showStep2() {
+    document.getElementById('step-1').classList.add('hidden');
+    document.getElementById('step-2').classList.remove('hidden');
 
     document.getElementById('red-flags-list').innerHTML = assessmentData.red_flags.map(flag => `
         <div class="red-flag-item">
@@ -349,29 +190,37 @@ async function submitAssessment() {
             body: JSON.stringify({ red_flags: redFlags, symptoms, orientation, memory })
         });
 
-        const result = await response.json();
-        showStep5(result);
+        assessmentResult = await response.json();
+        showStep3();
     } catch (error) {
         alert('Error submitting assessment: ' + error.message);
     }
 }
 
-function showStep5(result) {
-    document.getElementById('step-4').classList.add('hidden');
-    document.getElementById('step-5').classList.remove('hidden');
+function showStep3() {
+    document.getElementById('step-2').classList.add('hidden');
+    document.getElementById('step-3').classList.remove('hidden');
 
+    displayAssessmentResults();
+    displayVideoAnalysis();
+    
+    document.getElementById('calculate-risk-btn').addEventListener('click', calculateRisk);
+    document.getElementById('restart-btn').addEventListener('click', () => location.reload());
+}
+
+function displayAssessmentResults() {
     let symptomDetailsHtml = '';
-    if (result.symptom_details.length > 0) {
+    if (assessmentResult.symptom_details.length > 0) {
         symptomDetailsHtml = `
             <h4>Reported Symptoms (by severity):</h4>
             <ul>
-                ${result.symptom_details.map(s => `<li>${s.name}: ${s.severity}/6</li>`).join('')}
+                ${assessmentResult.symptom_details.map(s => `<li>${s.name}: ${s.severity}/6</li>`).join('')}
             </ul>
         `;
     }
 
     let redFlagWarning = '';
-    if (result.red_flags_count > 0) {
+    if (assessmentResult.red_flags_count > 0) {
         redFlagWarning = `
             <div class="warning" style="background: rgba(211, 47, 47, 0.3); border-color: #d32f2f;">
                 <strong>RED FLAGS DETECTED!</strong><br>
@@ -380,91 +229,196 @@ function showStep5(result) {
         `;
     }
 
-    let riskSummaryHtml = '';
-    if (savedRiskData) {
-        riskSummaryHtml = `
-            <div class="combined-risk-summary">
-                <h3>Punch Impact Analysis Summary</h3>
-                <div class="risk-overview-mini">
-                    <div class="risk-gauge">
-                        <div class="risk-level ${savedRiskData.overall_risk}">${savedRiskData.overall_risk}</div>
-                        <div class="risk-percentage">${savedRiskData.risk_percentage}%</div>
-                        <div class="summary-label">Impact Risk</div>
-                    </div>
-                    <div class="impact-stats-mini">
-                        <p>Clean Punches Detected: <strong>${savedRiskData.impact_count}</strong></p>
-                        <p>Max Force: <strong>${savedRiskData.max_single_impact_force.toFixed(1)} N</strong></p>
-                        <p>Total Force: <strong>${savedRiskData.total_force_estimate.toFixed(1)} N</strong></p>
-                        <p>Puncher Weight: <strong>${savedRiskData.puncher_weight_kg} kg</strong></p>
-                    </div>
-                </div>
-                <h4>Impact Details</h4>
-                <table class="impact-details-table compact">
-                    <thead>
-                        <tr>
-                            <th>Frame</th>
-                            <th>Time</th>
-                            <th>Hand</th>
-                            <th>Force (N)</th>
-                            <th>G-Force</th>
-                            <th>Risk</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${savedRiskData.impact_details.map(d => `
-                            <tr>
-                                <td>${d.frame}</td>
-                                <td>${d.time.toFixed(2)}s</td>
-                                <td>${d.hand}</td>
-                                <td>${d.estimated_force_newtons.toFixed(1)}</td>
-                                <td>${d.g_force.toFixed(1)}</td>
-                                <td class="risk-level ${d.risk_level}">${d.risk_level}</td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            </div>
-        `;
-    }
-
     const resultHtml = `
-        ${riskSummaryHtml}
-        
         <div class="assessment-result-card">
-            <h3>Concussion Screening Assessment</h3>
+            <h3>Concussion Screening Results</h3>
             ${redFlagWarning}
-            <span class="urgency-badge ${result.urgency_level}">${result.urgency_level}</span>
+            <span class="urgency-badge ${assessmentResult.urgency_level}">${assessmentResult.urgency_level}</span>
             
             <div class="risk-recommendation">
                 <strong>Recommendation:</strong><br>
-                ${result.recommendation}
+                ${assessmentResult.recommendation}
             </div>
 
             <div class="scores-grid">
                 <div class="score-item">
-                    <div class="score-value">${result.symptom_total}/22</div>
+                    <div class="score-value">${assessmentResult.symptom_total}/22</div>
                     <div class="score-label">Symptoms Present</div>
                 </div>
                 <div class="score-item">
-                    <div class="score-value">${result.symptom_severity_score}/${result.max_symptom_severity}</div>
+                    <div class="score-value">${assessmentResult.symptom_severity_score}/${assessmentResult.max_symptom_severity}</div>
                     <div class="score-label">Symptom Severity</div>
                 </div>
                 <div class="score-item">
-                    <div class="score-value">${result.orientation_score}/${result.orientation_max}</div>
+                    <div class="score-value">${assessmentResult.orientation_score}/${assessmentResult.orientation_max}</div>
                     <div class="score-label">Orientation Score</div>
                 </div>
                 <div class="score-item">
-                    <div class="score-value">${result.memory_score}/${result.memory_max}</div>
+                    <div class="score-value">${assessmentResult.memory_score}/${assessmentResult.memory_max}</div>
                     <div class="score-label">Memory Score</div>
                 </div>
             </div>
 
             ${symptomDetailsHtml}
 
-            <p class="disclaimer">${result.disclaimer}</p>
+            <p class="disclaimer">${assessmentResult.disclaimer}</p>
         </div>
     `;
 
-    document.getElementById('assessment-results').innerHTML = resultHtml;
-    document.getElementById('restart-btn').addEventListener('click', () => location.reload());
+    document.getElementById('assessment-results-section').innerHTML = resultHtml;
+}
+
+function displayVideoAnalysis() {
+    const data = currentSession;
+    
+    const summaryHtml = `
+        <div class="summary-item">
+            <div class="summary-value">${data.impact_count}</div>
+            <div class="summary-label">Impacts Detected</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-value">${data.duration.toFixed(2)}s</div>
+            <div class="summary-label">Video Duration</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-value">${data.total_frames}</div>
+            <div class="summary-label">Total Frames</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-value">${data.fps.toFixed(1)}</div>
+            <div class="summary-label">FPS</div>
+        </div>
+    `;
+    document.getElementById('results-summary').innerHTML = summaryHtml;
+
+    const impactsGrid = document.getElementById('impacts-grid');
+    
+    if (data.impacts.length === 0) {
+        impactsGrid.innerHTML = '<p>No punch impacts were detected in this video. Try uploading a different video with clearer fighting footage.</p>';
+        return;
+    }
+
+    impactsGrid.innerHTML = data.impacts.map(impact => `
+        <div class="impact-card" data-id="${impact.id}" onclick="toggleImpact(${impact.id})">
+            <img src="${impact.image_path}" alt="Impact ${impact.id}">
+            <div class="impact-info">
+                <div class="impact-title">
+                    <span>Fighter ${impact.fighter} - Frame ${impact.frame}</span>
+                    <span class="impact-hand">${impact.hand}</span>
+                </div>
+                <div class="impact-stats">
+                    <div>Time: <span class="impact-stat-value">${impact.time.toFixed(2)}s</span></div>
+                    <div>Velocity: <span class="impact-stat-value">${impact.velocity.toFixed(1)} T/s</span></div>
+                    <div>Accel: <span class="impact-stat-value">${impact.acceleration.toFixed(1)} T/s²</span></div>
+                    <div>Power: <span class="impact-stat-value">${impact.power_index.toFixed(1)}</span></div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function toggleImpact(id) {
+    const card = document.querySelector(`.impact-card[data-id="${id}"]`);
+    
+    if (selectedImpacts.has(id)) {
+        selectedImpacts.delete(id);
+        card.classList.remove('selected');
+    } else {
+        selectedImpacts.add(id);
+        card.classList.add('selected');
+    }
+
+    document.getElementById('calculate-risk-btn').disabled = selectedImpacts.size === 0;
+}
+
+async function calculateRisk() {
+    const weight = parseFloat(document.getElementById('puncher-weight').value);
+    
+    if (isNaN(weight) || weight < 40 || weight > 200) {
+        alert('Please enter a valid weight between 40 and 200 kg');
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/calculate-risk', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                session_id: currentSession.session_id,
+                selected_impact_ids: Array.from(selectedImpacts),
+                puncher_weight_kg: weight
+            })
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.detail || 'Calculation failed');
+        }
+
+        const riskData = await response.json();
+        displayRiskResults(riskData);
+
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+}
+
+function displayRiskResults(riskData) {
+    document.getElementById('risk-results-section').classList.remove('hidden');
+
+    const riskHtml = `
+        <div class="risk-overview">
+            <div class="risk-gauge">
+                <div class="risk-level ${riskData.overall_risk}">${riskData.overall_risk}</div>
+                <div class="risk-percentage">${riskData.risk_percentage}%</div>
+                <div class="summary-label">Estimated Injury Risk</div>
+            </div>
+            <div class="risk-details">
+                <div class="risk-recommendation">
+                    <strong>Recommendation:</strong><br>
+                    ${riskData.recommendation}
+                </div>
+                <div class="impact-stats">
+                    <p>Selected Impacts: <strong>${riskData.impact_count}</strong></p>
+                    <p>Max Single Impact Force: <strong>${riskData.max_single_impact_force.toFixed(1)} N</strong></p>
+                    <p>Total Cumulative Force: <strong>${riskData.total_force_estimate.toFixed(1)} N</strong></p>
+                    <p>Puncher Weight: <strong>${riskData.puncher_weight_kg} kg</strong></p>
+                </div>
+            </div>
+        </div>
+        
+        <h4>Impact Details</h4>
+        <table class="impact-details-table">
+            <thead>
+                <tr>
+                    <th>Frame</th>
+                    <th>Time</th>
+                    <th>Hand</th>
+                    <th>Est. Force (N)</th>
+                    <th>G-Force</th>
+                    <th>Risk Level</th>
+                    <th>Injury Prob.</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${riskData.impact_details.map(d => `
+                    <tr>
+                        <td>${d.frame}</td>
+                        <td>${d.time.toFixed(2)}s</td>
+                        <td>${d.hand}</td>
+                        <td>${d.estimated_force_newtons.toFixed(1)}</td>
+                        <td>${d.g_force.toFixed(1)}</td>
+                        <td class="risk-level ${d.risk_level}">${d.risk_level}</td>
+                        <td>${d.injury_probability.toFixed(1)}%</td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+        
+        <p class="disclaimer">${riskData.disclaimer}</p>
+    `;
+
+    document.getElementById('risk-results').innerHTML = riskHtml;
+    
+    document.getElementById('risk-results-section').scrollIntoView({ behavior: 'smooth' });
 }
