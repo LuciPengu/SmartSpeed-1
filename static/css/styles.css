@@ -561,3 +561,52 @@ header h1 {
         flex-direction: column;
     }
 }
+
+/* Combined Results Summary */
+.combined-risk-summary {
+    background: rgba(233, 69, 96, 0.1);
+    border: 1px solid rgba(233, 69, 96, 0.3);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.combined-risk-summary h3 {
+    margin-bottom: 15px;
+    color: #e94560;
+}
+
+.combined-risk-summary h4 {
+    margin: 15px 0 10px 0;
+    font-size: 1rem;
+}
+
+.risk-overview-mini {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.impact-stats-mini {
+    flex: 1;
+}
+
+.impact-stats-mini p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+
+.impact-details-table.compact {
+    font-size: 0.85rem;
+}
+
+.impact-details-table.compact th,
+.impact-details-table.compact td {
+    padding: 6px 8px;
+}
+
+.assessment-result-card h3 {
+    margin-bottom: 15px;
+    color: #4fc3f7;
+}

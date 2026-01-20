@@ -1,6 +1,7 @@
 let currentSession = null;
 let selectedImpacts = new Set();
 let assessmentData = null;
+let savedRiskData = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     initializeUpload();
@@ -185,6 +186,7 @@ async function calculateRisk() {
 }
 
 function showStep3(riskData) {
+    savedRiskData = riskData;
     document.getElementById('step-2').classList.add('hidden');
     document.getElementById('step-3').classList.remove('hidden');
 
@@ -378,8 +380,58 @@ function showStep5(result) {
         `;
     }
 
+    let riskSummaryHtml = '';
+    if (savedRiskData) {
+        riskSummaryHtml = `
+            <div class="combined-risk-summary">
+                <h3>Punch Impact Analysis Summary</h3>
+                <div class="risk-overview-mini">
+                    <div class="risk-gauge">
+                        <div class="risk-level ${savedRiskData.overall_risk}">${savedRiskData.overall_risk}</div>
+                        <div class="risk-percentage">${savedRiskData.risk_percentage}%</div>
+                        <div class="summary-label">Impact Risk</div>
+                    </div>
+                    <div class="impact-stats-mini">
+                        <p>Clean Punches Detected: <strong>${savedRiskData.impact_count}</strong></p>
+                        <p>Max Force: <strong>${savedRiskData.max_single_impact_force.toFixed(1)} N</strong></p>
+                        <p>Total Force: <strong>${savedRiskData.total_force_estimate.toFixed(1)} N</strong></p>
+                        <p>Puncher Weight: <strong>${savedRiskData.puncher_weight_kg} kg</strong></p>
+                    </div>
+                </div>
+                <h4>Impact Details</h4>
+                <table class="impact-details-table compact">
+                    <thead>
+                        <tr>
+                            <th>Frame</th>
+                            <th>Time</th>
+                            <th>Hand</th>
+                            <th>Force (N)</th>
+                            <th>G-Force</th>
+                            <th>Risk</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${savedRiskData.impact_details.map(d => `
+                            <tr>
+                                <td>${d.frame}</td>
+                                <td>${d.time.toFixed(2)}s</td>
+                                <td>${d.hand}</td>
+                                <td>${d.estimated_force_newtons.toFixed(1)}</td>
+                                <td>${d.g_force.toFixed(1)}</td>
+                                <td class="risk-level ${d.risk_level}">${d.risk_level}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+        `;
+    }
+
     const resultHtml = `
+        ${riskSummaryHtml}
+        
         <div class="assessment-result-card">
+            <h3>Concussion Screening Assessment</h3>
             ${redFlagWarning}
             <span class="urgency-badge ${result.urgency_level}">${result.urgency_level}</span>
             
