@@ -191,6 +191,11 @@ def analyze_video(video_path: str, output_folder: str = "static/frames",
 
     cap = cv2.VideoCapture(video_path)
     fps = cap.get(cv2.CAP_PROP_FPS)
+    
+    frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    total_frames_in_video = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    print(f"Video info: {frame_width}x{frame_height}, {fps} fps, {total_frames_in_video} total frames")
 
     if fps <= 0 or fps > 1000:
         fps = 30.0
