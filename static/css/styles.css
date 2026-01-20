@@ -201,6 +201,27 @@ header h1 {
     box-shadow: 0 0 20px rgba(233, 69, 96, 0.3);
 }
 
+.selected-badge {
+    background: linear-gradient(135deg, #e94560, #ff6b6b);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.impact-frames-section {
+    margin-top: 30px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.impact-frames-section h3 {
+    margin-bottom: 20px;
+}
+
 .impact-card img {
     width: 100%;
     height: 200px;

@@ -2,6 +2,7 @@ let currentSession = null;
 let selectedImpacts = new Set();
 let assessmentData = null;
 let assessmentResult = null;
+let riskData = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     initializeUpload();
@@ -73,12 +74,12 @@ async function handleFileUpload(file) {
         }
 
         progressFill.style.width = '100%';
-        progressText.textContent = 'Analysis complete! Loading concussion screening...';
+        progressText.textContent = 'Analysis complete!';
 
         const data = await response.json();
         currentSession = data;
 
-        setTimeout(() => loadConcussionAssessment(), 500);
+        setTimeout(() => showStep2(data), 500);
 
     } catch (error) {
         alert('Error: ' + error.message);
@@ -87,19 +88,118 @@ async function handleFileUpload(file) {
     }
 }
 
-async function loadConcussionAssessment() {
+function showStep2(data) {
+    document.getElementById('step-1').classList.add('hidden');
+    document.getElementById('step-2').classList.remove('hidden');
+
+    const summaryHtml = `
+        <div class="summary-item">
+            <div class="summary-value">${data.impact_count}</div>
+            <div class="summary-label">Impacts Detected</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-value">${data.duration.toFixed(2)}s</div>
+            <div class="summary-label">Video Duration</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-value">${data.total_frames}</div>
+            <div class="summary-label">Total Frames</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-value">${data.fps.toFixed(1)}</div>
+            <div class="summary-label">FPS</div>
+        </div>
+    `;
+    document.getElementById('results-summary').innerHTML = summaryHtml;
+
+    const impactsGrid = document.getElementById('impacts-grid');
+    
+    if (data.impacts.length === 0) {
+        impactsGrid.innerHTML = '<p>No punch impacts were detected in this video. Try uploading a different video with clearer fighting footage.</p>';
+        document.getElementById('continue-to-assessment-btn').disabled = false;
+        document.getElementById('continue-to-assessment-btn').addEventListener('click', continueToAssessment);
+        return;
+    }
+
+    impactsGrid.innerHTML = data.impacts.map(impact => `
+        <div class="impact-card" data-id="${impact.id}" onclick="toggleImpact(${impact.id})">
+            <img src="${impact.image_path}" alt="Impact ${impact.id}">
+            <div class="impact-info">
+                <div class="impact-title">
+                    <span>Fighter ${impact.fighter} - Frame ${impact.frame}</span>
+                    <span class="impact-hand">${impact.hand}</span>
+                </div>
+                <div class="impact-stats">
+                    <div>Time: <span class="impact-stat-value">${impact.time.toFixed(2)}s</span></div>
+                    <div>Velocity: <span class="impact-stat-value">${impact.velocity.toFixed(1)} T/s</span></div>
+                    <div>Accel: <span class="impact-stat-value">${impact.acceleration.toFixed(1)} T/s²</span></div>
+                    <div>Power: <span class="impact-stat-value">${impact.power_index.toFixed(1)}</span></div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+
+    document.getElementById('continue-to-assessment-btn').addEventListener('click', continueToAssessment);
+}
+
+function toggleImpact(id) {
+    const card = document.querySelector(`.impact-card[data-id="${id}"]`);
+    
+    if (selectedImpacts.has(id)) {
+        selectedImpacts.delete(id);
+        card.classList.remove('selected');
+    } else {
+        selectedImpacts.add(id);
+        card.classList.add('selected');
+    }
+
+    document.getElementById('continue-to-assessment-btn').disabled = selectedImpacts.size === 0;
+}
+
+async function continueToAssessment() {
+    const weight = parseFloat(document.getElementById('puncher-weight').value);
+    
+    if (selectedImpacts.size > 0 && (isNaN(weight) || weight < 40 || weight > 200)) {
+        alert('Please enter a valid weight between 40 and 200 kg');
+        return;
+    }
+
+    if (selectedImpacts.size > 0) {
+        try {
+            const response = await fetch('/api/calculate-risk', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    session_id: currentSession.session_id,
+                    selected_impact_ids: Array.from(selectedImpacts),
+                    puncher_weight_kg: weight
+                })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.detail || 'Calculation failed');
+            }
+
+            riskData = await response.json();
+        } catch (error) {
+            alert('Error calculating risk: ' + error.message);
+            return;
+        }
+    }
+
     try {
         const response = await fetch('/api/concussion-assessment');
         assessmentData = await response.json();
-        showStep2();
+        showStep3();
     } catch (error) {
         alert('Error loading assessment: ' + error.message);
     }
 }
 
-function showStep2() {
-    document.getElementById('step-1').classList.add('hidden');
-    document.getElementById('step-2').classList.remove('hidden');
+function showStep3() {
+    document.getElementById('step-2').classList.add('hidden');
+    document.getElementById('step-3').classList.remove('hidden');
 
     document.getElementById('red-flags-list').innerHTML = assessmentData.red_flags.map(flag => `
         <div class="red-flag-item">
@@ -191,20 +291,20 @@ async function submitAssessment() {
         });
 
         assessmentResult = await response.json();
-        showStep3();
+        showStep4();
     } catch (error) {
         alert('Error submitting assessment: ' + error.message);
     }
 }
 
-function showStep3() {
-    document.getElementById('step-2').classList.add('hidden');
-    document.getElementById('step-3').classList.remove('hidden');
+function showStep4() {
+    document.getElementById('step-3').classList.add('hidden');
+    document.getElementById('step-4').classList.remove('hidden');
 
     displayAssessmentResults();
-    displayVideoAnalysis();
+    displayRiskResults();
+    displayImpactFrames();
     
-    document.getElementById('calculate-risk-btn').addEventListener('click', calculateRisk);
     document.getElementById('restart-btn').addEventListener('click', () => location.reload());
 }
 
@@ -268,103 +368,13 @@ function displayAssessmentResults() {
     document.getElementById('assessment-results-section').innerHTML = resultHtml;
 }
 
-function displayVideoAnalysis() {
-    const data = currentSession;
+function displayRiskResults() {
+    const riskResultsSection = document.getElementById('risk-results-section');
     
-    const summaryHtml = `
-        <div class="summary-item">
-            <div class="summary-value">${data.impact_count}</div>
-            <div class="summary-label">Impacts Detected</div>
-        </div>
-        <div class="summary-item">
-            <div class="summary-value">${data.duration.toFixed(2)}s</div>
-            <div class="summary-label">Video Duration</div>
-        </div>
-        <div class="summary-item">
-            <div class="summary-value">${data.total_frames}</div>
-            <div class="summary-label">Total Frames</div>
-        </div>
-        <div class="summary-item">
-            <div class="summary-value">${data.fps.toFixed(1)}</div>
-            <div class="summary-label">FPS</div>
-        </div>
-    `;
-    document.getElementById('results-summary').innerHTML = summaryHtml;
-
-    const impactsGrid = document.getElementById('impacts-grid');
-    
-    if (data.impacts.length === 0) {
-        impactsGrid.innerHTML = '<p>No punch impacts were detected in this video. Try uploading a different video with clearer fighting footage.</p>';
+    if (!riskData) {
+        riskResultsSection.innerHTML = '<h3>Brain Injury Risk Assessment</h3><p>No impacts were selected for risk analysis.</p>';
         return;
     }
-
-    impactsGrid.innerHTML = data.impacts.map(impact => `
-        <div class="impact-card" data-id="${impact.id}" onclick="toggleImpact(${impact.id})">
-            <img src="${impact.image_path}" alt="Impact ${impact.id}">
-            <div class="impact-info">
-                <div class="impact-title">
-                    <span>Fighter ${impact.fighter} - Frame ${impact.frame}</span>
-                    <span class="impact-hand">${impact.hand}</span>
-                </div>
-                <div class="impact-stats">
-                    <div>Time: <span class="impact-stat-value">${impact.time.toFixed(2)}s</span></div>
-                    <div>Velocity: <span class="impact-stat-value">${impact.velocity.toFixed(1)} T/s</span></div>
-                    <div>Accel: <span class="impact-stat-value">${impact.acceleration.toFixed(1)} T/s²</span></div>
-                    <div>Power: <span class="impact-stat-value">${impact.power_index.toFixed(1)}</span></div>
-                </div>
-            </div>
-        </div>
-    `).join('');
-}
-
-function toggleImpact(id) {
-    const card = document.querySelector(`.impact-card[data-id="${id}"]`);
-    
-    if (selectedImpacts.has(id)) {
-        selectedImpacts.delete(id);
-        card.classList.remove('selected');
-    } else {
-        selectedImpacts.add(id);
-        card.classList.add('selected');
-    }
-
-    document.getElementById('calculate-risk-btn').disabled = selectedImpacts.size === 0;
-}
-
-async function calculateRisk() {
-    const weight = parseFloat(document.getElementById('puncher-weight').value);
-    
-    if (isNaN(weight) || weight < 40 || weight > 200) {
-        alert('Please enter a valid weight between 40 and 200 kg');
-        return;
-    }
-
-    try {
-        const response = await fetch('/api/calculate-risk', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                session_id: currentSession.session_id,
-                selected_impact_ids: Array.from(selectedImpacts),
-                puncher_weight_kg: weight
-            })
-        });
-
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.detail || 'Calculation failed');
-        }
-
-        const riskData = await response.json();
-        displayRiskResults(riskData);
-
-    } catch (error) {
-        alert('Error: ' + error.message);
-    }
-}
-
-function displayRiskResults(riskData) {
-    document.getElementById('risk-results-section').classList.remove('hidden');
 
     const riskHtml = `
         <div class="risk-overview">
@@ -419,6 +429,57 @@ function displayRiskResults(riskData) {
     `;
 
     document.getElementById('risk-results').innerHTML = riskHtml;
+}
+
+function displayImpactFrames() {
+    const data = currentSession;
     
-    document.getElementById('risk-results-section').scrollIntoView({ behavior: 'smooth' });
+    const summaryHtml = `
+        <div class="summary-item">
+            <div class="summary-value">${data.impact_count}</div>
+            <div class="summary-label">Impacts Detected</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-value">${data.duration.toFixed(2)}s</div>
+            <div class="summary-label">Video Duration</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-value">${data.total_frames}</div>
+            <div class="summary-label">Total Frames</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-value">${data.fps.toFixed(1)}</div>
+            <div class="summary-label">FPS</div>
+        </div>
+    `;
+    document.getElementById('final-results-summary').innerHTML = summaryHtml;
+
+    const impactsGrid = document.getElementById('final-impacts-grid');
+    
+    if (data.impacts.length === 0) {
+        impactsGrid.innerHTML = '<p>No punch impacts were detected in this video.</p>';
+        return;
+    }
+
+    impactsGrid.innerHTML = data.impacts.map(impact => {
+        const isSelected = selectedImpacts.has(impact.id);
+        return `
+            <div class="impact-card ${isSelected ? 'selected' : ''}" data-id="${impact.id}">
+                <img src="${impact.image_path}" alt="Impact ${impact.id}">
+                <div class="impact-info">
+                    <div class="impact-title">
+                        <span>Fighter ${impact.fighter} - Frame ${impact.frame}</span>
+                        <span class="impact-hand">${impact.hand}</span>
+                    </div>
+                    <div class="impact-stats">
+                        <div>Time: <span class="impact-stat-value">${impact.time.toFixed(2)}s</span></div>
+                        <div>Velocity: <span class="impact-stat-value">${impact.velocity.toFixed(1)} T/s</span></div>
+                        <div>Accel: <span class="impact-stat-value">${impact.acceleration.toFixed(1)} T/s²</span></div>
+                        <div>Power: <span class="impact-stat-value">${impact.power_index.toFixed(1)}</span></div>
+                    </div>
+                    ${isSelected ? '<div class="selected-badge">Selected for Analysis</div>' : ''}
+                </div>
+            </div>
+        `;
+    }).join('');
 }
