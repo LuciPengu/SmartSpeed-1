@@ -169,6 +169,8 @@ def analyze_video(video_path: str, output_folder: str = "static/frames",
                          1: VelocityTracker(velocity_window, fps)}
     impact_log = []
 
+    debug_frames = [20, 21, 22, 23, 24]
+    
     while cap.isOpened():
         success, frame = cap.read()
         if not success: 
@@ -178,6 +180,8 @@ def analyze_video(video_path: str, output_folder: str = "static/frames",
         frame_count += 1
         impact_detected = False
         impact_details = {}
+        
+        debug_this_frame = frame_count in debug_frames
 
         yolo_results = yolo_model(frame, classes=0, verbose=False)
         for r in yolo_results:
@@ -281,6 +285,9 @@ def analyze_video(video_path: str, output_folder: str = "static/frames",
                         left_dist_raw = get_2d_distance(left_wrist, opponent_head)
                         left_dist_norm = left_dist_raw / normalization_scale
 
+                        if debug_this_frame:
+                            print(f"Frame {frame_count}: F{fighter_idx+1} LEFT dist={left_dist_norm:.3f} vel={left_speed_peak:.4f} threshold={impact_threshold} min_speed={min_punch_speed}")
+                        
                         if left_dist_norm < impact_threshold and left_speed_peak > min_punch_speed:
                             impact_detected = True
                             impact_details = {
@@ -300,6 +307,9 @@ def analyze_video(video_path: str, output_folder: str = "static/frames",
                         right_dist_raw = get_2d_distance(right_wrist, opponent_head)
                         right_dist_norm = right_dist_raw / normalization_scale
 
+                        if debug_this_frame:
+                            print(f"Frame {frame_count}: F{fighter_idx+1} RIGHT dist={right_dist_norm:.3f} vel={right_speed_peak:.4f}")
+                        
                         if right_dist_norm < impact_threshold and right_speed_peak > min_punch_speed:
                             impact_detected = True
                             impact_details = {
