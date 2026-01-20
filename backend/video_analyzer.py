@@ -248,6 +248,12 @@ def analyze_video(video_path: str, output_folder: str = "static/frames",
 
                     left_accel_peak = velocity_trackers[fighter_idx].get_peak_acceleration('left')
                     right_accel_peak = velocity_trackers[fighter_idx].get_peak_acceleration('right')
+                    
+                    if frame_count == 22:
+                        print(f"Frame 22 - Fighter {fighter_idx+1} punching Fighter {opponent_idx+1}:")
+                        print(f"  LEFT wrist to head: dist={dist_left_normalized:.3f}, vel={left_speed_peak:.4f}")
+                        print(f"  RIGHT wrist to head: dist={dist_right_normalized:.3f}, vel={right_speed_peak:.4f}")
+                        print(f"  Threshold: {impact_threshold}, Min speed: {min_punch_speed}")
 
                     left_power_index = velocity_trackers[fighter_idx].calculate_power_index('left')
                     right_power_index = velocity_trackers[fighter_idx].calculate_power_index('right')
