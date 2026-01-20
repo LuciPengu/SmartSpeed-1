@@ -31,12 +31,16 @@ A web application that analyzes sparring/boxing footage to detect punch impacts,
    - Power index (V × A)
    - Puncher's weight
    - Cumulative impact effects
-5. **Concussion Screening**: Self-administered SCAT5-based assessment including:
+5. **Concussion Screening**: Self-administered SCAT5-based assessment (separate tab) including:
    - Red flag symptoms
    - 22 symptom evaluation (0-6 severity scale)
    - Self-validated orientation questions (dropdowns/numeric inputs)
    - Memory test (5-word recall after 10-second display)
-   - Interactive eye tracking test (H-pattern smooth pursuit with self-reported difficulty)
+   - Webcam-based eye tracking test with TensorFlow.js face detection:
+     - 5-point calibration for gaze mapping
+     - H-pattern smooth pursuit tracking
+     - Automatic tracking quality score
+     - Fallback to manual self-report if camera denied
 
 ## API Endpoints
 - `GET /` - Main web interface
