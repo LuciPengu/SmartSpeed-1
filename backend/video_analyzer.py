@@ -216,10 +216,11 @@ def analyze_video(video_path: str, output_folder: str = "static/frames",
 
                     try:
                         opponent_torso_height = get_torso_height(detection_result.pose_landmarks[opponent_idx])
+                        opponent_head_size = get_head_size(detection_result.pose_landmarks[opponent_idx])
                     except:
                         continue
 
-                    if opponent_torso_height < 0.01:
+                    if opponent_torso_height < 0.01 or opponent_head_size < 0.01:
                         continue
 
                     normalization_scale = opponent_torso_height
