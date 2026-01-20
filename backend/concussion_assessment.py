@@ -141,6 +141,8 @@ def evaluate_assessment(responses: Dict[str, Any]) -> Dict[str, Any]:
     eye_tracking = responses.get('eye_tracking', {})
     eye_tracking_completed = eye_tracking.get('completed', False)
     eye_tracking_difficulty = eye_tracking.get('difficulty', 0)
+    eye_tracking_score = eye_tracking.get('trackingScore')
+    eye_tracking_used_webcam = eye_tracking.get('usedWebcam', False)
     
     if red_flags_present:
         urgency = 'emergency'
@@ -160,6 +162,13 @@ def evaluate_assessment(responses: Dict[str, Any]) -> Dict[str, Any]:
     
     eye_tracking_labels = ['No difficulty', 'Mild difficulty', 'Moderate difficulty', 'Severe difficulty']
     
+    if eye_tracking_used_webcam and eye_tracking_score is not None:
+        eye_tracking_display = f"{eye_tracking_score}% tracking"
+    elif eye_tracking_completed:
+        eye_tracking_display = eye_tracking_labels[min(eye_tracking_difficulty, 3)]
+    else:
+        eye_tracking_display = 'Not completed'
+    
     return {
         'urgency_level': urgency,
         'red_flags': red_flags_present,
@@ -174,7 +183,9 @@ def evaluate_assessment(responses: Dict[str, Any]) -> Dict[str, Any]:
         'memory_max': 5,
         'eye_tracking_completed': eye_tracking_completed,
         'eye_tracking_difficulty': eye_tracking_difficulty,
-        'eye_tracking_result': eye_tracking_labels[min(eye_tracking_difficulty, 3)] if eye_tracking_completed else 'Not completed',
+        'eye_tracking_score': eye_tracking_score,
+        'eye_tracking_used_webcam': eye_tracking_used_webcam,
+        'eye_tracking_result': eye_tracking_display,
         'recommendation': recommendation,
         'disclaimer': 'This is a screening tool only, not a medical diagnosis. A concussion should only be diagnosed by a qualified healthcare professional. Always seek professional medical evaluation after any suspected head injury.'
     }

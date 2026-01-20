@@ -5,108 +5,132 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Punch Impact Analyzer</title>
     <link rel="stylesheet" href="/static/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection"></script>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>Punch Impact Analyzer</h1>
-            <p class="subtitle">Upload sparring footage to analyze punch impacts and assess injury risk</p>
+            <p class="subtitle">Analyze sparring footage and assess injury risk</p>
         </header>
 
-        <div id="step-1" class="step active">
-            <div class="step-header">
-                <span class="step-number">1</span>
-                <h2>Upload Video</h2>
+        <nav class="section-tabs">
+            <button class="tab-btn active" data-section="punch-analysis" onclick="switchSection('punch-analysis')">
+                Punch Analysis
+            </button>
+            <button class="tab-btn" data-section="scat5-assessment" onclick="switchSection('scat5-assessment')">
+                SCAT5 Concussion Screening
+            </button>
+        </nav>
+
+        <div id="punch-analysis-section" class="main-section active">
+            <div class="section-intro">
+                <h2>Video Punch Analysis</h2>
+                <p>Upload sparring footage to detect punch impacts and calculate brain injury risk based on punch metrics.</p>
             </div>
-            <div class="upload-section">
-                <div class="upload-area" id="upload-area">
-                    <div class="upload-icon">📹</div>
-                    <p>Drag and drop your sparring video here</p>
-                    <p class="upload-hint">or click to select a file</p>
-                    <input type="file" id="video-input" accept=".mp4,.avi,.mov,.mkv" hidden>
+
+            <div id="step-1" class="step active">
+                <div class="step-header">
+                    <span class="step-number">1</span>
+                    <h2>Upload Video</h2>
                 </div>
-                <div id="upload-progress" class="progress-container hidden">
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progress-fill"></div>
+                <div class="upload-section">
+                    <div class="upload-area" id="upload-area">
+                        <div class="upload-icon">📹</div>
+                        <p>Drag and drop your sparring video here</p>
+                        <p class="upload-hint">or click to select a file</p>
+                        <input type="file" id="video-input" accept=".mp4,.avi,.mov,.mkv" hidden>
                     </div>
-                    <p id="progress-text">Analyzing video...</p>
+                    <div id="upload-progress" class="progress-container hidden">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <p id="progress-text">Analyzing video...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="step-2" class="step hidden">
+                <div class="step-header">
+                    <span class="step-number">2</span>
+                    <h2>Review Detected Impacts</h2>
+                </div>
+                <div class="results-summary" id="results-summary"></div>
+                <p class="instruction">Select the punches that you believe landed cleanly:</p>
+                <div class="impacts-grid" id="impacts-grid"></div>
+                <div class="weight-input">
+                    <label for="puncher-weight">Puncher's Weight (kg):</label>
+                    <input type="number" id="puncher-weight" min="40" max="200" value="70" step="0.5">
+                </div>
+                <button id="calculate-risk-btn" class="btn primary" disabled>Calculate Brain Injury Risk</button>
+            </div>
+
+            <div id="step-3" class="step hidden">
+                <div class="step-header">
+                    <span class="step-number">3</span>
+                    <h2>Brain Injury Risk Assessment</h2>
+                </div>
+                <div id="risk-results"></div>
+                <div class="next-steps-prompt">
+                    <p>Based on the punch analysis, you may want to complete a concussion screening assessment.</p>
+                    <button id="start-assessment-btn" class="btn primary">Take SCAT5 Concussion Screening</button>
+                    <button class="btn secondary" onclick="restartAnalysis()">Start New Analysis</button>
                 </div>
             </div>
         </div>
 
-        <div id="step-2" class="step hidden">
-            <div class="step-header">
-                <span class="step-number">2</span>
-                <h2>Review Detected Impacts</h2>
-            </div>
-            <div class="results-summary" id="results-summary"></div>
-            <p class="instruction">Select the punches that you believe landed cleanly:</p>
-            <div class="impacts-grid" id="impacts-grid"></div>
-            <div class="weight-input">
-                <label for="puncher-weight">Puncher's Weight (kg):</label>
-                <input type="number" id="puncher-weight" min="40" max="200" value="70" step="0.5">
-            </div>
-            <button id="calculate-risk-btn" class="btn primary" disabled>Calculate Brain Injury Risk</button>
-        </div>
-
-        <div id="step-3" class="step hidden">
-            <div class="step-header">
-                <span class="step-number">3</span>
-                <h2>Brain Injury Risk Assessment</h2>
-            </div>
-            <div id="risk-results"></div>
-            <button id="start-assessment-btn" class="btn primary">Take Concussion Screening Assessment</button>
-        </div>
-
-        <div id="step-4" class="step hidden">
-            <div class="step-header">
-                <span class="step-number">4</span>
-                <h2>Concussion Screening Assessment</h2>
-            </div>
-            <div class="assessment-intro">
-                <p class="warning">This is based on the SCAT5 protocol. It is a screening tool only, not a medical diagnosis.</p>
-            </div>
-            
-            <div id="red-flags-section" class="assessment-section">
-                <h3>Red Flag Symptoms</h3>
-                <p class="section-description">If any of these are present, seek immediate medical attention.</p>
-                <div id="red-flags-list"></div>
+        <div id="scat5-assessment-section" class="main-section hidden">
+            <div class="section-intro">
+                <h2>SCAT5 Concussion Screening</h2>
+                <p>Self-administered concussion assessment based on the Sport Concussion Assessment Tool (SCAT5).</p>
+                <p class="warning">This is a screening tool only, not a medical diagnosis. Always consult a healthcare professional.</p>
             </div>
 
-            <div id="symptoms-section" class="assessment-section">
-                <h3>Symptom Evaluation</h3>
-                <p class="section-description">Rate each symptom from 0 (none) to 6 (severe)</p>
-                <div id="symptoms-list"></div>
+            <div id="step-4" class="step active">
+                <div id="red-flags-section" class="assessment-section">
+                    <h3>Red Flag Symptoms</h3>
+                    <p class="section-description">If any of these are present, seek immediate medical attention.</p>
+                    <div id="red-flags-list"></div>
+                </div>
+
+                <div id="symptoms-section" class="assessment-section">
+                    <h3>Symptom Evaluation</h3>
+                    <p class="section-description">Rate each symptom from 0 (none) to 6 (severe)</p>
+                    <div id="symptoms-list"></div>
+                </div>
+
+                <div id="orientation-section" class="assessment-section">
+                    <h3>Orientation Questions</h3>
+                    <p class="section-description">Answer the following questions</p>
+                    <div id="orientation-list"></div>
+                </div>
+
+                <div id="memory-section" class="assessment-section">
+                    <h3>Memory Test</h3>
+                    <p class="section-description">Memorize the words shown, then recall them</p>
+                    <div id="memory-list"></div>
+                </div>
+
+                <div id="eye-tracking-section" class="assessment-section">
+                    <h3>Eye Tracking Test</h3>
+                    <p class="section-description">This test uses your webcam to track how well your eyes follow a moving target</p>
+                    <div id="eye-tracking-container"></div>
+                </div>
+
+                <button id="submit-assessment-btn" class="btn primary">Submit Assessment</button>
             </div>
 
-            <div id="orientation-section" class="assessment-section">
-                <h3>Orientation Questions</h3>
-                <p class="section-description">Mark each question as correctly answered or not</p>
-                <div id="orientation-list"></div>
+            <div id="step-5" class="step hidden">
+                <div class="step-header">
+                    <h2>Assessment Results</h2>
+                </div>
+                <div id="assessment-results"></div>
+                <div class="results-actions">
+                    <button id="restart-btn" class="btn secondary" onclick="restartAssessment()">Take Another Assessment</button>
+                    <button class="btn secondary" onclick="switchSection('punch-analysis')">Return to Punch Analysis</button>
+                </div>
             </div>
-
-            <div id="memory-section" class="assessment-section">
-                <h3>Memory Test</h3>
-                <p class="section-description">Memorize the words shown, then recall them</p>
-                <div id="memory-list"></div>
-            </div>
-
-            <div id="eye-tracking-section" class="assessment-section">
-                <h3>Eye Tracking Test</h3>
-                <p class="section-description">Follow the moving dot with your eyes only (keep your head still)</p>
-                <div id="eye-tracking-container"></div>
-            </div>
-
-            <button id="submit-assessment-btn" class="btn primary">Submit Assessment</button>
-        </div>
-
-        <div id="step-5" class="step hidden">
-            <div class="step-header">
-                <span class="step-number">5</span>
-                <h2>Assessment Results</h2>
-            </div>
-            <div id="assessment-results"></div>
-            <button id="restart-btn" class="btn secondary">Start New Analysis</button>
         </div>
     </div>
 

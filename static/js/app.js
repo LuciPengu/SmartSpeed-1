@@ -2,10 +2,69 @@ let currentSession = null;
 let selectedImpacts = new Set();
 let assessmentData = null;
 let savedRiskData = null;
+let currentSection = 'punch-analysis';
 
 document.addEventListener('DOMContentLoaded', () => {
     initializeUpload();
+    initSectionTabs();
 });
+
+function initSectionTabs() {
+    const tabs = document.querySelectorAll('.tab-btn');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            switchSection(tab.dataset.section);
+        });
+    });
+}
+
+function switchSection(sectionId) {
+    currentSection = sectionId;
+    
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.section === sectionId);
+    });
+    
+    document.querySelectorAll('.main-section').forEach(section => {
+        section.classList.remove('active');
+    });
+    
+    const targetSection = document.getElementById(sectionId + '-section');
+    if (targetSection) {
+        targetSection.classList.add('active');
+    }
+    
+    if (sectionId === 'scat5-assessment' && !assessmentData) {
+        loadAssessmentQuestions();
+    }
+}
+
+function restartAnalysis() {
+    currentSession = null;
+    selectedImpacts = new Set();
+    savedRiskData = null;
+    
+    document.querySelectorAll('#punch-analysis-section .step').forEach(step => {
+        step.classList.add('hidden');
+    });
+    document.getElementById('step-1').classList.remove('hidden');
+    document.getElementById('step-1').classList.add('active');
+    
+    const uploadArea = document.getElementById('upload-area');
+    const progressContainer = document.getElementById('upload-progress');
+    uploadArea.classList.remove('hidden');
+    progressContainer.classList.add('hidden');
+}
+
+function restartAssessment() {
+    assessmentData = null;
+    eyeTrackingResult = { completed: false, difficulty: 0, trackingScore: null, usedWebcam: false };
+    
+    document.getElementById('step-4').classList.remove('hidden');
+    document.getElementById('step-5').classList.add('hidden');
+    
+    loadAssessmentQuestions();
+}
 
 function initializeUpload() {
     const uploadArea = document.getElementById('upload-area');
@@ -205,15 +264,26 @@ async function loadConcussionAssessment() {
     try {
         const response = await fetch('/api/concussion-assessment');
         assessmentData = await response.json();
-        showStep4();
+        switchSection('scat5-assessment');
+        populateAssessmentForm();
     } catch (error) {
         alert('Error loading assessment: ' + error.message);
     }
 }
 
-function showStep4() {
-    document.getElementById('step-3').classList.add('hidden');
+async function loadAssessmentQuestions() {
+    try {
+        const response = await fetch('/api/concussion-assessment');
+        assessmentData = await response.json();
+        populateAssessmentForm();
+    } catch (error) {
+        console.error('Error loading assessment:', error);
+    }
+}
+
+function populateAssessmentForm() {
     document.getElementById('step-4').classList.remove('hidden');
+    document.getElementById('step-5').classList.add('hidden');
 
     document.getElementById('red-flags-list').innerHTML = assessmentData.red_flags.map(flag => `
         <div class="red-flag-item">
@@ -302,57 +372,363 @@ function hideMemoryWords() {
     document.getElementById('memory-recall').classList.remove('hidden');
 }
 
-let eyeTrackingResult = { completed: false, difficulty: 0 };
+let eyeTrackingResult = { completed: false, difficulty: 0, trackingScore: null, usedWebcam: false };
+let faceDetector = null;
+let videoStream = null;
+let eyeTrackingAnimationId = null;
+let calibrationData = [];
+let trackingErrors = [];
 
 function initEyeTrackingTest() {
     const container = document.getElementById('eye-tracking-container');
     container.innerHTML = `
         <div class="eye-tracking-test">
-            <div class="eye-test-instructions" id="eye-test-instructions">
-                <p>This test evaluates your ability to track a moving target smoothly.</p>
-                <p><strong>Instructions:</strong></p>
-                <ol>
-                    <li>Keep your head still</li>
-                    <li>Follow the red dot with your eyes only</li>
-                    <li>The dot will move in an H-pattern</li>
-                </ol>
-                <button class="btn primary" onclick="startEyeTrackingTest()">Start Eye Tracking Test</button>
+            <div class="eye-test-consent" id="eye-test-consent">
+                <p>This test uses your webcam to track your eye movements as you follow a moving target.</p>
+                <p class="privacy-note"><strong>Privacy:</strong> All processing happens locally in your browser. No video is recorded or uploaded.</p>
+                <div class="consent-buttons">
+                    <button class="btn primary" onclick="requestCameraAccess()">Enable Camera & Start Test</button>
+                    <button class="btn secondary" onclick="useManualFallback()">Use Manual Test Instead</button>
+                </div>
             </div>
-            <div class="eye-test-canvas-container hidden" id="eye-test-canvas-container">
-                <canvas id="eye-tracking-canvas" width="400" height="300"></canvas>
-                <p id="eye-test-progress">Following target...</p>
+            <div class="eye-test-loading hidden" id="eye-test-loading">
+                <p>Loading eye tracking model...</p>
+                <div class="loading-spinner"></div>
+            </div>
+            <div class="eye-test-calibration hidden" id="eye-test-calibration">
+                <p>Look at each dot as it appears and click when ready</p>
+                <div class="calibration-container">
+                    <video id="calibration-video" autoplay playsinline></video>
+                    <canvas id="calibration-canvas" width="640" height="480"></canvas>
+                    <div id="calibration-dot" class="calibration-dot"></div>
+                </div>
+                <p id="calibration-status">Calibration point 1 of 5</p>
+            </div>
+            <div class="eye-test-tracking hidden" id="eye-test-tracking">
+                <p>Follow the red dot with your eyes - keep your head still</p>
+                <div class="tracking-container">
+                    <video id="tracking-video" autoplay playsinline></video>
+                    <canvas id="tracking-canvas" width="640" height="480"></canvas>
+                </div>
+                <p id="tracking-status">Tracking...</p>
             </div>
             <div class="eye-test-result hidden" id="eye-test-result">
-                <p><strong>How difficult was it to follow the dot smoothly?</strong></p>
-                <div class="difficulty-scale">
+                <div id="tracking-score-display"></div>
+                <p id="manual-difficulty-prompt" class="hidden"><strong>Rate your difficulty following the dot:</strong></p>
+                <div class="difficulty-scale" id="difficulty-scale">
                     <button class="difficulty-btn" data-difficulty="0" onclick="setEyeTrackingDifficulty(0)">Easy (No difficulty)</button>
                     <button class="difficulty-btn" data-difficulty="1" onclick="setEyeTrackingDifficulty(1)">Mild difficulty</button>
                     <button class="difficulty-btn" data-difficulty="2" onclick="setEyeTrackingDifficulty(2)">Moderate difficulty</button>
                     <button class="difficulty-btn" data-difficulty="3" onclick="setEyeTrackingDifficulty(3)">Severe difficulty / Could not follow</button>
                 </div>
             </div>
+            <div class="eye-test-manual hidden" id="eye-test-manual">
+                <div class="eye-test-instructions">
+                    <p>Follow the red dot with your eyes only (keep your head still).</p>
+                    <button class="btn primary" onclick="startManualEyeTest()">Start Test</button>
+                </div>
+            </div>
+            <div class="eye-test-canvas-container hidden" id="eye-test-canvas-container">
+                <canvas id="eye-tracking-canvas" width="400" height="300"></canvas>
+                <p id="eye-test-progress">Following target...</p>
+            </div>
         </div>
     `;
 }
 
-let eyeTrackingAnimationId = null;
+async function requestCameraAccess() {
+    document.getElementById('eye-test-consent').classList.add('hidden');
+    document.getElementById('eye-test-loading').classList.remove('hidden');
+    
+    try {
+        videoStream = await navigator.mediaDevices.getUserMedia({ 
+            video: { width: 640, height: 480, facingMode: 'user' } 
+        });
+        
+        await loadFaceDetector();
+        startCalibration();
+    } catch (error) {
+        console.error('Camera access denied:', error);
+        alert('Camera access was denied. Falling back to manual test.');
+        useManualFallback();
+    }
+}
 
-function startEyeTrackingTest() {
-    document.getElementById('eye-test-instructions').classList.add('hidden');
+async function loadFaceDetector() {
+    try {
+        const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
+        faceDetector = await faceLandmarksDetection.createDetector(model, {
+            runtime: 'tfjs',
+            refineLandmarks: true,
+            maxFaces: 1
+        });
+    } catch (error) {
+        console.error('Failed to load face detector:', error);
+        throw error;
+    }
+}
+
+function startCalibration() {
+    document.getElementById('eye-test-loading').classList.add('hidden');
+    document.getElementById('eye-test-calibration').classList.remove('hidden');
+    
+    const video = document.getElementById('calibration-video');
+    video.srcObject = videoStream;
+    
+    calibrationData = [];
+    const calibrationPoints = [
+        { x: 50, y: 50 },
+        { x: 590, y: 50 },
+        { x: 320, y: 240 },
+        { x: 50, y: 430 },
+        { x: 590, y: 430 }
+    ];
+    
+    let currentCalibPoint = 0;
+    const dot = document.getElementById('calibration-dot');
+    const status = document.getElementById('calibration-status');
+    
+    function showNextPoint() {
+        if (currentCalibPoint >= calibrationPoints.length) {
+            startTracking();
+            return;
+        }
+        
+        const point = calibrationPoints[currentCalibPoint];
+        dot.style.left = point.x + 'px';
+        dot.style.top = point.y + 'px';
+        status.textContent = `Calibration point ${currentCalibPoint + 1} of ${calibrationPoints.length} - Look at the dot and click`;
+        
+        dot.onclick = async () => {
+            const faces = await faceDetector.estimateFaces(video);
+            if (faces.length > 0) {
+                const iris = getIrisPosition(faces[0]);
+                calibrationData.push({ screen: point, iris: iris });
+            }
+            currentCalibPoint++;
+            showNextPoint();
+        };
+    }
+    
+    showNextPoint();
+}
+
+function getIrisPosition(face) {
+    const leftIris = face.keypoints.filter(k => k.name && k.name.includes('leftIris'));
+    const rightIris = face.keypoints.filter(k => k.name && k.name.includes('rightIris'));
+    
+    let x = 0, y = 0, count = 0;
+    
+    [...leftIris, ...rightIris].forEach(point => {
+        x += point.x;
+        y += point.y;
+        count++;
+    });
+    
+    if (count === 0) {
+        const leftEye = face.keypoints.find(k => k.name === 'leftEye');
+        const rightEye = face.keypoints.find(k => k.name === 'rightEye');
+        if (leftEye && rightEye) {
+            return { x: (leftEye.x + rightEye.x) / 2, y: (leftEye.y + rightEye.y) / 2 };
+        }
+        return { x: 320, y: 240 };
+    }
+    
+    return { x: x / count, y: y / count };
+}
+
+function startTracking() {
+    document.getElementById('eye-test-calibration').classList.add('hidden');
+    document.getElementById('eye-test-tracking').classList.remove('hidden');
+    
+    const video = document.getElementById('tracking-video');
+    video.srcObject = videoStream;
+    
+    const canvas = document.getElementById('tracking-canvas');
+    const ctx = canvas.getContext('2d');
+    
+    trackingErrors = [];
+    
+    const trackingPoints = [
+        { x: 100, y: 240 },
+        { x: 100, y: 80 },
+        { x: 320, y: 80 },
+        { x: 320, y: 240 },
+        { x: 320, y: 400 },
+        { x: 540, y: 400 },
+        { x: 540, y: 240 },
+        { x: 540, y: 80 }
+    ];
+    
+    let currentSegment = 0;
+    let progress = 0;
+    const speed = 0.015;
+    let lastTrackTime = 0;
+    
+    async function trackFrame(timestamp) {
+        if (timestamp - lastTrackTime < 50) {
+            eyeTrackingAnimationId = requestAnimationFrame(trackFrame);
+            return;
+        }
+        lastTrackTime = timestamp;
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        const start = trackingPoints[currentSegment];
+        const end = trackingPoints[(currentSegment + 1) % trackingPoints.length];
+        const targetX = start.x + (end.x - start.x) * progress;
+        const targetY = start.y + (end.y - start.y) * progress;
+        
+        ctx.beginPath();
+        ctx.arc(targetX, targetY, 20, 0, Math.PI * 2);
+        ctx.fillStyle = '#e94560';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(targetX, targetY, 8, 0, Math.PI * 2);
+        ctx.fillStyle = '#fff';
+        ctx.fill();
+        
+        try {
+            const faces = await faceDetector.estimateFaces(video);
+            if (faces.length > 0) {
+                const iris = getIrisPosition(faces[0]);
+                const estimatedGaze = estimateGazePosition(iris);
+                
+                const error = Math.sqrt(
+                    Math.pow(estimatedGaze.x - targetX, 2) + 
+                    Math.pow(estimatedGaze.y - targetY, 2)
+                );
+                trackingErrors.push(error);
+                
+                ctx.beginPath();
+                ctx.arc(estimatedGaze.x, estimatedGaze.y, 8, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(79, 195, 247, 0.7)';
+                ctx.fill();
+            }
+        } catch (e) {
+            console.error('Tracking error:', e);
+        }
+        
+        progress += speed;
+        
+        if (progress >= 1) {
+            progress = 0;
+            currentSegment++;
+            
+            if (currentSegment >= trackingPoints.length - 1) {
+                cancelAnimationFrame(eyeTrackingAnimationId);
+                finishTracking();
+                return;
+            }
+        }
+        
+        document.getElementById('tracking-status').textContent = 
+            `Tracking... ${Math.round((currentSegment / (trackingPoints.length - 1)) * 100)}%`;
+        
+        eyeTrackingAnimationId = requestAnimationFrame(trackFrame);
+    }
+    
+    eyeTrackingAnimationId = requestAnimationFrame(trackFrame);
+}
+
+function estimateGazePosition(iris) {
+    if (calibrationData.length < 3) {
+        return { x: 320, y: 240 };
+    }
+    
+    let sumX = 0, sumY = 0;
+    let sumIrisX = 0, sumIrisY = 0;
+    
+    calibrationData.forEach(c => {
+        sumX += c.screen.x;
+        sumY += c.screen.y;
+        sumIrisX += c.iris.x;
+        sumIrisY += c.iris.y;
+    });
+    
+    const avgScreenX = sumX / calibrationData.length;
+    const avgScreenY = sumY / calibrationData.length;
+    const avgIrisX = sumIrisX / calibrationData.length;
+    const avgIrisY = sumIrisY / calibrationData.length;
+    
+    const scaleX = 640 / 100;
+    const scaleY = 480 / 100;
+    
+    const gazeX = avgScreenX + (iris.x - avgIrisX) * scaleX;
+    const gazeY = avgScreenY + (iris.y - avgIrisY) * scaleY;
+    
+    return { 
+        x: Math.max(0, Math.min(640, gazeX)), 
+        y: Math.max(0, Math.min(480, gazeY)) 
+    };
+}
+
+function finishTracking() {
+    if (videoStream) {
+        videoStream.getTracks().forEach(track => track.stop());
+        videoStream = null;
+    }
+    
+    document.getElementById('eye-test-tracking').classList.add('hidden');
+    document.getElementById('eye-test-result').classList.remove('hidden');
+    document.getElementById('difficulty-scale').classList.add('hidden');
+    
+    const avgError = trackingErrors.length > 0 
+        ? trackingErrors.reduce((a, b) => a + b, 0) / trackingErrors.length 
+        : 999;
+    
+    let difficulty = 0;
+    let qualityLabel = '';
+    
+    if (avgError < 80) {
+        difficulty = 0;
+        qualityLabel = 'Excellent tracking';
+    } else if (avgError < 150) {
+        difficulty = 1;
+        qualityLabel = 'Good tracking with minor deviations';
+    } else if (avgError < 250) {
+        difficulty = 2;
+        qualityLabel = 'Moderate tracking difficulty detected';
+    } else {
+        difficulty = 3;
+        qualityLabel = 'Significant tracking difficulty detected';
+    }
+    
+    eyeTrackingResult = { 
+        completed: true, 
+        difficulty: difficulty, 
+        trackingScore: Math.round(100 - Math.min(avgError / 3, 100)),
+        usedWebcam: true
+    };
+    
+    const scoreDisplay = document.getElementById('tracking-score-display');
+    scoreDisplay.innerHTML = `
+        <div class="tracking-result-card">
+            <h4>Eye Tracking Complete</h4>
+            <div class="tracking-score">${eyeTrackingResult.trackingScore}%</div>
+            <p class="tracking-quality ${difficulty > 1 ? 'warning' : ''}">${qualityLabel}</p>
+            <p class="tracking-note">This automated score will be included in your assessment.</p>
+        </div>
+    `;
+}
+
+function useManualFallback() {
+    document.getElementById('eye-test-consent').classList.add('hidden');
+    document.getElementById('eye-test-loading').classList.add('hidden');
+    document.getElementById('eye-test-manual').classList.remove('hidden');
+}
+
+function startManualEyeTest() {
+    document.getElementById('eye-test-manual').classList.add('hidden');
     document.getElementById('eye-test-canvas-container').classList.remove('hidden');
     
     const canvas = document.getElementById('eye-tracking-canvas');
     const ctx = canvas.getContext('2d');
     
     const points = [
-        { x: 50, y: 150 },
-        { x: 50, y: 50 },
-        { x: 200, y: 50 },
-        { x: 200, y: 150 },
-        { x: 200, y: 250 },
-        { x: 350, y: 250 },
-        { x: 350, y: 150 },
-        { x: 350, y: 50 }
+        { x: 50, y: 150 }, { x: 50, y: 50 }, { x: 200, y: 50 },
+        { x: 200, y: 150 }, { x: 200, y: 250 }, { x: 350, y: 250 },
+        { x: 350, y: 150 }, { x: 350, y: 50 }
     ];
     
     let currentPoint = 0;
@@ -374,7 +750,6 @@ function startEyeTrackingTest() {
         
         const start = points[currentPoint];
         const end = points[(currentPoint + 1) % points.length];
-        
         const x = start.x + (end.x - start.x) * progress;
         const y = start.y + (end.y - start.y) * progress;
         
@@ -382,7 +757,6 @@ function startEyeTrackingTest() {
         ctx.arc(x, y, 15, 0, Math.PI * 2);
         ctx.fillStyle = '#e94560';
         ctx.fill();
-        
         ctx.beginPath();
         ctx.arc(x, y, 5, 0, Math.PI * 2);
         ctx.fillStyle = '#fff';
@@ -393,27 +767,27 @@ function startEyeTrackingTest() {
         if (progress >= 1) {
             progress = 0;
             currentPoint++;
-            
             if (currentPoint >= points.length - 1) {
                 cancelAnimationFrame(eyeTrackingAnimationId);
-                endEyeTrackingTest();
+                endManualTest();
                 return;
             }
         }
-        
         eyeTrackingAnimationId = requestAnimationFrame(animate);
     }
-    
     animate();
 }
 
-function endEyeTrackingTest() {
+function endManualTest() {
     document.getElementById('eye-test-canvas-container').classList.add('hidden');
     document.getElementById('eye-test-result').classList.remove('hidden');
+    document.getElementById('tracking-score-display').innerHTML = '<p>Test complete. Please rate your difficulty below:</p>';
+    document.getElementById('difficulty-scale').classList.remove('hidden');
+    document.getElementById('manual-difficulty-prompt').classList.remove('hidden');
 }
 
 function setEyeTrackingDifficulty(difficulty) {
-    eyeTrackingResult = { completed: true, difficulty: difficulty };
+    eyeTrackingResult = { completed: true, difficulty: difficulty, usedWebcam: false };
     
     document.querySelectorAll('.difficulty-btn').forEach(btn => {
         btn.classList.remove('active');
