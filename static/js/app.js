@@ -428,8 +428,6 @@ function showStep5(result) {
     }
 
     const resultHtml = `
-        ${riskSummaryHtml}
-        
         <div class="assessment-result-card">
             <h3>Concussion Screening Assessment</h3>
             ${redFlagWarning}
@@ -463,6 +461,8 @@ function showStep5(result) {
 
             <p class="disclaimer">${result.disclaimer}</p>
         </div>
+        
+        ${riskSummaryHtml}
     `;
 
     document.getElementById('assessment-results').innerHTML = resultHtml;
