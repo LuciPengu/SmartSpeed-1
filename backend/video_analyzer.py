@@ -132,7 +132,7 @@ def get_head_size(landmarks):
 
 
 def analyze_video(video_path: str, output_folder: str = "static/frames", 
-                  impact_threshold: float = 0.6, min_punch_speed: float = 0.015,
+                  impact_threshold: float = 0.4, min_punch_speed: float = 0.015,
                   velocity_window: int = 5) -> Dict[str, Any]:
     
     verify_models()
@@ -184,13 +184,13 @@ def analyze_video(video_path: str, output_folder: str = "static/frames",
         impact_detected = False
         impact_details = {}
 
+        mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+
         yolo_results = yolo_model(frame, classes=0, verbose=False)
         for r in yolo_results:
             for box in r.boxes:
                 x1, y1, x2, y2 = map(int, box.xyxy[0])
                 cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 255), 2)
-
-        mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
 
         try:
             detection_result = landmarker.detect_for_video(mp_image, timestamp_ms)
