@@ -12,7 +12,7 @@ language = "python3"
 requiredFiles = [".replit", "replit.nix"]
 
 [deployment]
-run = ["python", "-m", "uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "5000"]
+run = ["python", "-m", "uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port"]
 deploymentTarget = "vm"
 build = ["pip", "install", "-r", "requirements.txt"]
 
