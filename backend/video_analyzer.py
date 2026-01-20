@@ -193,6 +193,10 @@ def analyze_video(video_path: str, output_folder: str = "static/frames",
             continue
 
         if detection_result.pose_landmarks:
+            num_poses = len(detection_result.pose_landmarks)
+            if frame_count in [20, 21, 22, 23, 24]:
+                print(f"Frame {frame_count}: Detected {num_poses} poses")
+            
             for idx, landmarks in enumerate(detection_result.pose_landmarks):
                 for landmark in landmarks:
                     cx, cy = int(landmark.x * frame.shape[1]), int(landmark.y * frame.shape[0])
