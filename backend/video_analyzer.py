@@ -133,7 +133,7 @@ def get_head_size(landmarks):
 
 def analyze_video(video_path: str, output_folder: str = "static/frames", 
                   impact_threshold: float = 0.4, min_punch_speed: float = 0.015,
-                  velocity_window: int = 5, max_frames: int = 3000) -> Dict[str, Any]:
+                  velocity_window: int = 5) -> Dict[str, Any]:
     
     verify_models()
     
@@ -172,9 +172,6 @@ def analyze_video(video_path: str, output_folder: str = "static/frames",
     while cap.isOpened():
         success, frame = cap.read()
         if not success: 
-            break
-        
-        if frame_count >= max_frames:
             break
 
         timestamp_ms = int(frame_count * (1000 / fps))
