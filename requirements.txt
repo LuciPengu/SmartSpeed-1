@@ -1,12 +1,8 @@
---extra-index-url https://download.pytorch.org/whl/cpu
-torch==2.1.0+cpu
-torchvision==0.16.0+cpu
 fastapi
 uvicorn[standard]
 pydantic
 python-multipart
 mediapipe
-ultralytics
 opencv-python-headless
 numpy
 Pillow

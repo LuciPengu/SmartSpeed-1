@@ -1,7 +1,6 @@
 import cv2
 import mediapipe as mp
 import numpy as np
-from ultralytics import YOLO
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 import os
@@ -131,6 +130,25 @@ def get_head_size(landmarks):
     return head_size
 
 
+def draw_pose_landmarks(frame, landmarks, color=(0, 255, 0)):
+    h, w = frame.shape[:2]
+    connections = [
+        (11, 12), (11, 13), (13, 15), (12, 14), (14, 16),
+        (11, 23), (12, 24), (23, 24), (23, 25), (25, 27),
+        (24, 26), (26, 28), (0, 11), (0, 12)
+    ]
+    
+    for landmark in landmarks:
+        cx, cy = int(landmark.x * w), int(landmark.y * h)
+        cv2.circle(frame, (cx, cy), 3, color, -1)
+    
+    for start, end in connections:
+        if start < len(landmarks) and end < len(landmarks):
+            p1 = (int(landmarks[start].x * w), int(landmarks[start].y * h))
+            p2 = (int(landmarks[end].x * w), int(landmarks[end].y * h))
+            cv2.line(frame, p1, p2, color, 2)
+
+
 def analyze_video(video_path: str, output_folder: str = "static/frames", 
                   impact_threshold: float = 0.35, min_punch_speed: float = 0.015,
                   velocity_window: int = 5) -> Dict[str, Any]:
@@ -143,11 +161,6 @@ def analyze_video(video_path: str, output_folder: str = "static/frames",
     session_id = str(uuid.uuid4())[:8]
     session_folder = os.path.join(output_folder, session_id)
     os.makedirs(session_folder, exist_ok=True)
-
-    try:
-        yolo_model = YOLO('yolov8n.pt')
-    except Exception as e:
-        raise RuntimeError(f"Failed to load YOLO model: {str(e)}")
 
     base_options = python.BaseOptions(model_asset_path=MODEL_PATH)
     options = vision.PoseLandmarkerOptions(
@@ -186,22 +199,16 @@ def analyze_video(video_path: str, output_folder: str = "static/frames",
 
         mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
 
-        yolo_results = yolo_model(frame, classes=0, verbose=False)
-        for r in yolo_results:
-            for box in r.boxes:
-                x1, y1, x2, y2 = map(int, box.xyxy[0])
-                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 255), 2)
-
         try:
             detection_result = landmarker.detect_for_video(mp_image, timestamp_ms)
         except Exception as e:
             continue
 
         if detection_result.pose_landmarks:
+            colors = [(0, 255, 0), (255, 0, 0)]
             for idx, landmarks in enumerate(detection_result.pose_landmarks):
-                for landmark in landmarks:
-                    cx, cy = int(landmark.x * frame.shape[1]), int(landmark.y * frame.shape[0])
-                    cv2.circle(frame, (cx, cy), 3, (0, 255, 0), -1)
+                color = colors[idx % len(colors)]
+                draw_pose_landmarks(frame, landmarks, color)
 
             for fighter_idx in [0, 1]:
                 if len(detection_result.pose_landmarks) > fighter_idx:
