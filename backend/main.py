@@ -1,6 +1,6 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException, BackgroundTasks, Response, Form
+from fastapi import FastAPI, File, UploadFile, HTTPException, BackgroundTasks, Response, Form, Request, Depends
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
+from fastapi.responses import HTMLResponse, JSONResponse, FileResponse, StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Dict, Any, Optional
@@ -12,6 +12,10 @@ import json
 from backend.video_analyzer import analyze_video
 from backend.risk_calculator import calculate_brain_injury_risk
 from backend.concussion_assessment import get_assessment_questions, evaluate_assessment
+from backend.ai_summary import generate_ai_summary_stream, generate_ai_summary
+from backend.database import init_db, get_db, User, InjurySession, ImpactRecord
+
+init_db()
 
 app = FastAPI(title="Punch Impact Analyzer", version="1.0.0")
 
@@ -178,6 +182,254 @@ async def evaluate_concussion(request: AssessmentRequest):
     
     result = evaluate_assessment(responses)
     return result
+
+
+class AISummaryRequest(BaseModel):
+    risk_data: Dict[str, Any]
+    fighter_settings: Optional[Dict[str, Any]] = None
+
+
+@app.post("/api/ai-summary/stream")
+async def stream_ai_summary(request: AISummaryRequest):
+    def event_generator():
+        for chunk in generate_ai_summary_stream(request.risk_data, request.fighter_settings):
+            yield f"data: {json.dumps({'text': chunk})}\n\n"
+        yield "data: [DONE]\n\n"
+    
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no"
+        }
+    )
+
+
+@app.post("/api/ai-summary")
+async def get_ai_summary(request: AISummaryRequest):
+    summary = generate_ai_summary(request.risk_data, request.fighter_settings)
+    return {"summary": summary}
+
+
+class UserLoginRequest(BaseModel):
+    user_id: str
+    email: Optional[str] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    profile_image_url: Optional[str] = None
+
+
+@app.post("/api/auth/login")
+async def login_user(request: UserLoginRequest):
+    db_gen = get_db()
+    db = next(db_gen)
+    
+    if db is None:
+        return {"success": True, "message": "Database not configured, session stored locally"}
+    
+    try:
+        user = db.query(User).filter(User.id == request.user_id).first()
+        
+        if not user:
+            user = User(
+                id=request.user_id,
+                email=request.email,
+                first_name=request.first_name,
+                last_name=request.last_name,
+                profile_image_url=request.profile_image_url
+            )
+            db.add(user)
+            db.commit()
+        else:
+            user.email = request.email or user.email
+            user.first_name = request.first_name or user.first_name
+            user.last_name = request.last_name or user.last_name
+            user.profile_image_url = request.profile_image_url or user.profile_image_url
+            db.commit()
+        
+        return {"success": True, "user_id": user.id}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+    finally:
+        try:
+            next(db_gen)
+        except StopIteration:
+            pass
+
+
+class SaveSessionRequest(BaseModel):
+    user_id: str
+    session_id: str
+    fighter_settings: Dict[str, Any]
+    risk_data: Dict[str, Any]
+    ai_summary: Optional[str] = None
+    assessment_result: Optional[Dict[str, Any]] = None
+
+
+@app.post("/api/sessions/save")
+async def save_session(request: SaveSessionRequest):
+    db_gen = get_db()
+    db = next(db_gen)
+    
+    if db is None:
+        return {"success": False, "error": "Database not configured"}
+    
+    try:
+        f1 = request.fighter_settings.get('fighter1', {})
+        f2 = request.fighter_settings.get('fighter2', {})
+        
+        injury_session = InjurySession(
+            user_id=request.user_id,
+            session_id=request.session_id,
+            fighter1_skill=f1.get('skill', 'professional'),
+            fighter1_weight=f1.get('weight', 75),
+            fighter2_skill=f2.get('skill', 'professional'),
+            fighter2_weight=f2.get('weight', 75),
+            overall_risk=request.risk_data.get('overall_risk'),
+            risk_percentage=request.risk_data.get('risk_percentage'),
+            total_force=request.risk_data.get('total_force_estimate'),
+            impact_count=request.risk_data.get('impact_count', 0),
+            ai_summary=request.ai_summary,
+            recommendation=request.risk_data.get('recommendation'),
+            assessment_result=request.assessment_result
+        )
+        db.add(injury_session)
+        db.flush()
+        
+        for impact in request.risk_data.get('impact_details', []):
+            impact_record = ImpactRecord(
+                session_id=injury_session.id,
+                frame=impact.get('frame'),
+                time=impact.get('time'),
+                hand=impact.get('hand'),
+                fighter=impact.get('fighter', 1),
+                speed_min=impact.get('speed_min'),
+                speed_max=impact.get('speed_max'),
+                power_min=impact.get('force_min'),
+                power_max=impact.get('force_max'),
+                motion_intensity=impact.get('motion_intensity'),
+                risk_level=impact.get('risk_level'),
+                injury_probability=impact.get('injury_probability'),
+                g_force=impact.get('g_force')
+            )
+            db.add(impact_record)
+        
+        db.commit()
+        return {"success": True, "session_db_id": injury_session.id}
+    except Exception as e:
+        db.rollback()
+        return {"success": False, "error": str(e)}
+    finally:
+        try:
+            next(db_gen)
+        except StopIteration:
+            pass
+
+
+@app.get("/api/sessions/{user_id}")
+async def get_user_sessions(user_id: str):
+    db_gen = get_db()
+    db = next(db_gen)
+    
+    if db is None:
+        return {"sessions": [], "error": "Database not configured"}
+    
+    try:
+        sessions = db.query(InjurySession).filter(
+            InjurySession.user_id == user_id
+        ).order_by(InjurySession.created_at.desc()).limit(20).all()
+        
+        result = []
+        for s in sessions:
+            result.append({
+                "id": s.id,
+                "session_id": s.session_id,
+                "created_at": s.created_at.isoformat() if s.created_at else None,
+                "overall_risk": s.overall_risk,
+                "risk_percentage": s.risk_percentage,
+                "impact_count": s.impact_count,
+                "total_force": s.total_force,
+                "ai_summary": s.ai_summary,
+                "recommendation": s.recommendation,
+                "fighter1_skill": s.fighter1_skill,
+                "fighter1_weight": s.fighter1_weight,
+                "fighter2_skill": s.fighter2_skill,
+                "fighter2_weight": s.fighter2_weight
+            })
+        
+        return {"sessions": result}
+    except Exception as e:
+        return {"sessions": [], "error": str(e)}
+    finally:
+        try:
+            next(db_gen)
+        except StopIteration:
+            pass
+
+
+@app.get("/api/sessions/{user_id}/{session_db_id}")
+async def get_session_details(user_id: str, session_db_id: int):
+    db_gen = get_db()
+    db = next(db_gen)
+    
+    if db is None:
+        return {"error": "Database not configured"}
+    
+    try:
+        session = db.query(InjurySession).filter(
+            InjurySession.id == session_db_id,
+            InjurySession.user_id == user_id
+        ).first()
+        
+        if not session:
+            raise HTTPException(status_code=404, detail="Session not found")
+        
+        impacts = []
+        for impact in session.impacts:
+            impacts.append({
+                "id": impact.id,
+                "frame": impact.frame,
+                "time": impact.time,
+                "hand": impact.hand,
+                "fighter": impact.fighter,
+                "speed_min": impact.speed_min,
+                "speed_max": impact.speed_max,
+                "power_min": impact.power_min,
+                "power_max": impact.power_max,
+                "motion_intensity": impact.motion_intensity,
+                "risk_level": impact.risk_level,
+                "injury_probability": impact.injury_probability,
+                "g_force": impact.g_force
+            })
+        
+        return {
+            "id": session.id,
+            "session_id": session.session_id,
+            "created_at": session.created_at.isoformat() if session.created_at else None,
+            "overall_risk": session.overall_risk,
+            "risk_percentage": session.risk_percentage,
+            "impact_count": session.impact_count,
+            "total_force": session.total_force,
+            "ai_summary": session.ai_summary,
+            "recommendation": session.recommendation,
+            "assessment_result": session.assessment_result,
+            "fighter1_skill": session.fighter1_skill,
+            "fighter1_weight": session.fighter1_weight,
+            "fighter2_skill": session.fighter2_skill,
+            "fighter2_weight": session.fighter2_weight,
+            "impacts": impacts
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        return {"error": str(e)}
+    finally:
+        try:
+            next(db_gen)
+        except StopIteration:
+            pass
 
 
 if __name__ == "__main__":

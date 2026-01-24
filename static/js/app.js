@@ -3,6 +3,8 @@ let selectedImpacts = new Set();
 let assessmentData = null;
 let assessmentResult = null;
 let riskData = null;
+let currentUser = null;
+let aiSummaryText = '';
 let fighterSettings = {
     fighter1: { skill: 'professional', weight: 75 },
     fighter2: { skill: 'professional', weight: 75 }
@@ -18,6 +20,8 @@ const SKILL_SPEED_RANGES = {
 document.addEventListener('DOMContentLoaded', () => {
     initializeUpload();
     initializeFighterSettings();
+    initializeAuth();
+    loadUserFromStorage();
 });
 
 function initializeFighterSettings() {
@@ -422,6 +426,10 @@ function showStep4() {
     displayRiskResults();
     displayImpactFrames();
     
+    streamAISummary();
+    
+    updateUserUI();
+    
     document.getElementById('restart-btn').addEventListener('click', () => location.reload());
 }
 
@@ -607,4 +615,251 @@ function displayImpactFrames() {
             </div>
         `;
     }).join('');
+}
+
+function initializeAuth() {
+    document.getElementById('login-btn').addEventListener('click', () => {
+        document.getElementById('login-modal').classList.remove('hidden');
+    });
+    
+    document.getElementById('close-login-btn').addEventListener('click', () => {
+        document.getElementById('login-modal').classList.add('hidden');
+    });
+    
+    document.getElementById('submit-login-btn').addEventListener('click', handleLogin);
+    
+    document.getElementById('logout-btn').addEventListener('click', handleLogout);
+    
+    document.getElementById('history-btn').addEventListener('click', showHistory);
+    
+    document.getElementById('close-history-btn').addEventListener('click', () => {
+        document.getElementById('history-modal').classList.add('hidden');
+    });
+    
+    const saveBtn = document.getElementById('save-session-btn');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', saveSession);
+    }
+}
+
+function loadUserFromStorage() {
+    const stored = localStorage.getItem('punchAnalyzerUser');
+    if (stored) {
+        try {
+            currentUser = JSON.parse(stored);
+            updateUserUI();
+        } catch (e) {
+            localStorage.removeItem('punchAnalyzerUser');
+        }
+    }
+}
+
+async function handleLogin() {
+    const email = document.getElementById('login-email').value.trim();
+    const name = document.getElementById('login-name').value.trim();
+    
+    if (!email) {
+        alert('Please enter your email');
+        return;
+    }
+    
+    const userId = btoa(email).replace(/[^a-zA-Z0-9]/g, '').substring(0, 20);
+    
+    try {
+        const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                user_id: userId,
+                email: email,
+                first_name: name || email.split('@')[0],
+                profile_image_url: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name || email)}`
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            currentUser = {
+                id: userId,
+                email: email,
+                name: name || email.split('@')[0],
+                avatar: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name || email)}`
+            };
+            
+            localStorage.setItem('punchAnalyzerUser', JSON.stringify(currentUser));
+            updateUserUI();
+            document.getElementById('login-modal').classList.add('hidden');
+        } else {
+            alert('Login failed: ' + (result.error || 'Unknown error'));
+        }
+    } catch (error) {
+        alert('Login error: ' + error.message);
+    }
+}
+
+function handleLogout() {
+    currentUser = null;
+    localStorage.removeItem('punchAnalyzerUser');
+    updateUserUI();
+}
+
+function updateUserUI() {
+    const loginBtn = document.getElementById('login-btn');
+    const loggedInSection = document.getElementById('user-logged-in');
+    const saveBtn = document.getElementById('save-session-btn');
+    
+    if (currentUser) {
+        loginBtn.classList.add('hidden');
+        loggedInSection.classList.remove('hidden');
+        document.getElementById('user-avatar').src = currentUser.avatar;
+        document.getElementById('user-name').textContent = currentUser.name;
+        if (saveBtn) saveBtn.style.display = 'inline-flex';
+    } else {
+        loginBtn.classList.remove('hidden');
+        loggedInSection.classList.add('hidden');
+        if (saveBtn) saveBtn.style.display = 'none';
+    }
+}
+
+async function showHistory() {
+    if (!currentUser) {
+        alert('Please sign in to view your history');
+        return;
+    }
+    
+    document.getElementById('history-modal').classList.remove('hidden');
+    document.getElementById('history-list').innerHTML = '<p class="loading-history">Loading history...</p>';
+    
+    try {
+        const response = await fetch(`/api/sessions/${currentUser.id}`);
+        const data = await response.json();
+        
+        if (data.sessions && data.sessions.length > 0) {
+            document.getElementById('history-list').innerHTML = data.sessions.map(session => `
+                <div class="history-item" onclick="viewHistorySession(${session.id})">
+                    <div class="history-item-header">
+                        <span class="history-date">${new Date(session.created_at).toLocaleString()}</span>
+                        <span class="history-risk ${session.overall_risk}">${session.overall_risk || 'N/A'}</span>
+                    </div>
+                    <div class="history-stats">
+                        <span>Impacts: ${session.impact_count || 0}</span>
+                        <span>Risk: ${session.risk_percentage ? session.risk_percentage.toFixed(1) + '%' : 'N/A'}</span>
+                        <span>Force: ${session.total_force ? session.total_force.toFixed(0) + 'N' : 'N/A'}</span>
+                    </div>
+                    ${session.ai_summary ? `<div class="history-summary">${session.ai_summary}</div>` : ''}
+                </div>
+            `).join('');
+        } else {
+            document.getElementById('history-list').innerHTML = '<p class="no-history">No injury history found. Complete an analysis to save it here.</p>';
+        }
+    } catch (error) {
+        document.getElementById('history-list').innerHTML = `<p class="no-history">Error loading history: ${error.message}</p>`;
+    }
+}
+
+async function viewHistorySession(sessionDbId) {
+    if (!currentUser) return;
+    
+    try {
+        const response = await fetch(`/api/sessions/${currentUser.id}/${sessionDbId}`);
+        const session = await response.json();
+        
+        if (session.error) {
+            alert('Error loading session: ' + session.error);
+            return;
+        }
+        
+        document.getElementById('history-modal').classList.add('hidden');
+        
+        alert(`Session Details:\n\nDate: ${new Date(session.created_at).toLocaleString()}\nRisk: ${session.overall_risk} (${session.risk_percentage}%)\nImpacts: ${session.impact_count}\nTotal Force: ${session.total_force?.toFixed(0)}N\n\nAI Summary:\n${session.ai_summary || 'Not available'}\n\nRecommendation:\n${session.recommendation || 'Not available'}`);
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+}
+
+async function saveSession() {
+    if (!currentUser || !currentSession || !riskData) {
+        alert('No session data to save');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/sessions/save', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                user_id: currentUser.id,
+                session_id: currentSession.session_id,
+                fighter_settings: fighterSettings,
+                risk_data: riskData,
+                ai_summary: aiSummaryText,
+                assessment_result: assessmentResult
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            alert('Session saved to your history!');
+            document.getElementById('save-session-btn').style.display = 'none';
+        } else {
+            alert('Failed to save: ' + (result.error || 'Unknown error'));
+        }
+    } catch (error) {
+        alert('Error saving session: ' + error.message);
+    }
+}
+
+async function streamAISummary() {
+    const container = document.getElementById('ai-summary-content');
+    container.innerHTML = '<div class="ai-loading"><div class="ai-pulse"></div><span>Generating AI analysis...</span></div>';
+    aiSummaryText = '';
+    
+    try {
+        const response = await fetch('/api/ai-summary/stream', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                risk_data: riskData,
+                fighter_settings: fighterSettings
+            })
+        });
+        
+        container.innerHTML = '';
+        
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            
+            const chunk = decoder.decode(value);
+            const lines = chunk.split('\n');
+            
+            for (const line of lines) {
+                if (line.startsWith('data: ')) {
+                    const data = line.slice(6);
+                    if (data === '[DONE]') {
+                        continue;
+                    }
+                    try {
+                        const parsed = JSON.parse(data);
+                        if (parsed.text) {
+                            aiSummaryText += parsed.text;
+                            container.textContent = aiSummaryText;
+                        }
+                    } catch (e) {
+                    }
+                }
+            }
+        }
+        
+        if (!aiSummaryText) {
+            container.innerHTML = '<span style="color: var(--text-secondary);">AI analysis not available.</span>';
+        }
+    } catch (error) {
+        container.innerHTML = `<span style="color: var(--danger);">Error generating AI summary: ${error.message}</span>`;
+    }
 }

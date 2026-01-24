@@ -10,3 +10,5 @@ opencv-python
 replicate
 sse-starlette
 ultralytics
+psycopg2-binary
+sqlalchemy

@@ -10,7 +10,9 @@ A web application that analyzes sparring/boxing footage to detect punch impacts,
 │   ├── main.py              # FastAPI server with all endpoints
 │   ├── video_analyzer.py    # Video processing and punch detection
 │   ├── risk_calculator.py   # Brain injury risk calculation
-│   └── concussion_assessment.py  # SCAT5 screening protocol
+│   ├── concussion_assessment.py  # SCAT5 screening protocol
+│   ├── database.py          # PostgreSQL models (User, InjurySession, ImpactRecord)
+│   └── ai_summary.py        # Replicate/GPT-4o streaming AI summary
 ├── frontend/
 │   └── index.html           # Main web interface
 ├── static/
@@ -45,6 +47,14 @@ A web application that analyzes sparring/boxing footage to detect punch impacts,
    - 22 symptom evaluation
    - Orientation questions
    - Memory questions
+8. **AI Summary**: Streaming AI-powered analysis using GPT-4o via Replicate:
+   - Real-time streaming summary of punch impacts
+   - Personalized injury risk insights
+   - Recovery recommendations
+9. **User Login & History**: Simple email-based authentication:
+   - Save analysis sessions to database
+   - View past injury history
+   - Track cumulative exposure over time
 
 ## UI Theme
 High-tech green glassy aesthetic with:
@@ -59,6 +69,10 @@ High-tech green glassy aesthetic with:
 - Implemented skill-based speed/power range estimation instead of raw velocity
 - Redesigned UI with high-tech green glassy theme
 - Reduced deployment size to ~1.5GB using CPU-only PyTorch
+- Added streaming AI summary using GPT-4o via Replicate API
+- Implemented user authentication with email login
+- Added PostgreSQL database for storing user sessions and injury history
+- New history modal to view past analysis sessions
 
 ## API Endpoints
 - `GET /` - Main web interface
@@ -67,11 +81,24 @@ High-tech green glassy aesthetic with:
 - `POST /api/calculate-risk` - Calculate brain injury risk
 - `GET /api/concussion-assessment` - Get assessment questions
 - `POST /api/concussion-assessment/evaluate` - Evaluate assessment responses
+- `POST /api/ai-summary/stream` - Stream AI analysis (SSE)
+- `POST /api/ai-summary` - Get AI summary (non-streaming)
+- `POST /api/auth/login` - User login/registration
+- `POST /api/sessions/save` - Save session to history
+- `GET /api/sessions/{user_id}` - Get user's session history
+- `GET /api/sessions/{user_id}/{session_id}` - Get session details
 
 ## Dependencies
 - FastAPI, Uvicorn, python-multipart
 - OpenCV, MediaPipe, NumPy
 - Ultralytics (YOLOv8)
+- Replicate (GPT-4o for AI summaries)
+- SQLAlchemy, psycopg2-binary (PostgreSQL database)
+- sse-starlette (Server-Sent Events for streaming)
+
+## Environment Variables
+- `DATABASE_URL` - PostgreSQL connection string (auto-configured)
+- `REPLICATE_API_TOKEN` - API key for Replicate/GPT-4o integration
 
 ## Running
 The application runs on port 5000 using:
