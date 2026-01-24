@@ -6,3 +6,7 @@ mediapipe
 opencv-python-headless
 numpy
 Pillow
+opencv-python
+replicate
+sse-starlette
+ultralytics

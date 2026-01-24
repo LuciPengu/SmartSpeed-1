@@ -3,7 +3,7 @@ modules = ["python-3.11"]
 
 [nix]
 channel = "stable-25_05"
-packages = ["libGL", "libGLU", "xorg.libX11", "xorg.libxcb"]
+packages = ["libGL", "libGLU", "libxcrypt", "xorg.libX11", "xorg.libxcb"]
 
 [unitTest]
 language = "python3"
