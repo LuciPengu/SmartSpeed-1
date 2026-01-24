@@ -73,7 +73,9 @@ Be concise, professional, and focus on actionable guidance. Do not use markdown 
                 "max_completion_tokens": 500
             },
         ):
-            yield str(event)
+            chunk = str(event) if event else ""
+            if chunk and chunk != "None":
+                yield chunk
     except Exception as e:
         yield f"Error generating AI summary: {str(e)}"
 

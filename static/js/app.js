@@ -830,28 +830,45 @@ async function streamAISummary() {
         
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
+        let buffer = '';
         
         while (true) {
             const { done, value } = await reader.read();
             if (done) break;
             
-            const chunk = decoder.decode(value);
-            const lines = chunk.split('\n');
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n');
+            buffer = lines.pop() || '';
             
             for (const line of lines) {
-                if (line.startsWith('data: ')) {
-                    const data = line.slice(6);
-                    if (data === '[DONE]') {
+                const trimmedLine = line.trim();
+                if (trimmedLine.startsWith('data: ')) {
+                    const data = trimmedLine.slice(6).trim();
+                    if (data === '[DONE]' || data === '') {
                         continue;
                     }
                     try {
                         const parsed = JSON.parse(data);
-                        if (parsed.text) {
+                        if (parsed.text && parsed.text !== 'None') {
                             aiSummaryText += parsed.text;
                             container.textContent = aiSummaryText;
                         }
                     } catch (e) {
                     }
+                }
+            }
+        }
+        
+        if (buffer.trim().startsWith('data: ')) {
+            const data = buffer.trim().slice(6).trim();
+            if (data !== '[DONE]' && data !== '') {
+                try {
+                    const parsed = JSON.parse(data);
+                    if (parsed.text && parsed.text !== 'None') {
+                        aiSummaryText += parsed.text;
+                        container.textContent = aiSummaryText;
+                    }
+                } catch (e) {
                 }
             }
         }
