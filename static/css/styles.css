@@ -14,8 +14,8 @@
     --primary-glow: rgba(16, 185, 129, 0.3);
     --primary-intense: rgba(16, 185, 129, 0.6);
     --secondary: #06b6d4;
-    --bg-dark: #0f172a;
-    --bg-card: rgba(15, 23, 42, 0.6);
+    --bg-dark: #000000;
+    --bg-card: rgba(0, 0, 0, 0.6);
     --bg-glass: rgba(255, 255, 255, 0.05);
     --bg-glass-hover: rgba(255, 255, 255, 0.1);
     --border-glow: rgba(255, 255, 255, 0.1);
@@ -30,7 +30,7 @@
 
 body {
     font-family: 'Montserrat', sans-serif;
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    background: linear-gradient(135deg, #000000 0%, #0a0a0a 50%, #000000 100%);
     min-height: 100vh;
     color: var(--text-primary);
     position: relative;
