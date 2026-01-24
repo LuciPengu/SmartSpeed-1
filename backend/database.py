@@ -69,6 +69,19 @@ class ImpactRecord(Base):
     
     session = relationship("InjurySession", back_populates="impacts")
 
+class OAuthSession(Base):
+    __tablename__ = 'oauth_sessions'
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    session_id = Column(String, unique=True, nullable=False, index=True)
+    user_id = Column(String, ForeignKey('users.id'), nullable=False)
+    access_token = Column(Text, nullable=True)
+    refresh_token = Column(Text, nullable=True)
+    expires_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=datetime.now)
+    
+    user = relationship("User")
+
 engine = None
 SessionLocal = None
 

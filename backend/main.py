@@ -1,6 +1,6 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException, BackgroundTasks, Response, Form, Request, Depends
+from fastapi import FastAPI, File, UploadFile, HTTPException, BackgroundTasks, Response, Form, Request, Depends, Cookie
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse, JSONResponse, FileResponse, StreamingResponse
+from fastapi.responses import HTMLResponse, JSONResponse, FileResponse, StreamingResponse, RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Dict, Any, Optional
@@ -8,12 +8,15 @@ import os
 import uuid
 import shutil
 import json
+import secrets
+from datetime import datetime, timedelta
 
 from backend.video_analyzer import analyze_video
 from backend.risk_calculator import calculate_brain_injury_risk
 from backend.concussion_assessment import get_assessment_questions, evaluate_assessment
 from backend.ai_summary import generate_ai_summary_stream, generate_ai_summary
-from backend.database import init_db, get_db, User, InjurySession, ImpactRecord
+from backend.database import init_db, get_db, User, InjurySession, ImpactRecord, OAuthSession
+from backend import replit_auth
 
 init_db()
 
@@ -213,50 +216,164 @@ async def get_ai_summary(request: AISummaryRequest):
     return {"summary": summary}
 
 
-class UserLoginRequest(BaseModel):
-    user_id: str
-    email: Optional[str] = None
-    first_name: Optional[str] = None
-    last_name: Optional[str] = None
-    profile_image_url: Optional[str] = None
+@app.get("/api/auth/login")
+async def start_login(request: Request):
+    state = secrets.token_urlsafe(32)
+    
+    host = request.headers.get('host', 'localhost:5000')
+    scheme = request.headers.get('x-forwarded-proto', 'https')
+    redirect_uri = f"{scheme}://{host}/api/auth/callback"
+    
+    auth_url, code_verifier = replit_auth.get_auth_url(redirect_uri, state)
+    replit_auth.store_auth_state(state, code_verifier, redirect_uri)
+    
+    return RedirectResponse(url=auth_url)
 
-
-@app.post("/api/auth/login")
-async def login_user(request: UserLoginRequest):
+@app.get("/api/auth/callback")
+async def auth_callback(request: Request, code: str = None, state: str = None, error: str = None):
+    if error:
+        return RedirectResponse(url="/?auth_error=" + error)
+    
+    if not code or not state:
+        return RedirectResponse(url="/?auth_error=missing_params")
+    
+    auth_state = replit_auth.get_auth_state(state)
+    if not auth_state:
+        return RedirectResponse(url="/?auth_error=invalid_state")
+    
+    tokens = await replit_auth.exchange_code_for_token(
+        code, 
+        auth_state['redirect_uri'], 
+        auth_state['code_verifier']
+    )
+    
+    if not tokens:
+        return RedirectResponse(url="/?auth_error=token_exchange_failed")
+    
+    user_claims = replit_auth.decode_id_token(tokens.get('id_token', ''))
+    if not user_claims:
+        return RedirectResponse(url="/?auth_error=invalid_token")
+    
     db_gen = get_db()
     db = next(db_gen)
     
-    if db is None:
-        return {"success": True, "message": "Database not configured, session stored locally"}
-    
     try:
-        user = db.query(User).filter(User.id == request.user_id).first()
+        user_id = str(user_claims.get('sub'))
+        user = db.query(User).filter(User.id == user_id).first()
         
         if not user:
             user = User(
-                id=request.user_id,
-                email=request.email,
-                first_name=request.first_name,
-                last_name=request.last_name,
-                profile_image_url=request.profile_image_url
+                id=user_id,
+                email=user_claims.get('email'),
+                first_name=user_claims.get('first_name'),
+                last_name=user_claims.get('last_name'),
+                profile_image_url=user_claims.get('profile_image_url')
             )
             db.add(user)
             db.commit()
         else:
-            user.email = request.email or user.email
-            user.first_name = request.first_name or user.first_name
-            user.last_name = request.last_name or user.last_name
-            user.profile_image_url = request.profile_image_url or user.profile_image_url
+            user.email = user_claims.get('email') or user.email
+            user.first_name = user_claims.get('first_name') or user.first_name
+            user.last_name = user_claims.get('last_name') or user.last_name
+            user.profile_image_url = user_claims.get('profile_image_url') or user.profile_image_url
             db.commit()
         
-        return {"success": True, "user_id": user.id}
+        session_id = replit_auth.create_session(user_claims, tokens)
+        
+        oauth_session = OAuthSession(
+            session_id=session_id,
+            user_id=user_id,
+            access_token=tokens.get('access_token'),
+            refresh_token=tokens.get('refresh_token'),
+            expires_at=datetime.now() + timedelta(seconds=tokens.get('expires_in', 3600))
+        )
+        db.add(oauth_session)
+        db.commit()
+        
+        response = RedirectResponse(url="/?auth_success=true")
+        response.set_cookie(
+            key="session_id",
+            value=session_id,
+            httponly=True,
+            secure=True,
+            samesite="lax",
+            max_age=86400 * 7
+        )
+        return response
+        
     except Exception as e:
-        return {"success": False, "error": str(e)}
+        print(f"Auth error: {e}")
+        return RedirectResponse(url="/?auth_error=database_error")
     finally:
         try:
             next(db_gen)
         except StopIteration:
             pass
+
+@app.get("/api/auth/user")
+async def get_current_user(session_id: Optional[str] = Cookie(default=None)):
+    if not session_id:
+        return {"authenticated": False, "user": None}
+    
+    user = replit_auth.get_user_from_session(session_id)
+    if user:
+        return {"authenticated": True, "user": user}
+    
+    db_gen = get_db()
+    db = next(db_gen)
+    
+    try:
+        oauth_session = db.query(OAuthSession).filter(OAuthSession.session_id == session_id).first()
+        if oauth_session and oauth_session.expires_at > datetime.now():
+            db_user = db.query(User).filter(User.id == oauth_session.user_id).first()
+            if db_user:
+                return {
+                    "authenticated": True,
+                    "user": {
+                        "id": db_user.id,
+                        "email": db_user.email,
+                        "first_name": db_user.first_name,
+                        "last_name": db_user.last_name,
+                        "profile_image_url": db_user.profile_image_url
+                    }
+                }
+    except Exception as e:
+        print(f"Session lookup error: {e}")
+    finally:
+        try:
+            next(db_gen)
+        except StopIteration:
+            pass
+    
+    return {"authenticated": False, "user": None}
+
+@app.get("/api/auth/logout")
+async def logout(request: Request, session_id: Optional[str] = Cookie(default=None)):
+    if session_id:
+        replit_auth.delete_session(session_id)
+        
+        db_gen = get_db()
+        db = next(db_gen)
+        try:
+            db.query(OAuthSession).filter(OAuthSession.session_id == session_id).delete()
+            db.commit()
+        except:
+            pass
+        finally:
+            try:
+                next(db_gen)
+            except StopIteration:
+                pass
+    
+    host = request.headers.get('host', 'localhost:5000')
+    scheme = request.headers.get('x-forwarded-proto', 'https')
+    post_logout_uri = f"{scheme}://{host}/"
+    
+    logout_url = replit_auth.get_logout_url(post_logout_uri)
+    
+    response = RedirectResponse(url=logout_url)
+    response.delete_cookie("session_id")
+    return response
 
 
 class SaveSessionRequest(BaseModel):

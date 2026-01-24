@@ -619,14 +619,8 @@ function displayImpactFrames() {
 
 function initializeAuth() {
     document.getElementById('login-btn').addEventListener('click', () => {
-        document.getElementById('login-modal').classList.remove('hidden');
+        window.location.href = '/api/auth/login';
     });
-    
-    document.getElementById('close-login-btn').addEventListener('click', () => {
-        document.getElementById('login-modal').classList.add('hidden');
-    });
-    
-    document.getElementById('submit-login-btn').addEventListener('click', handleLogin);
     
     document.getElementById('logout-btn').addEventListener('click', handleLogout);
     
@@ -640,68 +634,52 @@ function initializeAuth() {
     if (saveBtn) {
         saveBtn.addEventListener('click', saveSession);
     }
+    
+    checkAuthStatus();
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('auth_success') === 'true') {
+        checkAuthStatus();
+        window.history.replaceState({}, document.title, '/');
+    }
+    if (urlParams.get('auth_error')) {
+        console.error('Authentication error:', urlParams.get('auth_error'));
+        window.history.replaceState({}, document.title, '/');
+    }
 }
 
 function loadUserFromStorage() {
-    const stored = localStorage.getItem('punchAnalyzerUser');
-    if (stored) {
-        try {
-            currentUser = JSON.parse(stored);
-            updateUserUI();
-        } catch (e) {
-            localStorage.removeItem('punchAnalyzerUser');
-        }
-    }
+    checkAuthStatus();
 }
 
-async function handleLogin() {
-    const email = document.getElementById('login-email').value.trim();
-    const name = document.getElementById('login-name').value.trim();
-    
-    if (!email) {
-        alert('Please enter your email');
-        return;
-    }
-    
-    const userId = btoa(email).replace(/[^a-zA-Z0-9]/g, '').substring(0, 20);
-    
+async function checkAuthStatus() {
     try {
-        const response = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                user_id: userId,
-                email: email,
-                first_name: name || email.split('@')[0],
-                profile_image_url: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name || email)}`
-            })
+        const response = await fetch('/api/auth/user', {
+            credentials: 'include'
         });
+        const data = await response.json();
         
-        const result = await response.json();
-        
-        if (result.success) {
+        if (data.authenticated && data.user) {
             currentUser = {
-                id: userId,
-                email: email,
-                name: name || email.split('@')[0],
-                avatar: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name || email)}`
+                id: data.user.id,
+                email: data.user.email,
+                name: data.user.first_name || data.user.email?.split('@')[0] || 'User',
+                avatar: data.user.profile_image_url || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(data.user.first_name || 'U')}`
             };
-            
-            localStorage.setItem('punchAnalyzerUser', JSON.stringify(currentUser));
             updateUserUI();
-            document.getElementById('login-modal').classList.add('hidden');
         } else {
-            alert('Login failed: ' + (result.error || 'Unknown error'));
+            currentUser = null;
+            updateUserUI();
         }
     } catch (error) {
-        alert('Login error: ' + error.message);
+        console.error('Auth check failed:', error);
+        currentUser = null;
+        updateUserUI();
     }
 }
 
 function handleLogout() {
-    currentUser = null;
-    localStorage.removeItem('punchAnalyzerUser');
-    updateUserUI();
+    window.location.href = '/api/auth/logout';
 }
 
 function updateUserUI() {
