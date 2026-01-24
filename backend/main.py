@@ -259,12 +259,24 @@ async def auth_callback(request: Request, code: str = None, state: str = None, e
     
     try:
         user_id = str(user_claims.get('sub'))
+        email = user_claims.get('email')
+        
         user = db.query(User).filter(User.id == user_id).first()
+        
+        if not user and email:
+            existing_email_user = db.query(User).filter(User.email == email).first()
+            if existing_email_user:
+                existing_email_user.id = user_id
+                existing_email_user.first_name = user_claims.get('first_name') or existing_email_user.first_name
+                existing_email_user.last_name = user_claims.get('last_name') or existing_email_user.last_name
+                existing_email_user.profile_image_url = user_claims.get('profile_image_url') or existing_email_user.profile_image_url
+                db.commit()
+                user = existing_email_user
         
         if not user:
             user = User(
                 id=user_id,
-                email=user_claims.get('email'),
+                email=email,
                 first_name=user_claims.get('first_name'),
                 last_name=user_claims.get('last_name'),
                 profile_image_url=user_claims.get('profile_image_url')
@@ -272,7 +284,8 @@ async def auth_callback(request: Request, code: str = None, state: str = None, e
             db.add(user)
             db.commit()
         else:
-            user.email = user_claims.get('email') or user.email
+            if email:
+                user.email = email
             user.first_name = user_claims.get('first_name') or user.first_name
             user.last_name = user_claims.get('last_name') or user.last_name
             user.profile_image_url = user_claims.get('profile_image_url') or user.profile_image_url
