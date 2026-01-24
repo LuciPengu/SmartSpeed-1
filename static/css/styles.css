@@ -5,28 +5,28 @@
 }
 
 :root {
-    --primary: #00ff9d;
-    --primary-dark: #00d4aa;
-    --primary-glow: rgba(0, 255, 157, 0.5);
-    --primary-intense: rgba(0, 255, 157, 0.8);
-    --secondary: #00e5ff;
-    --bg-dark: #030806;
-    --bg-card: rgba(0, 40, 30, 0.4);
-    --bg-glass: rgba(0, 255, 157, 0.03);
-    --bg-glass-hover: rgba(0, 255, 157, 0.08);
-    --border-glow: rgba(0, 255, 157, 0.25);
-    --border-bright: rgba(0, 255, 157, 0.5);
-    --text-primary: #e8fff0;
-    --text-secondary: #7ab898;
-    --danger: #ff4466;
-    --warning: #ffcc00;
-    --glass-blur: 25px;
-    --glass-shine: rgba(255, 255, 255, 0.1);
+    --primary: #10b981;
+    --primary-dark: #059669;
+    --primary-glow: rgba(16, 185, 129, 0.3);
+    --primary-intense: rgba(16, 185, 129, 0.6);
+    --secondary: #06b6d4;
+    --bg-dark: #0f172a;
+    --bg-card: rgba(15, 23, 42, 0.6);
+    --bg-glass: rgba(255, 255, 255, 0.05);
+    --bg-glass-hover: rgba(255, 255, 255, 0.1);
+    --border-glow: rgba(255, 255, 255, 0.1);
+    --border-bright: rgba(255, 255, 255, 0.2);
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --glass-blur: 20px;
+    --glass-shine: rgba(255, 255, 255, 0.08);
 }
 
 body {
-    font-family: 'Rajdhani', sans-serif;
-    background: linear-gradient(145deg, #010503 0%, #051510 30%, #03100c 60%, #020805 100%);
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
     min-height: 100vh;
     color: var(--text-primary);
     position: relative;
@@ -41,34 +41,10 @@ body::before {
     right: 0;
     bottom: 0;
     background: 
-        radial-gradient(ellipse at 15% 15%, rgba(0, 255, 157, 0.12) 0%, transparent 40%),
-        radial-gradient(ellipse at 85% 85%, rgba(0, 229, 255, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 50% 50%, rgba(0, 255, 157, 0.03) 0%, transparent 60%);
+        radial-gradient(ellipse at 20% 20%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(6, 182, 212, 0.06) 0%, transparent 50%);
     pointer-events: none;
     z-index: 0;
-    animation: ambientPulse 8s ease-in-out infinite;
-}
-
-@keyframes ambientPulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
-}
-
-.scanlines {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(0, 255, 136, 0.015) 2px,
-        rgba(0, 255, 136, 0.015) 4px
-    );
-    pointer-events: none;
-    z-index: 1000;
 }
 
 .container {
@@ -85,18 +61,12 @@ header {
 }
 
 header h1 {
-    font-family: 'Orbitron', monospace;
-    font-size: 2.8rem;
-    font-weight: 900;
-    letter-spacing: 4px;
-    margin-bottom: 10px;
-    background: linear-gradient(90deg, var(--primary), var(--secondary), var(--primary));
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: shimmer 3s linear infinite;
-    text-shadow: 0 0 30px var(--primary-glow);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    color: var(--text-primary);
 }
 
 @keyframes shimmer {
@@ -105,26 +75,22 @@ header h1 {
 }
 
 .subtitle {
-    font-family: 'Orbitron', monospace;
+    font-family: 'Montserrat', sans-serif;
     color: var(--text-secondary);
-    font-size: 1rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
+    font-size: 0.9rem;
+    font-weight: 400;
+    letter-spacing: 1px;
 }
 
 .step {
-    background: linear-gradient(135deg, rgba(0, 50, 35, 0.35) 0%, rgba(0, 30, 25, 0.25) 100%);
+    background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(var(--glass-blur));
     -webkit-backdrop-filter: blur(var(--glass-blur));
     border-radius: 20px;
     padding: 35px;
     margin-bottom: 25px;
-    border: 1px solid var(--border-glow);
-    box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.4),
-        0 0 60px rgba(0, 255, 157, 0.08),
-        inset 0 1px 0 var(--glass-shine),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     position: relative;
     overflow: hidden;
 }
@@ -135,9 +101,8 @@ header h1 {
     top: 0;
     left: 0;
     right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent 5%, var(--primary) 50%, transparent 95%);
-    opacity: 0.8;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
 }
 
 .step::after {
@@ -147,7 +112,7 @@ header h1 {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, transparent 30%);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, transparent 20%);
     pointer-events: none;
     border-radius: 20px;
 }
@@ -164,25 +129,24 @@ header h1 {
 }
 
 .step-number {
-    width: 44px;
-    height: 44px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    background: var(--primary);
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Orbitron', monospace;
-    font-weight: bold;
-    font-size: 1.2rem;
-    color: var(--bg-dark);
-    box-shadow: 0 0 20px var(--primary-glow);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: white;
 }
 
 .step-header h2 {
-    font-family: 'Orbitron', monospace;
-    font-size: 1.4rem;
-    font-weight: 700;
-    letter-spacing: 1px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: 0;
 }
 
 .fighter-settings {
@@ -198,17 +162,14 @@ header h1 {
     flex: 1;
     min-width: 280px;
     max-width: 400px;
-    background: linear-gradient(145deg, rgba(0, 60, 45, 0.3) 0%, rgba(0, 35, 28, 0.2) 100%);
-    border: 1px solid var(--border-glow);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 16px;
     padding: 25px;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow: 
-        0 4px 24px rgba(0, 0, 0, 0.3),
-        0 0 40px rgba(0, 255, 157, 0.05),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08);
-    transition: all 0.4s ease;
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
 }
@@ -220,7 +181,7 @@ header h1 {
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--primary-glow), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
 }
 
 .fighter-card:hover {
@@ -244,20 +205,19 @@ header h1 {
     width: 36px;
     height: 36px;
     background: var(--primary);
-    color: var(--bg-dark);
+    color: white;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Orbitron', monospace;
-    font-weight: bold;
-    box-shadow: 0 0 15px var(--primary-glow);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
 }
 
 .fighter-card h3 {
-    font-family: 'Orbitron', monospace;
+    font-family: 'Montserrat', sans-serif;
     font-size: 1.1rem;
-    letter-spacing: 1px;
+    font-weight: 600;
 }
 
 .fighter-inputs {
@@ -281,29 +241,24 @@ header h1 {
 
 .cyber-select, .cyber-input {
     padding: 14px 18px;
-    border-radius: 10px;
-    border: 1px solid var(--border-glow);
-    background: linear-gradient(180deg, rgba(0, 30, 22, 0.9) 0%, rgba(0, 20, 15, 0.95) 100%);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
     color: var(--text-primary);
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
     font-weight: 500;
     transition: all 0.3s ease;
-    box-shadow: 
-        inset 0 2px 4px rgba(0, 0, 0, 0.3),
-        0 0 15px rgba(0, 255, 157, 0.03);
 }
 
 .cyber-select:focus, .cyber-input:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 
-        0 0 20px var(--primary-glow),
-        inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .cyber-select:hover, .cyber-input:hover {
-    border-color: var(--border-bright);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 .cyber-select option {
@@ -312,11 +267,10 @@ header h1 {
 }
 
 .vs-divider {
-    font-family: 'Orbitron', monospace;
-    font-size: 1.5rem;
-    font-weight: 900;
-    color: var(--primary);
-    text-shadow: 0 0 20px var(--primary-glow);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-secondary);
 }
 
 .upload-section {
@@ -328,57 +282,33 @@ header h1 {
 .upload-area {
     width: 100%;
     max-width: 550px;
-    padding: 60px 50px;
-    border: 2px dashed var(--border-glow);
+    padding: 50px 40px;
+    border: 2px dashed rgba(255, 255, 255, 0.15);
     border-radius: 16px;
     text-align: center;
     cursor: pointer;
-    transition: all 0.4s ease;
-    background: linear-gradient(135deg, rgba(0, 50, 40, 0.25) 0%, rgba(0, 30, 25, 0.15) 100%);
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     position: relative;
     overflow: hidden;
 }
 
-.upload-area::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(0, 255, 157, 0.05) 0%, transparent 50%);
-    animation: uploadGlow 4s ease-in-out infinite;
-}
-
-@keyframes uploadGlow {
-    0%, 100% { transform: translate(0, 0); opacity: 0.5; }
-    50% { transform: translate(20px, 20px); opacity: 1; }
-}
-
 .upload-area:hover {
     border-color: var(--primary);
-    background: linear-gradient(135deg, rgba(0, 80, 60, 0.35) 0%, rgba(0, 50, 40, 0.25) 100%);
-    box-shadow: 
-        0 0 40px var(--primary-glow),
-        inset 0 0 30px rgba(0, 255, 157, 0.05);
-    transform: scale(1.02);
+    background: rgba(255, 255, 255, 0.06);
 }
 
 .upload-area.dragover {
     border-color: var(--primary);
     border-style: solid;
-    background: linear-gradient(135deg, rgba(0, 100, 75, 0.4) 0%, rgba(0, 60, 50, 0.3) 100%);
-    box-shadow: 
-        0 0 60px var(--primary-glow),
-        inset 0 0 40px rgba(0, 255, 157, 0.1);
+    background: rgba(16, 185, 129, 0.1);
 }
 
 .upload-icon {
     color: var(--primary);
     margin-bottom: 15px;
-    filter: drop-shadow(0 0 10px var(--primary-glow));
 }
 
 .upload-hint {
@@ -417,7 +347,7 @@ header h1 {
     text-align: center;
     margin-top: 10px;
     color: var(--text-secondary);
-    font-family: 'Orbitron', monospace;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.9rem;
 }
 
@@ -442,7 +372,7 @@ header h1 {
 }
 
 .summary-value {
-    font-family: 'Orbitron', monospace;
+    font-family: 'Montserrat', sans-serif;
     font-size: 2rem;
     font-weight: bold;
     color: var(--primary);
@@ -540,7 +470,7 @@ header h1 {
 .impact-stat-value {
     color: var(--primary);
     font-weight: 600;
-    font-family: 'Orbitron', monospace;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.8rem;
 }
 
@@ -561,7 +491,7 @@ header h1 {
 }
 
 .speed-range-value {
-    font-family: 'Orbitron', monospace;
+    font-family: 'Montserrat', sans-serif;
     color: var(--secondary);
     font-size: 0.95rem;
     font-weight: 600;
@@ -584,7 +514,7 @@ header h1 {
 }
 
 .power-range-value {
-    font-family: 'Orbitron', monospace;
+    font-family: 'Montserrat', sans-serif;
     color: var(--warning);
     font-size: 0.95rem;
     font-weight: 600;
@@ -594,7 +524,7 @@ header h1 {
     padding: 16px 35px;
     border-radius: 12px;
     border: none;
-    font-family: 'Orbitron', monospace;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
@@ -693,7 +623,7 @@ header h1 {
 .assessment-section h3 {
     margin-bottom: 10px;
     color: var(--primary);
-    font-family: 'Orbitron', monospace;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .section-description {
@@ -756,7 +686,7 @@ header h1 {
     text-align: center;
     font-weight: bold;
     color: var(--primary);
-    font-family: 'Orbitron', monospace;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .question-item {
@@ -783,7 +713,7 @@ header h1 {
     color: var(--text-primary);
     cursor: pointer;
     transition: all 0.3s ease;
-    font-family: 'Rajdhani', sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .toggle-btn.active {
@@ -798,7 +728,7 @@ header h1 {
 }
 
 #risk-results-section h3 {
-    font-family: 'Orbitron', monospace;
+    font-family: 'Montserrat', sans-serif;
     margin-bottom: 20px;
     color: var(--primary);
 }
@@ -825,7 +755,7 @@ header h1 {
 }
 
 .risk-level {
-    font-family: 'Orbitron', monospace;
+    font-family: 'Montserrat', sans-serif;
     font-size: 1.2rem;
     text-transform: uppercase;
     font-weight: bold;
@@ -840,7 +770,7 @@ header h1 {
 .risk-level.critical { color: var(--danger); }
 
 .risk-percentage {
-    font-family: 'Orbitron', monospace;
+    font-family: 'Montserrat', sans-serif;
     font-size: 3rem;
     font-weight: bold;
     margin: 10px 0;
@@ -878,13 +808,13 @@ header h1 {
     background: rgba(0, 20, 15, 0.8);
     color: var(--text-secondary);
     font-weight: 500;
-    font-family: 'Orbitron', monospace;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.8rem;
     letter-spacing: 1px;
 }
 
 .impact-details-table td {
-    font-family: 'Rajdhani', sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .assessment-result-card {
@@ -896,7 +826,7 @@ header h1 {
 }
 
 .assessment-result-card h3 {
-    font-family: 'Orbitron', monospace;
+    font-family: 'Montserrat', sans-serif;
     margin-bottom: 15px;
     color: var(--secondary);
 }
@@ -905,7 +835,7 @@ header h1 {
     display: inline-block;
     padding: 8px 20px;
     border-radius: 20px;
-    font-family: 'Orbitron', monospace;
+    font-family: 'Montserrat', sans-serif;
     font-weight: bold;
     text-transform: uppercase;
     margin-bottom: 20px;
@@ -934,7 +864,7 @@ header h1 {
 }
 
 .score-value {
-    font-family: 'Orbitron', monospace;
+    font-family: 'Montserrat', sans-serif;
     font-size: 1.5rem;
     font-weight: bold;
     color: var(--primary);
@@ -965,7 +895,7 @@ header h1 {
 }
 
 .impact-frames-section h3 {
-    font-family: 'Orbitron', monospace;
+    font-family: 'Montserrat', sans-serif;
     margin-bottom: 20px;
     color: var(--primary);
 }
@@ -1058,7 +988,7 @@ header h1 {
 }
 
 .ai-summary-section h3 {
-    font-family: 'Orbitron', monospace;
+    font-family: 'Montserrat', sans-serif;
     color: var(--primary);
     margin-bottom: 15px;
     display: flex;
@@ -1157,7 +1087,7 @@ header h1 {
 }
 
 .modal-header h2 {
-    font-family: 'Orbitron', monospace;
+    font-family: 'Montserrat', sans-serif;
     color: var(--primary);
     margin: 0;
 }
