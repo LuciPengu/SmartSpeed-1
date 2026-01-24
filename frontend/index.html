@@ -5,24 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Punch Impact Analyzer</title>
     <link rel="stylesheet" href="/static/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="scanlines"></div>
     <div class="container">
         <header>
-            <h1>Punch Impact Analyzer</h1>
-            <p class="subtitle">Upload sparring footage to analyze punch impacts and assess injury risk</p>
+            <h1>PUNCH IMPACT ANALYZER</h1>
+            <p class="subtitle">Advanced Combat Analysis System</p>
         </header>
 
         <div id="step-1" class="step active">
             <div class="step-header">
                 <span class="step-number">1</span>
-                <h2>Upload Video</h2>
+                <h2>Fighter Configuration</h2>
             </div>
+            
+            <div class="fighter-settings">
+                <div class="fighter-card">
+                    <div class="fighter-card-header">
+                        <span class="fighter-icon">1</span>
+                        <h3>Fighter 1</h3>
+                    </div>
+                    <div class="fighter-inputs">
+                        <div class="input-group">
+                            <label for="fighter1-skill">Skill Level</label>
+                            <select id="fighter1-skill" class="cyber-select">
+                                <option value="beginner">Beginner (Untrained)</option>
+                                <option value="amateur">Amateur</option>
+                                <option value="professional" selected>Professional</option>
+                                <option value="elite">Elite</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="fighter1-weight">Weight (kg)</label>
+                            <input type="number" id="fighter1-weight" class="cyber-input" min="40" max="200" value="75" step="0.5">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="vs-divider">VS</div>
+                
+                <div class="fighter-card">
+                    <div class="fighter-card-header">
+                        <span class="fighter-icon">2</span>
+                        <h3>Fighter 2</h3>
+                    </div>
+                    <div class="fighter-inputs">
+                        <div class="input-group">
+                            <label for="fighter2-skill">Skill Level</label>
+                            <select id="fighter2-skill" class="cyber-select">
+                                <option value="beginner">Beginner (Untrained)</option>
+                                <option value="amateur">Amateur</option>
+                                <option value="professional" selected>Professional</option>
+                                <option value="elite">Elite</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="fighter2-weight">Weight (kg)</label>
+                            <input type="number" id="fighter2-weight" class="cyber-input" min="40" max="200" value="75" step="0.5">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="upload-section">
                 <div class="upload-area" id="upload-area">
-                    <div class="upload-icon">📹</div>
-                    <p>Drag and drop your sparring video here</p>
-                    <p class="upload-hint">or click to select a file</p>
+                    <div class="upload-icon">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                    </div>
+                    <p>Drop sparring footage here</p>
+                    <p class="upload-hint">or click to select file</p>
                     <input type="file" id="video-input" accept=".mp4,.avi,.mov,.mkv" hidden>
                 </div>
                 <div id="upload-progress" class="progress-container hidden">
@@ -37,15 +94,11 @@
         <div id="step-2" class="step hidden">
             <div class="step-header">
                 <span class="step-number">2</span>
-                <h2>Review Detected Impacts</h2>
+                <h2>Detected Impacts</h2>
             </div>
             <div class="results-summary" id="results-summary"></div>
-            <p class="instruction">Select the punches that you believe landed cleanly:</p>
+            <p class="instruction">Select the punches that landed cleanly:</p>
             <div class="impacts-grid" id="impacts-grid"></div>
-            <div class="weight-input">
-                <label for="puncher-weight">Puncher's Weight (kg):</label>
-                <input type="number" id="puncher-weight" min="40" max="200" value="70" step="0.5">
-            </div>
             <button id="continue-to-assessment-btn" class="btn primary" disabled>Continue to Concussion Screening</button>
         </div>
 

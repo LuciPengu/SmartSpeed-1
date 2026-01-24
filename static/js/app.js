@@ -3,10 +3,37 @@ let selectedImpacts = new Set();
 let assessmentData = null;
 let assessmentResult = null;
 let riskData = null;
+let fighterSettings = {
+    fighter1: { skill: 'professional', weight: 75 },
+    fighter2: { skill: 'professional', weight: 75 }
+};
+
+const SKILL_SPEED_RANGES = {
+    beginner: { min: 12, max: 18, avg: 15 },
+    amateur: { min: 18, max: 28, avg: 23 },
+    professional: { min: 24, max: 35, avg: 29 },
+    elite: { min: 30, max: 45, avg: 37 }
+};
 
 document.addEventListener('DOMContentLoaded', () => {
     initializeUpload();
+    initializeFighterSettings();
 });
+
+function initializeFighterSettings() {
+    document.getElementById('fighter1-skill').addEventListener('change', (e) => {
+        fighterSettings.fighter1.skill = e.target.value;
+    });
+    document.getElementById('fighter1-weight').addEventListener('change', (e) => {
+        fighterSettings.fighter1.weight = parseFloat(e.target.value) || 75;
+    });
+    document.getElementById('fighter2-skill').addEventListener('change', (e) => {
+        fighterSettings.fighter2.skill = e.target.value;
+    });
+    document.getElementById('fighter2-weight').addEventListener('change', (e) => {
+        fighterSettings.fighter2.weight = parseFloat(e.target.value) || 75;
+    });
+}
 
 function initializeUpload() {
     const uploadArea = document.getElementById('upload-area');
@@ -38,6 +65,27 @@ function initializeUpload() {
 
 const MAX_FILE_SIZE_MB = 50;
 
+function validateFighterSettings() {
+    const f1Weight = parseFloat(document.getElementById('fighter1-weight').value);
+    const f2Weight = parseFloat(document.getElementById('fighter2-weight').value);
+    
+    if (isNaN(f1Weight) || f1Weight < 40 || f1Weight > 200) {
+        alert('Fighter 1 weight must be between 40 and 200 kg');
+        return false;
+    }
+    if (isNaN(f2Weight) || f2Weight < 40 || f2Weight > 200) {
+        alert('Fighter 2 weight must be between 40 and 200 kg');
+        return false;
+    }
+    
+    fighterSettings.fighter1.skill = document.getElementById('fighter1-skill').value;
+    fighterSettings.fighter1.weight = f1Weight;
+    fighterSettings.fighter2.skill = document.getElementById('fighter2-skill').value;
+    fighterSettings.fighter2.weight = f2Weight;
+    
+    return true;
+}
+
 async function handleFileUpload(file) {
     const validTypes = ['.mp4', '.avi', '.mov', '.mkv'];
     const fileExt = '.' + file.name.split('.').pop().toLowerCase();
@@ -50,6 +98,10 @@ async function handleFileUpload(file) {
     const fileSizeMB = file.size / (1024 * 1024);
     if (fileSizeMB > MAX_FILE_SIZE_MB) {
         alert(`File too large. Maximum size is ${MAX_FILE_SIZE_MB}MB. Your file is ${fileSizeMB.toFixed(1)}MB.`);
+        return;
+    }
+
+    if (!validateFighterSettings()) {
         return;
     }
 
@@ -66,6 +118,7 @@ async function handleFileUpload(file) {
 
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('fighter_settings', JSON.stringify(fighterSettings));
 
     try {
         progressFill.style.width = '50%';
@@ -94,6 +147,44 @@ async function handleFileUpload(file) {
         uploadArea.classList.remove('hidden');
         progressContainer.classList.add('hidden');
     }
+}
+
+function calculateSpeedRange(impact, fighterIdx) {
+    const settings = fighterIdx === 1 ? fighterSettings.fighter1 : fighterSettings.fighter2;
+    const skillRanges = SKILL_SPEED_RANGES[settings.skill];
+    
+    const intensity = Math.min(1, impact.motion_intensity || 0.7);
+    
+    const adjustedMin = skillRanges.min + (skillRanges.avg - skillRanges.min) * intensity * 0.5;
+    const adjustedMax = skillRanges.min + (skillRanges.max - skillRanges.min) * intensity;
+    
+    return {
+        min: Math.round(adjustedMin),
+        max: Math.round(adjustedMax),
+        unit: 'mph'
+    };
+}
+
+function calculatePowerRange(impact, fighterIdx) {
+    const settings = fighterIdx === 1 ? fighterSettings.fighter1 : fighterSettings.fighter2;
+    const speedRange = calculateSpeedRange(impact, fighterIdx);
+    
+    const mphToMs = 0.44704;
+    const minSpeed = speedRange.min * mphToMs;
+    const maxSpeed = speedRange.max * mphToMs;
+    
+    const effectiveMass = settings.weight * 0.04;
+    
+    const contactTime = 0.01;
+    
+    const minForce = (effectiveMass * minSpeed) / contactTime;
+    const maxForce = (effectiveMass * maxSpeed) / contactTime;
+    
+    return {
+        min: Math.round(minForce),
+        max: Math.round(maxForce),
+        unit: 'N'
+    };
 }
 
 function showStep2(data) {
@@ -129,23 +220,34 @@ function showStep2(data) {
         return;
     }
 
-    impactsGrid.innerHTML = data.impacts.map(impact => `
-        <div class="impact-card" data-id="${impact.id}" onclick="toggleImpact(${impact.id})">
-            <img src="${impact.image_path}" alt="Impact ${impact.id}">
-            <div class="impact-info">
-                <div class="impact-title">
-                    <span>Fighter ${impact.fighter} - Frame ${impact.frame}</span>
-                    <span class="impact-hand">${impact.hand}</span>
-                </div>
-                <div class="impact-stats">
-                    <div>Time: <span class="impact-stat-value">${impact.time.toFixed(2)}s</span></div>
-                    <div>Velocity: <span class="impact-stat-value">${impact.velocity.toFixed(1)} T/s</span></div>
-                    <div>Accel: <span class="impact-stat-value">${impact.acceleration.toFixed(1)} T/s²</span></div>
-                    <div>Power: <span class="impact-stat-value">${impact.power_index.toFixed(1)}</span></div>
+    impactsGrid.innerHTML = data.impacts.map(impact => {
+        const speedRange = calculateSpeedRange(impact, impact.fighter);
+        const powerRange = calculatePowerRange(impact, impact.fighter);
+        
+        return `
+            <div class="impact-card" data-id="${impact.id}" onclick="toggleImpact(${impact.id})">
+                <img src="${impact.image_path}" alt="Impact ${impact.id}">
+                <div class="impact-info">
+                    <div class="impact-title">
+                        <span>Fighter ${impact.fighter} - Frame ${impact.frame}</span>
+                        <span class="impact-hand">${impact.hand}</span>
+                    </div>
+                    <div class="impact-stats">
+                        <div>Time: <span class="impact-stat-value">${impact.time.toFixed(2)}s</span></div>
+                        <div>Intensity: <span class="impact-stat-value">${((impact.motion_intensity || 0.7) * 100).toFixed(0)}%</span></div>
+                    </div>
+                    <div class="speed-range">
+                        <div class="speed-range-label">Est. Speed</div>
+                        <div class="speed-range-value">${speedRange.min} - ${speedRange.max} ${speedRange.unit}</div>
+                    </div>
+                    <div class="power-range">
+                        <div class="power-range-label">Est. Force</div>
+                        <div class="power-range-value">${powerRange.min} - ${powerRange.max} ${powerRange.unit}</div>
+                    </div>
                 </div>
             </div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
 
     document.getElementById('continue-to-assessment-btn').addEventListener('click', continueToAssessment);
 }
@@ -165,14 +267,20 @@ function toggleImpact(id) {
 }
 
 async function continueToAssessment() {
-    const weight = parseFloat(document.getElementById('puncher-weight').value);
-    
-    if (selectedImpacts.size > 0 && (isNaN(weight) || weight < 40 || weight > 200)) {
-        alert('Please enter a valid weight between 40 and 200 kg');
-        return;
-    }
-
     if (selectedImpacts.size > 0) {
+        const selectedImpactData = currentSession.impacts
+            .filter(i => selectedImpacts.has(i.id))
+            .map(impact => {
+                const speedRange = calculateSpeedRange(impact, impact.fighter);
+                const powerRange = calculatePowerRange(impact, impact.fighter);
+                return {
+                    ...impact,
+                    speed_range: speedRange,
+                    power_range: powerRange,
+                    fighter_weight: impact.fighter === 1 ? fighterSettings.fighter1.weight : fighterSettings.fighter2.weight
+                };
+            });
+
         try {
             const response = await fetch('/api/calculate-risk', {
                 method: 'POST',
@@ -180,7 +288,8 @@ async function continueToAssessment() {
                 body: JSON.stringify({
                     session_id: currentSession.session_id,
                     selected_impact_ids: Array.from(selectedImpacts),
-                    puncher_weight_kg: weight
+                    impact_data: selectedImpactData,
+                    fighter_settings: fighterSettings
                 })
             });
 
@@ -330,7 +439,7 @@ function displayAssessmentResults() {
     let redFlagWarning = '';
     if (assessmentResult.red_flags_count > 0) {
         redFlagWarning = `
-            <div class="warning" style="background: rgba(211, 47, 47, 0.3); border-color: #d32f2f;">
+            <div class="warning" style="background: rgba(255, 68, 68, 0.2); border-color: #ff4444;">
                 <strong>RED FLAGS DETECTED!</strong><br>
                 Seek immediate medical attention.
             </div>
@@ -398,9 +507,8 @@ function displayRiskResults() {
                 </div>
                 <div class="impact-stats">
                     <p>Selected Impacts: <strong>${riskData.impact_count}</strong></p>
-                    <p>Max Single Impact Force: <strong>${riskData.max_single_impact_force.toFixed(1)} N</strong></p>
-                    <p>Total Cumulative Force: <strong>${riskData.total_force_estimate.toFixed(1)} N</strong></p>
-                    <p>Puncher Weight: <strong>${riskData.puncher_weight_kg} kg</strong></p>
+                    <p>Max Single Impact Force: <strong>${riskData.max_single_impact_force.toFixed(0)} - ${(riskData.max_single_impact_force * 1.4).toFixed(0)} N</strong></p>
+                    <p>Total Cumulative Force: <strong>${riskData.total_force_estimate.toFixed(0)} - ${(riskData.total_force_estimate * 1.4).toFixed(0)} N</strong></p>
                 </div>
             </div>
         </div>
@@ -412,10 +520,10 @@ function displayRiskResults() {
                     <th>Frame</th>
                     <th>Time</th>
                     <th>Hand</th>
-                    <th>Est. Force (N)</th>
+                    <th>Speed Range</th>
+                    <th>Force Range</th>
                     <th>G-Force</th>
                     <th>Risk Level</th>
-                    <th>Injury Prob.</th>
                 </tr>
             </thead>
             <tbody>
@@ -424,10 +532,10 @@ function displayRiskResults() {
                         <td>${d.frame}</td>
                         <td>${d.time.toFixed(2)}s</td>
                         <td>${d.hand}</td>
-                        <td>${d.estimated_force_newtons.toFixed(1)}</td>
+                        <td>${d.speed_min || '-'} - ${d.speed_max || '-'} mph</td>
+                        <td>${d.force_min || d.estimated_force_newtons.toFixed(0)} - ${d.force_max || (d.estimated_force_newtons * 1.4).toFixed(0)} N</td>
                         <td>${d.g_force.toFixed(1)}</td>
                         <td class="risk-level ${d.risk_level}">${d.risk_level}</td>
-                        <td>${d.injury_probability.toFixed(1)}%</td>
                     </tr>
                 `).join('')}
             </tbody>
@@ -471,6 +579,9 @@ function displayImpactFrames() {
 
     impactsGrid.innerHTML = data.impacts.map(impact => {
         const isSelected = selectedImpacts.has(impact.id);
+        const speedRange = calculateSpeedRange(impact, impact.fighter);
+        const powerRange = calculatePowerRange(impact, impact.fighter);
+        
         return `
             <div class="impact-card ${isSelected ? 'selected' : ''}" data-id="${impact.id}">
                 <img src="${impact.image_path}" alt="Impact ${impact.id}">
@@ -481,9 +592,15 @@ function displayImpactFrames() {
                     </div>
                     <div class="impact-stats">
                         <div>Time: <span class="impact-stat-value">${impact.time.toFixed(2)}s</span></div>
-                        <div>Velocity: <span class="impact-stat-value">${impact.velocity.toFixed(1)} T/s</span></div>
-                        <div>Accel: <span class="impact-stat-value">${impact.acceleration.toFixed(1)} T/s²</span></div>
-                        <div>Power: <span class="impact-stat-value">${impact.power_index.toFixed(1)}</span></div>
+                        <div>Intensity: <span class="impact-stat-value">${((impact.motion_intensity || 0.7) * 100).toFixed(0)}%</span></div>
+                    </div>
+                    <div class="speed-range">
+                        <div class="speed-range-label">Est. Speed</div>
+                        <div class="speed-range-value">${speedRange.min} - ${speedRange.max} ${speedRange.unit}</div>
+                    </div>
+                    <div class="power-range">
+                        <div class="power-range-label">Est. Force</div>
+                        <div class="power-range-value">${powerRange.min} - ${powerRange.max} ${powerRange.unit}</div>
                     </div>
                     ${isSelected ? '<div class="selected-badge">Selected for Analysis</div>' : ''}
                 </div>

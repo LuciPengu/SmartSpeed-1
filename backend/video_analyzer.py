@@ -295,6 +295,7 @@ def analyze_video(video_path: str, output_folder: str = "static/frames",
 
                         if left_dist_norm < impact_threshold and left_speed_peak > min_punch_speed:
                             impact_detected = True
+                            motion_intensity = min(1.0, left_speed_peak / 0.15)
                             impact_details = {
                                 'fighter': fighter_idx + 1,
                                 'hand': 'LEFT',
@@ -304,6 +305,7 @@ def analyze_video(video_path: str, output_folder: str = "static/frames",
                                 'acceleration': float(left_accel_normalized),
                                 'acceleration_raw': float(left_accel_peak),
                                 'power_index': float(left_power_normalized),
+                                'motion_intensity': float(motion_intensity),
                                 'frame': frame_count,
                                 'time': timestamp_ms / 1000.0
                             }
@@ -314,6 +316,7 @@ def analyze_video(video_path: str, output_folder: str = "static/frames",
 
                         if right_dist_norm < impact_threshold and right_speed_peak > min_punch_speed:
                             impact_detected = True
+                            motion_intensity = min(1.0, right_speed_peak / 0.15)
                             impact_details = {
                                 'fighter': fighter_idx + 1,
                                 'hand': 'RIGHT',
@@ -323,6 +326,7 @@ def analyze_video(video_path: str, output_folder: str = "static/frames",
                                 'acceleration': float(right_accel_normalized),
                                 'acceleration_raw': float(right_accel_peak),
                                 'power_index': float(right_power_normalized),
+                                'motion_intensity': float(motion_intensity),
                                 'frame': frame_count,
                                 'time': timestamp_ms / 1000.0
                             }

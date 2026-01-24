@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException, BackgroundTasks, Response
+from fastapi import FastAPI, File, UploadFile, HTTPException, BackgroundTasks, Response, Form
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -7,6 +7,7 @@ from typing import List, Dict, Any, Optional
 import os
 import uuid
 import shutil
+import json
 
 from backend.video_analyzer import analyze_video
 from backend.risk_calculator import calculate_brain_injury_risk
@@ -31,10 +32,19 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs("static/frames", exist_ok=True)
 
 
+class FighterSetting(BaseModel):
+    skill: str
+    weight: float
+
+class FighterSettings(BaseModel):
+    fighter1: FighterSetting
+    fighter2: FighterSetting
+
 class RiskCalculationRequest(BaseModel):
     session_id: str
     selected_impact_ids: List[int]
-    puncher_weight_kg: float
+    impact_data: Optional[List[Dict[str, Any]]] = None
+    fighter_settings: Optional[FighterSettings] = None
 
 
 class AssessmentRequest(BaseModel):
@@ -66,10 +76,18 @@ MAX_FILE_SIZE_MB = 50
 MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
 
 @app.post("/api/upload")
-async def upload_video(file: UploadFile = File(...)):
+async def upload_video(
+    file: UploadFile = File(...),
+    fighter_settings: str = Form(default="{}")
+):
     filename_str = file.filename or ""
     if not filename_str.endswith(('.mp4', '.avi', '.mov', '.mkv')):
         raise HTTPException(status_code=400, detail="Invalid file format. Please upload a video file.")
+    
+    try:
+        settings = json.loads(fighter_settings)
+    except:
+        settings = {}
     
     session_id = str(uuid.uuid4())[:8]
     file_extension = os.path.splitext(filename_str)[1]
@@ -85,6 +103,7 @@ async def upload_video(file: UploadFile = File(...)):
     
     try:
         result = analyze_video(filepath)
+        result['fighter_settings'] = settings
         analysis_results[result['session_id']] = result
         
         os.remove(filepath)
@@ -96,7 +115,8 @@ async def upload_video(file: UploadFile = File(...)):
             "duration": result['duration'],
             "total_frames": result['total_frames'],
             "impact_count": result['impact_count'],
-            "impacts": result['impacts']
+            "impacts": result['impacts'],
+            "fighter_settings": settings
         }
     except Exception as e:
         if os.path.exists(filepath):
@@ -119,15 +139,25 @@ async def calculate_risk(request: RiskCalculationRequest):
     
     session = analysis_results[request.session_id]
     
-    selected_impacts = [
-        impact for impact in session['impacts'] 
-        if impact['id'] in request.selected_impact_ids
-    ]
+    if request.impact_data:
+        selected_impacts = request.impact_data
+    else:
+        selected_impacts = [
+            impact for impact in session['impacts'] 
+            if impact['id'] in request.selected_impact_ids
+        ]
     
     if not selected_impacts:
         raise HTTPException(status_code=400, detail="No impacts selected")
     
-    risk_result = calculate_brain_injury_risk(selected_impacts, request.puncher_weight_kg)
+    fighter_settings = None
+    if request.fighter_settings:
+        fighter_settings = {
+            'fighter1': {'skill': request.fighter_settings.fighter1.skill, 'weight': request.fighter_settings.fighter1.weight},
+            'fighter2': {'skill': request.fighter_settings.fighter2.skill, 'weight': request.fighter_settings.fighter2.weight}
+        }
+    
+    risk_result = calculate_brain_injury_risk(selected_impacts, fighter_settings)
     
     return risk_result
 
