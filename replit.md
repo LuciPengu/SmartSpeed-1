@@ -1,4 +1,4 @@
-# Punch Impact Analyzer
+# Hitsmart Strike Calculator
 
 ## Overview
 A web application that analyzes sparring/boxing footage to detect punch impacts, assess brain injury risk based on punch metrics and fighter weight, and provides a SCAT5-based concussion screening assessment.

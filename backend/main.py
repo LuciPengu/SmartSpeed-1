@@ -20,7 +20,7 @@ from backend import replit_auth
 
 init_db()
 
-app = FastAPI(title="Punch Impact Analyzer", version="1.0.0")
+app = FastAPI(title="Hitsmart Strike Calculator", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,

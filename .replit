@@ -29,10 +29,10 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Punch Impact Analyzer"
+args = "Hitsmart Strike Calculator"
 
 [[workflows.workflow]]
-name = "Punch Impact Analyzer"
+name = "Hitsmart Strike Calculator"
 author = "agent"
 
 [[workflows.workflow.tasks]]
