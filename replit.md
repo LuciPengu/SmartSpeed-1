@@ -11,7 +11,8 @@ A web application that analyzes sparring/boxing footage to detect punch impacts,
 │   ├── video_analyzer.py    # Video processing and punch detection
 │   ├── risk_calculator.py   # Brain injury risk calculation
 │   ├── concussion_assessment.py  # SCAT5 screening protocol
-│   ├── database.py          # PostgreSQL models (User, InjurySession, ImpactRecord)
+│   ├── database.py          # PostgreSQL models (User, InjurySession, ImpactRecord, OAuthSession)
+│   ├── replit_auth.py       # Replit OAuth 2.0 with PKCE flow
 │   └── ai_summary.py        # Replicate/GPT-4o streaming AI summary
 ├── frontend/
 │   └── index.html           # Main web interface
@@ -51,8 +52,10 @@ A web application that analyzes sparring/boxing footage to detect punch impacts,
    - Real-time streaming summary of punch impacts
    - Personalized injury risk insights
    - Recovery recommendations
-9. **User Login & History**: Simple email-based authentication:
-   - Save analysis sessions to database
+9. **User Login & History**: Replit OAuth authentication:
+   - Secure OAuth 2.0 with PKCE flow
+   - Supports Google, GitHub, Apple, and email/password login via Replit
+   - Save analysis sessions to PostgreSQL database
    - View past injury history
    - Track cumulative exposure over time
 
@@ -70,8 +73,10 @@ High-tech green glassy aesthetic with:
 - Redesigned UI with high-tech green glassy theme
 - Reduced deployment size to ~1.5GB using CPU-only PyTorch
 - Added streaming AI summary using GPT-4o via Replicate API
-- Implemented user authentication with email login
-- Added PostgreSQL database for storing user sessions and injury history
+- Migrated to Replit OAuth with PKCE flow for secure authentication
+- OAuth supports Google, GitHub, Apple, and email/password login
+- Added OAuthSession model for token storage in PostgreSQL
+- Enhanced glassmorphism UI with deeper blur effects and animated lighting
 - New history modal to view past analysis sessions
 
 ## API Endpoints
@@ -83,7 +88,10 @@ High-tech green glassy aesthetic with:
 - `POST /api/concussion-assessment/evaluate` - Evaluate assessment responses
 - `POST /api/ai-summary/stream` - Stream AI analysis (SSE)
 - `POST /api/ai-summary` - Get AI summary (non-streaming)
-- `POST /api/auth/login` - User login/registration
+- `GET /api/auth/login` - Initiate Replit OAuth login (redirects to Replit)
+- `GET /api/auth/callback` - OAuth callback handler
+- `GET /api/auth/user` - Get current authenticated user
+- `GET /api/auth/logout` - Logout and clear session
 - `POST /api/sessions/save` - Save session to history
 - `GET /api/sessions/{user_id}` - Get user's session history
 - `GET /api/sessions/{user_id}/{session_id}` - Get session details
@@ -95,6 +103,8 @@ High-tech green glassy aesthetic with:
 - Replicate (GPT-4o for AI summaries)
 - SQLAlchemy, psycopg2-binary (PostgreSQL database)
 - sse-starlette (Server-Sent Events for streaming)
+- httpx (async HTTP client for OAuth)
+- PyJWT (JWT token decoding)
 
 ## Environment Variables
 - `DATABASE_URL` - PostgreSQL connection string (auto-configured)
