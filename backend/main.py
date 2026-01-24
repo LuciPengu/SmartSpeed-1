@@ -324,7 +324,9 @@ async def auth_callback(request: Request, code: str = None, state: str = None, e
             pass
 
 @app.get("/api/auth/user")
-async def get_current_user(session_id: Optional[str] = Cookie(default=None)):
+async def get_current_user(request: Request):
+    session_id = request.cookies.get("session_id")
+    
     if not session_id:
         return {"authenticated": False, "user": None}
     
@@ -337,9 +339,18 @@ async def get_current_user(session_id: Optional[str] = Cookie(default=None)):
     
     try:
         oauth_session = db.query(OAuthSession).filter(OAuthSession.session_id == session_id).first()
-        if oauth_session and oauth_session.expires_at > datetime.now():
+        if oauth_session:
             db_user = db.query(User).filter(User.id == oauth_session.user_id).first()
             if db_user:
+                replit_auth.sessions[session_id] = {
+                    'user': {
+                        'id': db_user.id,
+                        'email': db_user.email,
+                        'first_name': db_user.first_name,
+                        'last_name': db_user.last_name,
+                        'profile_image_url': db_user.profile_image_url
+                    }
+                }
                 return {
                     "authenticated": True,
                     "user": {
