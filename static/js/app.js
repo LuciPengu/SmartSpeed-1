@@ -4,6 +4,7 @@ let assessmentData = null;
 let assessmentResult = null;
 let riskData = null;
 let currentUser = null;
+let authCheckPromise = null;
 let aiSummaryText = '';
 let conversationHistory = [];
 let fighterSettings = {
@@ -170,6 +171,11 @@ function validateFighterSettings() {
 }
 
 async function handleFileUpload(file) {
+    // Wait for auth check to complete before checking user status
+    if (authCheckPromise) {
+        await authCheckPromise;
+    }
+    
     if (!currentUser) {
         showToast('Please sign in before starting an analysis', 'warning');
         return;
@@ -775,29 +781,32 @@ function loadUserFromStorage() {
 }
 
 async function checkAuthStatus() {
-    try {
-        const response = await fetch('/api/auth/user', {
-            credentials: 'include'
-        });
-        const data = await response.json();
-        
-        if (data.authenticated && data.user) {
-            currentUser = {
-                id: data.user.id,
-                email: data.user.email,
-                name: data.user.first_name || data.user.email?.split('@')[0] || 'User',
-                avatar: data.user.profile_image_url || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(data.user.first_name || 'U')}`
-            };
-            updateUserUI();
-        } else {
+    authCheckPromise = (async () => {
+        try {
+            const response = await fetch('/api/auth/user', {
+                credentials: 'include'
+            });
+            const data = await response.json();
+            
+            if (data.authenticated && data.user) {
+                currentUser = {
+                    id: data.user.id,
+                    email: data.user.email,
+                    name: data.user.first_name || data.user.email?.split('@')[0] || 'User',
+                    avatar: data.user.profile_image_url || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(data.user.first_name || 'U')}`
+                };
+                updateUserUI();
+            } else {
+                currentUser = null;
+                updateUserUI();
+            }
+        } catch (error) {
+            console.error('Auth check failed:', error);
             currentUser = null;
             updateUserUI();
         }
-    } catch (error) {
-        console.error('Auth check failed:', error);
-        currentUser = null;
-        updateUserUI();
-    }
+    })();
+    return authCheckPromise;
 }
 
 function showAuthModal() {
