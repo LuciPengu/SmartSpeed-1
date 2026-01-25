@@ -18,78 +18,42 @@ const SKILL_SPEED_RANGES = {
     elite: { min: 30, max: 45, avg: 37 }
 };
 
-const RANKS = [
-    { name: 'Rookie', icon: '🥉', minScore: 0 },
-    { name: 'Contender', icon: '🥈', minScore: 40 },
-    { name: 'Champion', icon: '🥇', minScore: 60 },
-    { name: 'Elite', icon: '💎', minScore: 80 },
-    { name: 'Legend', icon: '👑', minScore: 95 }
-];
-
-const BADGE_ICONS = {
-    first_strike: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>',
-    iron_chin: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>',
-    quick_recovery: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>',
-    thorough: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>',
-    safety_first: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>',
-    warrior: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 17.5L3 6V3h3l11.5 11.5"></path><path d="M13 19l6-6"></path><path d="M16 16l4 4"></path><path d="M19 21a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"></path></svg>'
-};
-
-const BADGES = [
-    { id: 'first_analysis', name: 'First Strike', iconKey: 'first_strike', condition: () => true },
-    { id: 'no_symptoms', name: 'Iron Chin', iconKey: 'iron_chin', condition: (data) => data.symptomCount === 0 },
-    { id: 'quick_recovery', name: 'Quick Recovery', iconKey: 'quick_recovery', condition: (data) => data.urgency === 'none' || data.urgency === 'low' },
-    { id: 'thorough', name: 'Thorough Check', iconKey: 'thorough', condition: (data) => data.impactCount >= 3 },
-    { id: 'safety_first', name: 'Safety First', iconKey: 'safety_first', condition: (data) => data.safetyScore >= 80 },
-    { id: 'warrior', name: 'Warrior Spirit', iconKey: 'warrior', condition: (data) => data.impactCount >= 5 }
-];
-
-function calculateSafetyScore() {
-    if (!assessmentResult) return 50;
+function showToast(message, type = 'info', duration = 4000) {
+    const container = document.getElementById('toast-container') || createToastContainer();
     
-    let score = 100;
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.innerHTML = `
+        <span class="toast-icon">${getToastIcon(type)}</span>
+        <span class="toast-message">${message}</span>
+        <button class="toast-close" onclick="this.parentElement.remove()">&times;</button>
+    `;
     
-    score -= (assessmentResult.symptom_total || 0) * 3;
-    score -= (assessmentResult.symptom_severity_score || 0) * 0.5;
+    container.appendChild(toast);
     
-    if ((assessmentResult.red_flags_count || 0) > 0) score -= 40;
+    setTimeout(() => toast.classList.add('show'), 10);
     
-    const orientationMax = assessmentResult.orientation_max || 5;
-    const memoryMax = assessmentResult.memory_max || 5;
-    score += ((assessmentResult.orientation_score || 0) / orientationMax) * 10;
-    score += ((assessmentResult.memory_score || 0) / memoryMax) * 10;
-    
-    const urgencyPenalty = {
-        'none': 0,
-        'low': 5,
-        'moderate': 15,
-        'high': 30,
-        'emergency': 50
-    };
-    score -= urgencyPenalty[assessmentResult.urgency_level] || 0;
-    
-    return Math.max(0, Math.min(100, Math.round(score)));
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, duration);
 }
 
-function getRank(score) {
-    let currentRank = RANKS[0];
-    for (const rank of RANKS) {
-        if (score >= rank.minScore) {
-            currentRank = rank;
-        }
-    }
-    return currentRank;
+function createToastContainer() {
+    const container = document.createElement('div');
+    container.id = 'toast-container';
+    document.body.appendChild(container);
+    return container;
 }
 
-function getEarnedBadges() {
-    const data = {
-        symptomCount: assessmentResult?.symptom_total || 0,
-        urgency: assessmentResult?.urgency_level || 'none',
-        impactCount: riskData?.impact_count || 0,
-        safetyScore: calculateSafetyScore()
+function getToastIcon(type) {
+    const icons = {
+        success: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>',
+        error: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>',
+        warning: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>',
+        info: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>'
     };
-    
-    return BADGES.filter(badge => badge.condition(data));
+    return icons[type] || icons.info;
 }
 
 function animateNumber(element, endValue, duration = 1000, suffix = '') {
@@ -187,11 +151,11 @@ function validateFighterSettings() {
     const f2Weight = parseFloat(document.getElementById('fighter2-weight').value);
     
     if (isNaN(f1Weight) || f1Weight < 40 || f1Weight > 200) {
-        alert('Fighter 1 weight must be between 40 and 200 kg');
+        showToast('Fighter 1 weight must be between 40 and 200 kg', 'error');
         return false;
     }
     if (isNaN(f2Weight) || f2Weight < 40 || f2Weight > 200) {
-        alert('Fighter 2 weight must be between 40 and 200 kg');
+        showToast('Fighter 2 weight must be between 40 and 200 kg', 'error');
         return false;
     }
     
@@ -207,7 +171,7 @@ function validateFighterSettings() {
 
 async function handleFileUpload(file) {
     if (!currentUser) {
-        alert('Please sign in before starting an analysis. Click the Sign In button in the top right corner.');
+        showToast('Please sign in before starting an analysis', 'warning');
         return;
     }
     
@@ -215,13 +179,13 @@ async function handleFileUpload(file) {
     const fileExt = '.' + file.name.split('.').pop().toLowerCase();
     
     if (!validTypes.includes(fileExt)) {
-        alert('Please upload a valid video file (MP4, AVI, MOV, or MKV)');
+        showToast('Please upload a valid video file (MP4, AVI, MOV, or MKV)', 'error');
         return;
     }
     
     const fileSizeMB = file.size / (1024 * 1024);
     if (fileSizeMB > MAX_FILE_SIZE_MB) {
-        alert(`File too large. Maximum size is ${MAX_FILE_SIZE_MB}MB. Your file is ${fileSizeMB.toFixed(1)}MB.`);
+        showToast(`File too large. Maximum size is ${MAX_FILE_SIZE_MB}MB. Your file is ${fileSizeMB.toFixed(1)}MB.`, 'error');
         return;
     }
 
@@ -267,7 +231,7 @@ async function handleFileUpload(file) {
         setTimeout(() => showStep2(data), 500);
 
     } catch (error) {
-        alert('Error: ' + error.message);
+        showToast('Error: ' + error.message, 'error');
         uploadArea.classList.remove('hidden');
         progressContainer.classList.add('hidden');
     }
@@ -434,7 +398,7 @@ async function continueToAssessment() {
 
             riskData = await response.json();
         } catch (error) {
-            alert('Error calculating risk: ' + error.message);
+            showToast('Error calculating risk: ' + error.message, 'error');
             return;
         }
     }
@@ -444,7 +408,7 @@ async function continueToAssessment() {
         assessmentData = await response.json();
         showStep3();
     } catch (error) {
-        alert('Error loading assessment: ' + error.message);
+        showToast('Error loading assessment: ' + error.message, 'error');
     }
 }
 
@@ -550,7 +514,7 @@ async function submitAssessment() {
         assessmentResult = await response.json();
         showStep4();
     } catch (error) {
-        alert('Error submitting assessment: ' + error.message);
+        showToast('Error submitting assessment: ' + error.message, 'error');
     }
 }
 
@@ -571,10 +535,6 @@ function showStep4() {
 }
 
 function displayAssessmentResults() {
-    const safetyScore = calculateSafetyScore();
-    const rank = getRank(safetyScore);
-    const earnedBadges = getEarnedBadges();
-    
     let symptomDetailsHtml = '';
     const symptomDetails = assessmentResult.symptom_details || [];
     if (symptomDetails.length > 0) {
@@ -595,46 +555,12 @@ function displayAssessmentResults() {
             </div>
         `;
     }
-    
-    const badgesHtml = BADGES.map((badge, index) => {
-        const isEarned = earnedBadges.find(b => b.id === badge.id);
-        return `
-            <div class="badge ${isEarned ? 'earned' : ''}" style="animation-delay: ${index * 0.1}s">
-                <span class="badge-icon">${BADGE_ICONS[badge.iconKey]}</span>
-                <span class="badge-name">${badge.name}</span>
-            </div>
-        `;
-    }).join('');
 
     const resultHtml = `
-        <div class="score-display animate-score">
-            <span class="score-label">Safety Score</span>
-            <span class="score-value" id="safety-score-value">0</span>
-            <div class="score-rank">
-                <span class="rank-icon">${rank.icon}</span>
-                <span>${rank.name}</span>
-            </div>
-        </div>
-        
-        <div class="xp-bar-container">
-            <div class="xp-bar-label">
-                <span>Progress to next rank</span>
-                <span id="xp-progress-text">0%</span>
-            </div>
-            <div class="xp-bar">
-                <div class="xp-bar-fill" id="xp-bar-fill"></div>
-            </div>
-        </div>
-        
-        <h4 style="text-align: center; margin: 20px 0 15px; color: var(--text-secondary);">Achievements Earned</h4>
-        <div class="badges-container">
-            ${badgesHtml}
-        </div>
-        
-        <div class="assessment-result-card" style="margin-top: 25px;">
+        <div class="assessment-result-card">
             <h3>Concussion Screening Results</h3>
             ${redFlagWarning}
-            <span class="urgency-badge ${assessmentResult.urgency_level}">${assessmentResult.urgency_level}</span>
+            <span class="urgency-badge ${assessmentResult.urgency_level}">${assessmentResult.urgency_level.toUpperCase()}</span>
             
             <div class="risk-recommendation">
                 <strong>Recommendation:</strong><br>
@@ -648,15 +574,15 @@ function displayAssessmentResults() {
                 </div>
                 <div class="stat-card">
                     <div class="stat-number" id="stat-severity">0</div>
-                    <div class="stat-label">Severity</div>
+                    <div class="stat-label">Severity Score</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number" id="stat-orientation">0</div>
-                    <div class="stat-label">Orientation</div>
+                    <div class="stat-label">Orientation (/${assessmentResult.orientation_max || 5})</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number" id="stat-memory">0</div>
-                    <div class="stat-label">Memory</div>
+                    <div class="stat-label">Memory (/${assessmentResult.memory_max || 5})</div>
                 </div>
             </div>
 
@@ -669,42 +595,15 @@ function displayAssessmentResults() {
     document.getElementById('assessment-results-section').innerHTML = resultHtml;
     
     setTimeout(() => {
-        const scoreEl = document.getElementById('safety-score-value');
         const symptomsEl = document.getElementById('stat-symptoms');
         const severityEl = document.getElementById('stat-severity');
         const orientationEl = document.getElementById('stat-orientation');
         const memoryEl = document.getElementById('stat-memory');
         
-        if (scoreEl) animateNumber(scoreEl, safetyScore, 1500);
         if (symptomsEl) animateNumber(symptomsEl, assessmentResult.symptom_total || 0, 800);
         if (severityEl) animateNumber(severityEl, assessmentResult.symptom_severity_score || 0, 800);
         if (orientationEl) animateNumber(orientationEl, assessmentResult.orientation_score || 0, 800);
         if (memoryEl) animateNumber(memoryEl, assessmentResult.memory_score || 0, 800);
-        
-        const currentRankIndex = RANKS.indexOf(rank);
-        const nextRank = RANKS[currentRankIndex + 1];
-        let xpPercent = 100;
-        if (nextRank) {
-            const rangeStart = rank.minScore;
-            const rangeEnd = nextRank.minScore;
-            xpPercent = ((safetyScore - rangeStart) / (rangeEnd - rangeStart)) * 100;
-        }
-        
-        setTimeout(() => {
-            const xpFill = document.getElementById('xp-bar-fill');
-            const xpText = document.getElementById('xp-progress-text');
-            if (xpFill) xpFill.style.width = xpPercent + '%';
-            if (xpText) xpText.textContent = Math.round(xpPercent) + '%';
-        }, 500);
-        
-        document.querySelectorAll('.badge').forEach((badge, index) => {
-            setTimeout(() => {
-                badge.style.opacity = '1';
-                if (badge.classList.contains('earned')) {
-                    badge.classList.add('animate-badge');
-                }
-            }, 800 + index * 150);
-        });
     }, 300);
 }
 
@@ -1027,7 +926,7 @@ function updateUserUI() {
 
 async function showHistory() {
     if (!currentUser) {
-        alert('Please sign in to view your history');
+        showToast('Please sign in to view your history', 'warning');
         return;
     }
     
@@ -1069,21 +968,69 @@ async function viewHistorySession(sessionDbId) {
         const session = await response.json();
         
         if (session.error) {
-            alert('Error loading session: ' + session.error);
+            showToast('Error loading session: ' + session.error, 'error');
             return;
         }
         
         document.getElementById('history-modal').classList.add('hidden');
         
-        alert(`Session Details:\n\nDate: ${new Date(session.created_at).toLocaleString()}\nRisk: ${session.overall_risk} (${session.risk_percentage}%)\nImpacts: ${session.impact_count}\nTotal Force: ${session.total_force?.toFixed(0)}N\n\nAI Summary:\n${session.ai_summary || 'Not available'}\n\nRecommendation:\n${session.recommendation || 'Not available'}`);
+        showSessionDetails(session);
     } catch (error) {
-        alert('Error: ' + error.message);
+        showToast('Error: ' + error.message, 'error');
     }
+}
+
+function showSessionDetails(session) {
+    const assessmentHtml = session.assessment_result ? `
+        <div class="session-detail-section">
+            <h4>Concussion Screening</h4>
+            <p><strong>Urgency:</strong> ${session.assessment_result.urgency_level || 'N/A'}</p>
+            <p><strong>Symptoms:</strong> ${session.assessment_result.symptom_total || 0}</p>
+            <p><strong>Severity Score:</strong> ${session.assessment_result.symptom_severity_score || 0}</p>
+            <p><strong>Orientation:</strong> ${session.assessment_result.orientation_score || 0}/${session.assessment_result.orientation_max || 5}</p>
+            <p><strong>Memory:</strong> ${session.assessment_result.memory_score || 0}/${session.assessment_result.memory_max || 5}</p>
+            ${session.assessment_result.red_flags_count > 0 ? '<p class="red-flag-text"><strong>Red Flags Detected!</strong></p>' : ''}
+        </div>
+    ` : '';
+    
+    const detailsHtml = `
+        <div class="session-details-modal" onclick="if(event.target === this) this.remove()">
+            <div class="session-details-content">
+                <div class="modal-header">
+                    <h2>Session Details</h2>
+                    <button class="close-btn" onclick="this.closest('.session-details-modal').remove()">&times;</button>
+                </div>
+                <div class="session-details-body">
+                    <p><strong>Date:</strong> ${new Date(session.created_at).toLocaleString()}</p>
+                    <p><strong>Risk Level:</strong> <span class="urgency-badge ${session.overall_risk}">${session.overall_risk || 'N/A'}</span></p>
+                    <p><strong>Risk Percentage:</strong> ${session.risk_percentage ? session.risk_percentage.toFixed(1) + '%' : 'N/A'}</p>
+                    <p><strong>Impacts:</strong> ${session.impact_count || 0}</p>
+                    <p><strong>Total Force:</strong> ${session.total_force ? session.total_force.toFixed(0) + 'N' : 'N/A'}</p>
+                    
+                    ${assessmentHtml}
+                    
+                    <div class="session-detail-section">
+                        <h4>Recommendation</h4>
+                        <p>${session.recommendation || 'Not available'}</p>
+                    </div>
+                    
+                    ${session.ai_summary ? `
+                        <div class="session-detail-section">
+                            <h4>AI Summary</h4>
+                            <p>${session.ai_summary}</p>
+                        </div>
+                    ` : ''}
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', detailsHtml);
 }
 
 async function saveSession() {
     if (!currentUser || !currentSession || !riskData) {
-        alert('No session data to save');
+        showToast('No session data to save', 'warning');
         return;
     }
     
@@ -1104,13 +1051,13 @@ async function saveSession() {
         const result = await response.json();
         
         if (result.success) {
-            alert('Session saved to your history!');
+            showToast('Session saved to your history!', 'success');
             document.getElementById('save-session-btn').style.display = 'none';
         } else {
-            alert('Failed to save: ' + (result.error || 'Unknown error'));
+            showToast('Failed to save: ' + (result.error || 'Unknown error'), 'error');
         }
     } catch (error) {
-        alert('Error saving session: ' + error.message);
+        showToast('Error saving session: ' + error.message, 'error');
     }
 }
 
