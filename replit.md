@@ -60,23 +60,26 @@ A web application that analyzes sparring/boxing footage to detect punch impacts,
    - Track cumulative exposure over time
 
 ## UI Theme
-High-tech green glassy aesthetic with:
-- Dark background with subtle gradient
+Modern glassware aesthetic with:
+- Black background
 - Glassmorphism panels with backdrop blur
-- Neon green/teal accents (#00ff9d, #00d4aa)
-- Scanline effects for futuristic look
-- Glow effects on interactive elements
+- Emerald green accents (#10b981)
+- Montserrat font throughout
+- Clean, professional design
 
 ## Recent Changes (January 2026)
+- Added throwing intensity percentage slider for each fighter (affects speed/power calculations)
+- Speed and power only shown in final analysis phase (not frame selection)
+- Only selected frames displayed in analysis results
+- Sign-in required before starting video analysis
+- Renamed to "Hitsmart Strike Calculator"
+- Black background with modern glassware UI
 - Added fighter configuration UI with skill levels and weights
 - Implemented skill-based speed/power range estimation instead of raw velocity
-- Redesigned UI with high-tech green glassy theme
 - Reduced deployment size to ~1.5GB using CPU-only PyTorch
 - Added streaming AI summary using GPT-4o via Replicate API
 - Migrated to Replit OAuth with PKCE flow for secure authentication
 - OAuth supports Google, GitHub, Apple, and email/password login
-- Added OAuthSession model for token storage in PostgreSQL
-- Enhanced glassmorphism UI with deeper blur effects and animated lighting
 - New history modal to view past analysis sessions
 
 ## API Endpoints
