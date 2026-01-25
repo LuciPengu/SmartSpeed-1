@@ -11,8 +11,8 @@ A web application that analyzes sparring/boxing footage to detect punch impacts,
 │   ├── video_analyzer.py    # Video processing and punch detection
 │   ├── risk_calculator.py   # Brain injury risk calculation
 │   ├── concussion_assessment.py  # SCAT5 screening protocol
-│   ├── database.py          # PostgreSQL models (User, InjurySession, ImpactRecord, OAuthSession)
-│   ├── replit_auth.py       # Replit OAuth 2.0 with PKCE flow
+│   ├── database.py          # PostgreSQL models (User, InjurySession, ImpactRecord)
+│   ├── auth.py              # Email/password authentication with session management
 │   └── ai_summary.py        # Replicate/GPT-4o streaming AI summary
 ├── frontend/
 │   └── index.html           # Main web interface
@@ -92,8 +92,8 @@ Modern glassware aesthetic with:
 - Implemented skill-based speed/power range estimation instead of raw velocity
 - Reduced deployment size to ~1.5GB using CPU-only PyTorch
 - Added streaming AI summary using GPT-4o via Replicate API
-- Migrated to Replit OAuth with PKCE flow for secure authentication
-- OAuth supports Google, GitHub, Apple, and email/password login
+- Custom email/password authentication with secure password hashing
+- Session-based auth with cookie management
 - New history modal to view past analysis sessions
 
 ## API Endpoints
@@ -105,8 +105,8 @@ Modern glassware aesthetic with:
 - `POST /api/concussion-assessment/evaluate` - Evaluate assessment responses
 - `POST /api/ai-summary/stream` - Stream AI analysis (SSE)
 - `POST /api/ai-summary` - Get AI summary (non-streaming)
-- `GET /api/auth/login` - Initiate Replit OAuth login (redirects to Replit)
-- `GET /api/auth/callback` - OAuth callback handler
+- `POST /api/auth/register` - Register new user with email/password
+- `POST /api/auth/login` - Login with email/password
 - `GET /api/auth/user` - Get current authenticated user
 - `GET /api/auth/logout` - Logout and clear session
 - `POST /api/sessions/save` - Save session to history
