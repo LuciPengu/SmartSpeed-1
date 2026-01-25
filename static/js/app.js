@@ -446,7 +446,6 @@ function showStep4() {
     document.getElementById('step-4').classList.remove('hidden');
 
     displayAssessmentResults();
-    displayRiskResults();
     displayImpactFrames();
     
     updateUserUI();
