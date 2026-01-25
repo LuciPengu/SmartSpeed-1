@@ -1702,3 +1702,75 @@ header h1 {
 .level-up-notification p {
     color: rgba(255, 255, 255, 0.9);
 }
+
+.auth-modal-content {
+    max-width: 400px;
+}
+
+.auth-form {
+    padding: 25px;
+}
+
+.auth-form .input-group {
+    margin-bottom: 20px;
+}
+
+.auth-form .input-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.auth-error {
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid var(--danger);
+    color: var(--danger);
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+
+.btn.full-width {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 20px;
+    font-size: 1rem;
+}
+
+.auth-toggle {
+    text-align: center;
+    margin-top: 20px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.auth-toggle a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 5px;
+}
+
+.auth-toggle a:hover {
+    text-decoration: underline;
+}
+
+.badge-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
+
+.badge-icon svg {
+    width: 24px;
+    height: 24px;
+    stroke: currentColor;
+}
+
+.badge.earned .badge-icon svg {
+    stroke: var(--primary);
+}

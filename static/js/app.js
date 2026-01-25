@@ -26,13 +26,22 @@ const RANKS = [
     { name: 'Legend', icon: '👑', minScore: 95 }
 ];
 
+const BADGE_ICONS = {
+    first_strike: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>',
+    iron_chin: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>',
+    quick_recovery: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>',
+    thorough: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>',
+    safety_first: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>',
+    warrior: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 17.5L3 6V3h3l11.5 11.5"></path><path d="M13 19l6-6"></path><path d="M16 16l4 4"></path><path d="M19 21a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"></path></svg>'
+};
+
 const BADGES = [
-    { id: 'first_analysis', name: 'First Strike', icon: '🎯', condition: () => true },
-    { id: 'no_symptoms', name: 'Iron Chin', icon: '🛡️', condition: (data) => data.symptomCount === 0 },
-    { id: 'quick_recovery', name: 'Quick Recovery', icon: '⚡', condition: (data) => data.urgency === 'none' || data.urgency === 'low' },
-    { id: 'thorough', name: 'Thorough Check', icon: '🔍', condition: (data) => data.impactCount >= 3 },
-    { id: 'safety_first', name: 'Safety First', icon: '🏥', condition: (data) => data.safetyScore >= 80 },
-    { id: 'warrior', name: 'Warrior Spirit', icon: '⚔️', condition: (data) => data.impactCount >= 5 }
+    { id: 'first_analysis', name: 'First Strike', iconKey: 'first_strike', condition: () => true },
+    { id: 'no_symptoms', name: 'Iron Chin', iconKey: 'iron_chin', condition: (data) => data.symptomCount === 0 },
+    { id: 'quick_recovery', name: 'Quick Recovery', iconKey: 'quick_recovery', condition: (data) => data.urgency === 'none' || data.urgency === 'low' },
+    { id: 'thorough', name: 'Thorough Check', iconKey: 'thorough', condition: (data) => data.impactCount >= 3 },
+    { id: 'safety_first', name: 'Safety First', iconKey: 'safety_first', condition: (data) => data.safetyScore >= 80 },
+    { id: 'warrior', name: 'Warrior Spirit', iconKey: 'warrior', condition: (data) => data.impactCount >= 5 }
 ];
 
 function calculateSafetyScore() {
@@ -591,7 +600,7 @@ function displayAssessmentResults() {
         const isEarned = earnedBadges.find(b => b.id === badge.id);
         return `
             <div class="badge ${isEarned ? 'earned' : ''}" style="animation-delay: ${index * 0.1}s">
-                <span class="badge-icon">${badge.icon}</span>
+                <span class="badge-icon">${BADGE_ICONS[badge.iconKey]}</span>
                 <span class="badge-name">${badge.name}</span>
             </div>
         `;
@@ -823,17 +832,25 @@ function displayImpactFrames() {
     }).join('');
 }
 
+let isRegisterMode = false;
+
 function initializeAuth() {
-    document.getElementById('login-btn').addEventListener('click', () => {
-        window.location.href = '/api/auth/login';
-    });
-    
+    document.getElementById('login-btn').addEventListener('click', showAuthModal);
     document.getElementById('logout-btn').addEventListener('click', handleLogout);
-    
     document.getElementById('history-btn').addEventListener('click', showHistory);
-    
     document.getElementById('close-history-btn').addEventListener('click', () => {
         document.getElementById('history-modal').classList.add('hidden');
+    });
+    document.getElementById('close-auth-btn').addEventListener('click', () => {
+        document.getElementById('auth-modal').classList.add('hidden');
+    });
+    document.getElementById('auth-toggle-link').addEventListener('click', (e) => {
+        e.preventDefault();
+        toggleAuthMode();
+    });
+    document.getElementById('auth-submit-btn').addEventListener('click', handleAuthSubmit);
+    document.getElementById('auth-password').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleAuthSubmit();
     });
     
     const saveBtn = document.getElementById('save-session-btn');
@@ -884,8 +901,110 @@ async function checkAuthStatus() {
     }
 }
 
-function handleLogout() {
-    window.location.href = '/api/auth/logout';
+function showAuthModal() {
+    isRegisterMode = false;
+    updateAuthModalUI();
+    document.getElementById('auth-modal').classList.remove('hidden');
+    document.getElementById('auth-email').focus();
+}
+
+function toggleAuthMode() {
+    isRegisterMode = !isRegisterMode;
+    updateAuthModalUI();
+}
+
+function updateAuthModalUI() {
+    const title = document.getElementById('auth-modal-title');
+    const submitBtn = document.getElementById('auth-submit-btn');
+    const toggleText = document.getElementById('auth-toggle-text');
+    const toggleLink = document.getElementById('auth-toggle-link');
+    const nameFields = document.getElementById('auth-name-fields');
+    const errorDiv = document.getElementById('auth-error');
+    
+    errorDiv.classList.add('hidden');
+    document.getElementById('auth-email').value = '';
+    document.getElementById('auth-password').value = '';
+    
+    if (isRegisterMode) {
+        title.textContent = 'Create Account';
+        submitBtn.textContent = 'Sign Up';
+        toggleText.textContent = 'Already have an account?';
+        toggleLink.textContent = 'Sign in';
+        nameFields.classList.remove('hidden');
+    } else {
+        title.textContent = 'Sign In';
+        submitBtn.textContent = 'Sign In';
+        toggleText.textContent = "Don't have an account?";
+        toggleLink.textContent = 'Create one';
+        nameFields.classList.add('hidden');
+    }
+}
+
+async function handleAuthSubmit() {
+    const email = document.getElementById('auth-email').value.trim();
+    const password = document.getElementById('auth-password').value;
+    const errorDiv = document.getElementById('auth-error');
+    const submitBtn = document.getElementById('auth-submit-btn');
+    
+    if (!email || !password) {
+        errorDiv.textContent = 'Please enter email and password';
+        errorDiv.classList.remove('hidden');
+        return;
+    }
+    
+    if (password.length < 6) {
+        errorDiv.textContent = 'Password must be at least 6 characters';
+        errorDiv.classList.remove('hidden');
+        return;
+    }
+    
+    submitBtn.disabled = true;
+    submitBtn.textContent = isRegisterMode ? 'Creating account...' : 'Signing in...';
+    
+    try {
+        const endpoint = isRegisterMode ? '/api/auth/register' : '/api/auth/login';
+        const body = { email, password };
+        
+        if (isRegisterMode) {
+            body.first_name = document.getElementById('auth-first-name').value.trim() || null;
+            body.last_name = document.getElementById('auth-last-name').value.trim() || null;
+        }
+        
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.detail || 'Authentication failed');
+        }
+        
+        currentUser = {
+            id: data.user.id,
+            email: data.user.email,
+            name: data.user.first_name || data.user.email.split('@')[0],
+            avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(data.user.first_name || data.user.email)}&background=10b981&color=fff`
+        };
+        
+        updateUserUI();
+        document.getElementById('auth-modal').classList.add('hidden');
+        
+    } catch (error) {
+        errorDiv.textContent = error.message;
+        errorDiv.classList.remove('hidden');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = isRegisterMode ? 'Sign Up' : 'Sign In';
+    }
+}
+
+async function handleLogout() {
+    await fetch('/api/auth/logout');
+    currentUser = null;
+    updateUserUI();
 }
 
 function updateUserUI() {
