@@ -6,8 +6,8 @@ let riskData = null;
 let currentUser = null;
 let aiSummaryText = '';
 let fighterSettings = {
-    fighter1: { skill: 'professional', weight: 75 },
-    fighter2: { skill: 'professional', weight: 75 }
+    fighter1: { skill: 'professional', weight: 75, intensity: 70 },
+    fighter2: { skill: 'professional', weight: 75, intensity: 70 }
 };
 
 const SKILL_SPEED_RANGES = {
@@ -31,11 +31,19 @@ function initializeFighterSettings() {
     document.getElementById('fighter1-weight').addEventListener('change', (e) => {
         fighterSettings.fighter1.weight = parseFloat(e.target.value) || 75;
     });
+    document.getElementById('fighter1-intensity').addEventListener('input', (e) => {
+        fighterSettings.fighter1.intensity = parseInt(e.target.value);
+        document.getElementById('fighter1-intensity-value').textContent = e.target.value + '%';
+    });
     document.getElementById('fighter2-skill').addEventListener('change', (e) => {
         fighterSettings.fighter2.skill = e.target.value;
     });
     document.getElementById('fighter2-weight').addEventListener('change', (e) => {
         fighterSettings.fighter2.weight = parseFloat(e.target.value) || 75;
+    });
+    document.getElementById('fighter2-intensity').addEventListener('input', (e) => {
+        fighterSettings.fighter2.intensity = parseInt(e.target.value);
+        document.getElementById('fighter2-intensity-value').textContent = e.target.value + '%';
     });
 }
 
@@ -84,13 +92,20 @@ function validateFighterSettings() {
     
     fighterSettings.fighter1.skill = document.getElementById('fighter1-skill').value;
     fighterSettings.fighter1.weight = f1Weight;
+    fighterSettings.fighter1.intensity = parseInt(document.getElementById('fighter1-intensity').value) || 70;
     fighterSettings.fighter2.skill = document.getElementById('fighter2-skill').value;
     fighterSettings.fighter2.weight = f2Weight;
+    fighterSettings.fighter2.intensity = parseInt(document.getElementById('fighter2-intensity').value) || 70;
     
     return true;
 }
 
 async function handleFileUpload(file) {
+    if (!currentUser) {
+        alert('Please sign in before starting an analysis. Click the Sign In button in the top right corner.');
+        return;
+    }
+    
     const validTypes = ['.mp4', '.avi', '.mov', '.mkv'];
     const fileExt = '.' + file.name.split('.').pop().toLowerCase();
     
@@ -157,10 +172,12 @@ function calculateSpeedRange(impact, fighterIdx) {
     const settings = fighterIdx === 1 ? fighterSettings.fighter1 : fighterSettings.fighter2;
     const skillRanges = SKILL_SPEED_RANGES[settings.skill];
     
-    const intensity = Math.min(1, impact.motion_intensity || 0.7);
+    const motionIntensity = Math.min(1, impact.motion_intensity || 0.7);
+    const throwingIntensity = (settings.intensity || 70) / 100;
+    const combinedIntensity = motionIntensity * throwingIntensity;
     
-    const adjustedMin = skillRanges.min + (skillRanges.avg - skillRanges.min) * intensity * 0.5;
-    const adjustedMax = skillRanges.min + (skillRanges.max - skillRanges.min) * intensity;
+    const adjustedMin = skillRanges.min + (skillRanges.avg - skillRanges.min) * combinedIntensity * 0.5;
+    const adjustedMax = skillRanges.min + (skillRanges.max - skillRanges.min) * combinedIntensity;
     
     return {
         min: Math.round(adjustedMin),
@@ -225,9 +242,6 @@ function showStep2(data) {
     }
 
     impactsGrid.innerHTML = data.impacts.map(impact => {
-        const speedRange = calculateSpeedRange(impact, impact.fighter);
-        const powerRange = calculatePowerRange(impact, impact.fighter);
-        
         return `
             <div class="impact-card" data-id="${impact.id}" onclick="toggleImpact(${impact.id})">
                 <img src="${impact.image_path}" alt="Impact ${impact.id}">
@@ -238,15 +252,6 @@ function showStep2(data) {
                     </div>
                     <div class="impact-stats">
                         <div>Time: <span class="impact-stat-value">${impact.time.toFixed(2)}s</span></div>
-                        <div>Intensity: <span class="impact-stat-value">${((impact.motion_intensity || 0.7) * 100).toFixed(0)}%</span></div>
-                    </div>
-                    <div class="speed-range">
-                        <div class="speed-range-label">Est. Speed</div>
-                        <div class="speed-range-value">${speedRange.min} - ${speedRange.max} ${speedRange.unit}</div>
-                    </div>
-                    <div class="power-range">
-                        <div class="power-range-label">Est. Force</div>
-                        <div class="power-range-value">${powerRange.min} - ${powerRange.max} ${powerRange.unit}</div>
                     </div>
                 </div>
             </div>
@@ -557,41 +562,42 @@ function displayRiskResults() {
 
 function displayImpactFrames() {
     const data = currentSession;
+    const selectedImpactsList = data.impacts.filter(impact => selectedImpacts.has(impact.id));
     
     const summaryHtml = `
         <div class="summary-item">
-            <div class="summary-value">${data.impact_count}</div>
-            <div class="summary-label">Impacts Detected</div>
+            <div class="summary-value">${selectedImpactsList.length}</div>
+            <div class="summary-label">Impacts Analyzed</div>
         </div>
         <div class="summary-item">
             <div class="summary-value">${data.duration.toFixed(2)}s</div>
             <div class="summary-label">Video Duration</div>
         </div>
         <div class="summary-item">
-            <div class="summary-value">${data.total_frames}</div>
-            <div class="summary-label">Total Frames</div>
+            <div class="summary-value">${fighterSettings.fighter1.intensity}%</div>
+            <div class="summary-label">Fighter 1 Intensity</div>
         </div>
         <div class="summary-item">
-            <div class="summary-value">${data.fps.toFixed(1)}</div>
-            <div class="summary-label">FPS</div>
+            <div class="summary-value">${fighterSettings.fighter2.intensity}%</div>
+            <div class="summary-label">Fighter 2 Intensity</div>
         </div>
     `;
     document.getElementById('final-results-summary').innerHTML = summaryHtml;
 
     const impactsGrid = document.getElementById('final-impacts-grid');
     
-    if (data.impacts.length === 0) {
-        impactsGrid.innerHTML = '<p>No punch impacts were detected in this video.</p>';
+    if (selectedImpactsList.length === 0) {
+        impactsGrid.innerHTML = '<p>No impacts were selected for analysis.</p>';
         return;
     }
 
-    impactsGrid.innerHTML = data.impacts.map(impact => {
-        const isSelected = selectedImpacts.has(impact.id);
+    impactsGrid.innerHTML = selectedImpactsList.map(impact => {
         const speedRange = calculateSpeedRange(impact, impact.fighter);
         const powerRange = calculatePowerRange(impact, impact.fighter);
+        const settings = impact.fighter === 1 ? fighterSettings.fighter1 : fighterSettings.fighter2;
         
         return `
-            <div class="impact-card ${isSelected ? 'selected' : ''}" data-id="${impact.id}">
+            <div class="impact-card selected" data-id="${impact.id}">
                 <img src="${impact.image_path}" alt="Impact ${impact.id}">
                 <div class="impact-info">
                     <div class="impact-title">
@@ -600,7 +606,7 @@ function displayImpactFrames() {
                     </div>
                     <div class="impact-stats">
                         <div>Time: <span class="impact-stat-value">${impact.time.toFixed(2)}s</span></div>
-                        <div>Intensity: <span class="impact-stat-value">${((impact.motion_intensity || 0.7) * 100).toFixed(0)}%</span></div>
+                        <div>Throwing: <span class="impact-stat-value">${settings.intensity}%</span></div>
                     </div>
                     <div class="speed-range">
                         <div class="speed-range-label">Est. Speed</div>
@@ -610,7 +616,6 @@ function displayImpactFrames() {
                         <div class="power-range-label">Est. Force</div>
                         <div class="power-range-value">${powerRange.min} - ${powerRange.max} ${powerRange.unit}</div>
                     </div>
-                    ${isSelected ? '<div class="selected-badge">Selected for Analysis</div>' : ''}
                 </div>
             </div>
         `;
