@@ -52,11 +52,11 @@ A web application that analyzes sparring/boxing footage to detect punch impacts,
    - Real-time streaming summary of punch impacts
    - Personalized injury risk insights
    - Recovery recommendations
-9. **User Login & History**: Replit OAuth authentication:
-   - Secure OAuth 2.0 with PKCE flow
-   - Supports Google, GitHub, Apple, and email/password login via Replit
+9. **User Login & History**: Custom email/password authentication:
+   - Secure PBKDF2-HMAC-SHA256 password hashing with random salt
+   - Session-based auth with 7-day cookie expiration
    - Save analysis sessions to PostgreSQL database
-   - View past injury history
+   - View past injury history with full concussion screening details
    - Track cumulative exposure over time
 
 ## UI Theme
@@ -68,16 +68,13 @@ Modern glassware aesthetic with:
 - Clean, professional design
 
 ## Recent Changes (January 2026)
-- **Animations & Gamification** (Latest):
+- **Simplified UI & Toast Notifications** (Latest):
+  - Removed ranking/scoring systems for cleaner UX
+  - Custom toast notifications instead of browser alerts
+  - Session details modal shows full concussion screening results
+  - Click-outside-to-close for all modals
   - Smooth page transitions with step fade-in animations
   - Number count-up animations for all stats
-  - Safety Score (0-100) calculated from assessment results
-  - 5-tier Rank System: Rookie, Contender, Champion, Elite, Legend
-  - 6 Achievement Badges: First Strike, Iron Chin, Quick Recovery, Thorough Check, Safety First, Warrior Spirit
-  - XP progress bar with shimmer effect
-  - Impact card selection animations with floating "+1" points
-  - Badge reveal animations with staggered delays
-  - Defensive null checks throughout for reliability
 - **AI Chat**: Follow-up question capability after AI summary loads - ask questions about the analysis
 - **Integrated Assessment**: Concussion screening now combines both symptoms AND strike data for risk evaluation
 - **Realistic Calculations**: Speed/power values vary slightly per impact (seeded randomization) to appear more calculated
