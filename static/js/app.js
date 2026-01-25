@@ -208,6 +208,7 @@ async function handleFileUpload(file) {
     progressContainer.classList.remove('hidden');
 
     progressFill.style.width = '30%';
+    progressFill.classList.add('analyzing');
     progressText.textContent = 'Uploading video...';
 
     const formData = new FormData();
@@ -229,6 +230,7 @@ async function handleFileUpload(file) {
         }
 
         progressFill.style.width = '100%';
+        progressFill.classList.remove('analyzing');
         progressText.textContent = 'Analysis complete!';
 
         const data = await response.json();
@@ -238,6 +240,7 @@ async function handleFileUpload(file) {
 
     } catch (error) {
         showToast('Error: ' + error.message, 'error');
+        progressFill.classList.remove('analyzing');
         uploadArea.classList.remove('hidden');
         progressContainer.classList.add('hidden');
     }
