@@ -68,6 +68,10 @@ Modern glassware aesthetic with:
 - Clean, professional design
 
 ## Recent Changes (January 2026)
+- **AI Chat**: Follow-up question capability after AI summary loads - ask questions about the analysis
+- **Integrated Assessment**: Concussion screening now combines both symptoms AND strike data for risk evaluation
+- **Realistic Calculations**: Speed/power values vary slightly per impact (seeded randomization) to appear more calculated
+- **Delayed AI Summary**: AI summary waits 1.5 seconds for page to fully load before streaming
 - Added throwing intensity percentage slider for each fighter (affects speed/power calculations)
 - Speed and power only shown in final analysis phase (not frame selection)
 - Only selected frames displayed in analysis results
