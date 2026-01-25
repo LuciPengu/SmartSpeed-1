@@ -72,6 +72,7 @@ class AssessmentRequest(BaseModel):
     symptoms: List[Dict[str, Any]]
     orientation: List[Dict[str, Any]]
     memory: List[Dict[str, Any]]
+    strike_data: Optional[Dict[str, Any]] = None
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -196,7 +197,7 @@ async def evaluate_concussion(request: AssessmentRequest):
         "memory": request.memory
     }
     
-    result = evaluate_assessment(responses)
+    result = evaluate_assessment(responses, request.strike_data)
     return result
 
 
@@ -227,6 +228,36 @@ async def stream_ai_summary(request: AISummaryRequest):
 async def get_ai_summary(request: AISummaryRequest):
     summary = generate_ai_summary(request.risk_data, request.fighter_settings)
     return {"summary": summary}
+
+
+class AIChatRequest(BaseModel):
+    message: str
+    conversation_history: List[Dict[str, str]]
+    session_context: Dict[str, Any]
+
+
+@app.post("/api/ai-chat/stream")
+async def stream_ai_chat(request: AIChatRequest):
+    from backend.ai_summary import generate_chat_response_stream
+    
+    def event_generator():
+        for chunk in generate_chat_response_stream(
+            request.message, 
+            request.conversation_history, 
+            request.session_context
+        ):
+            yield f"data: {json.dumps({'text': chunk})}\n\n"
+        yield "data: [DONE]\n\n"
+    
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no"
+        }
+    )
 
 
 @app.get("/api/auth/login")

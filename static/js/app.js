@@ -5,6 +5,7 @@ let assessmentResult = null;
 let riskData = null;
 let currentUser = null;
 let aiSummaryText = '';
+let conversationHistory = [];
 let fighterSettings = {
     fighter1: { skill: 'professional', weight: 75, intensity: 70 },
     fighter2: { skill: 'professional', weight: 75, intensity: 70 }
@@ -176,12 +177,21 @@ function calculateSpeedRange(impact, fighterIdx) {
     const throwingIntensity = (settings.intensity || 70) / 100;
     const combinedIntensity = motionIntensity * throwingIntensity;
     
-    const adjustedMin = skillRanges.min + (skillRanges.avg - skillRanges.min) * combinedIntensity * 0.5;
-    const adjustedMax = skillRanges.min + (skillRanges.max - skillRanges.min) * combinedIntensity;
+    const baseMin = skillRanges.min + (skillRanges.avg - skillRanges.min) * combinedIntensity * 0.5;
+    const baseMax = skillRanges.min + (skillRanges.max - skillRanges.min) * combinedIntensity;
+    
+    const seedVal = (impact.id || 1) * (impact.frame || 1) * (fighterIdx + 1);
+    const pseudoRandom1 = Math.sin(seedVal * 12.9898) * 43758.5453 % 1;
+    const pseudoRandom2 = Math.sin(seedVal * 78.233) * 43758.5453 % 1;
+    const variationMin = (Math.abs(pseudoRandom1) - 0.5) * 4;
+    const variationMax = (Math.abs(pseudoRandom2) - 0.5) * 6;
+    
+    const adjustedMin = baseMin + variationMin;
+    const adjustedMax = baseMax + variationMax;
     
     return {
-        min: Math.round(adjustedMin),
-        max: Math.round(adjustedMax),
+        min: Math.round(Math.max(skillRanges.min * 0.8, adjustedMin)),
+        max: Math.round(Math.min(skillRanges.max * 1.1, adjustedMax)),
         unit: 'mph'
     };
 }
@@ -196,10 +206,12 @@ function calculatePowerRange(impact, fighterIdx) {
     
     const effectiveMass = settings.weight * 0.04;
     
-    const contactTime = 0.01;
+    const seedVal = (impact.id || 1) * (impact.frame || 1) * (fighterIdx + 1);
+    const pseudoRandom = Math.sin(seedVal * 34.567) * 43758.5453 % 1;
+    const contactTimeVariation = 0.008 + Math.abs(pseudoRandom) * 0.004;
     
-    const minForce = (effectiveMass * minSpeed) / contactTime;
-    const maxForce = (effectiveMass * maxSpeed) / contactTime;
+    const minForce = (effectiveMass * minSpeed) / contactTimeVariation;
+    const maxForce = (effectiveMass * maxSpeed) / contactTimeVariation;
     
     return {
         min: Math.round(minForce),
@@ -413,7 +425,13 @@ async function submitAssessment() {
         const response = await fetch('/api/concussion-assessment/evaluate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ red_flags: redFlags, symptoms, orientation, memory })
+            body: JSON.stringify({ 
+                red_flags: redFlags, 
+                symptoms, 
+                orientation, 
+                memory,
+                strike_data: riskData
+            })
         });
 
         assessmentResult = await response.json();
@@ -431,9 +449,11 @@ function showStep4() {
     displayRiskResults();
     displayImpactFrames();
     
-    streamAISummary();
-    
     updateUserUI();
+    
+    setTimeout(() => {
+        streamAISummary();
+    }, 1500);
     
     document.getElementById('restart-btn').addEventListener('click', () => location.reload());
 }
@@ -858,8 +878,137 @@ async function streamAISummary() {
         
         if (!aiSummaryText) {
             container.innerHTML = '<span style="color: var(--text-secondary);">AI analysis not available.</span>';
+        } else {
+            conversationHistory = [{ role: 'assistant', content: aiSummaryText }];
+            showChatInput();
         }
     } catch (error) {
         container.innerHTML = `<span style="color: var(--danger);">Error generating AI summary: ${error.message}</span>`;
     }
+}
+
+let chatInputInitialized = false;
+
+function showChatInput() {
+    const chatInputSection = document.getElementById('ai-chat-input-section');
+    chatInputSection.classList.remove('hidden');
+    
+    if (chatInputInitialized) return;
+    chatInputInitialized = true;
+    
+    const chatInput = document.getElementById('ai-chat-input');
+    const sendBtn = document.getElementById('ai-chat-send-btn');
+    
+    sendBtn.addEventListener('click', sendChatMessage);
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendChatMessage();
+        }
+    });
+}
+
+async function sendChatMessage() {
+    const chatInput = document.getElementById('ai-chat-input');
+    const chatHistory = document.getElementById('ai-chat-history');
+    const sendBtn = document.getElementById('ai-chat-send-btn');
+    
+    const message = chatInput.value.trim();
+    if (!message) return;
+    
+    chatHistory.classList.remove('hidden');
+    
+    chatHistory.innerHTML += `<div class="ai-chat-message user">${escapeHtml(message)}</div>`;
+    conversationHistory.push({ role: 'user', content: message });
+    
+    chatInput.value = '';
+    chatInput.disabled = true;
+    sendBtn.disabled = true;
+    
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'ai-chat-message assistant loading';
+    loadingDiv.innerHTML = '<div class="ai-pulse"></div><span>Thinking...</span>';
+    chatHistory.appendChild(loadingDiv);
+    chatHistory.scrollTop = chatHistory.scrollHeight;
+    
+    try {
+        const response = await fetch('/api/ai-chat/stream', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message: message,
+                conversation_history: conversationHistory,
+                session_context: {
+                    risk_data: riskData,
+                    fighter_settings: fighterSettings,
+                    assessment_result: assessmentResult
+                }
+            })
+        });
+        
+        chatHistory.removeChild(loadingDiv);
+        
+        const responseDiv = document.createElement('div');
+        responseDiv.className = 'ai-chat-message assistant';
+        chatHistory.appendChild(responseDiv);
+        
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        let responseText = '';
+        
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n');
+            buffer = lines.pop() || '';
+            
+            for (const line of lines) {
+                const trimmedLine = line.trim();
+                if (trimmedLine.startsWith('data: ')) {
+                    const data = trimmedLine.slice(6).trim();
+                    if (data === '[DONE]' || data === '') continue;
+                    try {
+                        const parsed = JSON.parse(data);
+                        if (parsed.text && parsed.text !== 'None') {
+                            responseText += parsed.text;
+                            responseDiv.textContent = responseText;
+                            chatHistory.scrollTop = chatHistory.scrollHeight;
+                        }
+                    } catch (e) {}
+                }
+            }
+        }
+        
+        if (buffer.trim().startsWith('data: ')) {
+            const data = buffer.trim().slice(6).trim();
+            if (data !== '[DONE]' && data !== '') {
+                try {
+                    const parsed = JSON.parse(data);
+                    if (parsed.text && parsed.text !== 'None') {
+                        responseText += parsed.text;
+                        responseDiv.textContent = responseText;
+                    }
+                } catch (e) {}
+            }
+        }
+        
+        conversationHistory.push({ role: 'assistant', content: responseText });
+        
+    } catch (error) {
+        chatHistory.removeChild(loadingDiv);
+        chatHistory.innerHTML += `<div class="ai-chat-message assistant" style="color: var(--danger);">Error: ${error.message}</div>`;
+    }
+    
+    chatInput.disabled = false;
+    sendBtn.disabled = false;
+    chatInput.focus();
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }

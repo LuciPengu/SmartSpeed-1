@@ -84,3 +84,71 @@ def generate_ai_summary(risk_data: Dict[str, Any], fighter_settings: Dict[str, A
     for chunk in generate_ai_summary_stream(risk_data, fighter_settings):
         result += chunk
     return result
+
+
+def generate_chat_response_stream(
+    user_message: str, 
+    conversation_history: List[Dict[str, str]], 
+    session_context: Dict[str, Any]
+) -> Generator[str, None, None]:
+    if not REPLICATE_API_TOKEN:
+        yield "AI chat unavailable - API key not configured."
+        return
+    
+    risk_data = session_context.get('risk_data', {})
+    fighter_settings = session_context.get('fighter_settings', {})
+    assessment_result = session_context.get('assessment_result', {})
+    
+    context_summary = f"""
+SESSION CONTEXT:
+- Total impacts analyzed: {risk_data.get('impact_count', 0)}
+- Overall risk level: {risk_data.get('overall_risk', 'unknown')}
+- Risk percentage: {risk_data.get('risk_percentage', 0):.1f}%
+- Max impact force: {risk_data.get('max_single_impact_force', 0):.0f} N
+- Assessment urgency: {assessment_result.get('urgency_level', 'not assessed')}
+- Symptom count: {assessment_result.get('symptom_total', 0)}/22
+- Symptom severity: {assessment_result.get('symptom_severity_score', 0)}/132
+"""
+    
+    if fighter_settings:
+        f1 = fighter_settings.get('fighter1', {})
+        f2 = fighter_settings.get('fighter2', {})
+        context_summary += f"""
+Fighter 1: {f1.get('skill', 'Professional')} level, {f1.get('weight', 75)}kg, {f1.get('intensity', 70)}% intensity
+Fighter 2: {f2.get('skill', 'Professional')} level, {f2.get('weight', 75)}kg, {f2.get('intensity', 70)}% intensity
+"""
+
+    messages_text = ""
+    for msg in conversation_history[-6:]:
+        role = "User" if msg.get('role') == 'user' else "Assistant"
+        messages_text += f"{role}: {msg.get('content', '')}\n"
+    
+    prompt = f"""{context_summary}
+
+CONVERSATION HISTORY:
+{messages_text}
+
+User's new question: {user_message}
+
+Provide a helpful, concise response based on the session context and conversation history. Focus on practical advice for brain health and recovery. Do not use markdown formatting."""
+
+    try:
+        for event in replicate.stream(
+            "openai/gpt-4o",
+            input={
+                "top_p": 1,
+                "prompt": prompt,
+                "messages": [],
+                "image_input": [],
+                "temperature": 0.7,
+                "system_prompt": "You are a sports medicine expert specializing in combat sports and brain injury prevention. You are discussing a specific sparring session with a user. Be concise, professional, and focus on actionable guidance. Answer follow-up questions based on the provided session context.",
+                "presence_penalty": 0,
+                "frequency_penalty": 0,
+                "max_completion_tokens": 400
+            },
+        ):
+            chunk = str(event) if event else ""
+            if chunk and chunk != "None":
+                yield chunk
+    except Exception as e:
+        yield f"Error generating response: {str(e)}"

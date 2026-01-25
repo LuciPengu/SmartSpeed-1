@@ -69,7 +69,7 @@ def get_assessment_questions() -> Dict[str, Any]:
     }
 
 
-def evaluate_assessment(responses: Dict[str, Any]) -> Dict[str, Any]:
+def evaluate_assessment(responses: Dict[str, Any], strike_data: Dict[str, Any] = None) -> Dict[str, Any]:
     
     red_flags_present = []
     for flag in responses.get('red_flags', []):
@@ -101,23 +101,61 @@ def evaluate_assessment(responses: Dict[str, Any]) -> Dict[str, Any]:
         if question.get('correct', False):
             memory_score += 1
     
+    strike_risk_modifier = 0
+    strike_analysis = None
+    
+    if strike_data:
+        impact_count = strike_data.get('impact_count', 0)
+        risk_percentage = strike_data.get('risk_percentage', 0)
+        max_force = strike_data.get('max_single_impact_force', 0)
+        total_force = strike_data.get('total_force_estimate', 0)
+        avg_g_force = strike_data.get('avg_g_force', 0)
+        
+        if impact_count >= 10 or risk_percentage > 60 or max_force > 2000:
+            strike_risk_modifier = 3
+        elif impact_count >= 5 or risk_percentage > 35 or max_force > 1500:
+            strike_risk_modifier = 2
+        elif impact_count >= 3 or risk_percentage > 15 or max_force > 1000:
+            strike_risk_modifier = 1
+        
+        strike_analysis = {
+            'impact_count': impact_count,
+            'risk_percentage': risk_percentage,
+            'max_force': max_force,
+            'total_force': total_force,
+            'avg_g_force': avg_g_force,
+            'strike_risk_level': 'high' if strike_risk_modifier >= 3 else 'moderate' if strike_risk_modifier >= 2 else 'low' if strike_risk_modifier >= 1 else 'minimal'
+        }
+    
+    combined_severity = symptom_severity + (strike_risk_modifier * 15)
+    combined_symptom_count = symptom_total + strike_risk_modifier
+    
     if red_flags_present:
         urgency = 'emergency'
         recommendation = 'EMERGENCY: Red flag symptoms detected. Seek immediate medical attention. Do not continue any physical activity.'
-    elif symptom_severity > 50 or symptom_total > 10:
+    elif combined_severity > 50 or combined_symptom_count > 10 or (strike_risk_modifier >= 3 and symptom_total > 0):
         urgency = 'high'
-        recommendation = 'HIGH CONCERN: Significant symptoms present. Medical evaluation strongly recommended before any return to activity.'
-    elif symptom_severity > 25 or symptom_total > 5 or orientation_score < 3:
+        if strike_risk_modifier >= 2:
+            recommendation = 'HIGH CONCERN: Significant symptoms combined with high-impact strikes detected. Medical evaluation strongly recommended. The combination of symptoms and strike intensity increases concussion risk.'
+        else:
+            recommendation = 'HIGH CONCERN: Significant symptoms present. Medical evaluation strongly recommended before any return to activity.'
+    elif combined_severity > 25 or combined_symptom_count > 5 or orientation_score < 3 or (strike_risk_modifier >= 2 and symptom_total > 0):
         urgency = 'moderate'
-        recommendation = 'MODERATE CONCERN: Notable symptoms present. Rest and monitor. Consider medical evaluation if symptoms persist or worsen.'
-    elif symptom_total > 0:
+        if strike_risk_modifier >= 1:
+            recommendation = 'MODERATE CONCERN: Notable symptoms combined with impact exposure. Rest and monitor closely. Medical evaluation recommended if symptoms persist or worsen.'
+        else:
+            recommendation = 'MODERATE CONCERN: Notable symptoms present. Rest and monitor. Consider medical evaluation if symptoms persist or worsen.'
+    elif symptom_total > 0 or strike_risk_modifier >= 2:
         urgency = 'low'
-        recommendation = 'LOW CONCERN: Mild symptoms present. Rest recommended. Monitor symptoms and seek medical attention if they worsen.'
+        if strike_risk_modifier >= 2 and symptom_total == 0:
+            recommendation = 'LOW CONCERN: No current symptoms but significant impact exposure detected. Rest recommended and monitor for delayed symptom onset over the next 24-48 hours.'
+        else:
+            recommendation = 'LOW CONCERN: Mild symptoms present. Rest recommended. Monitor symptoms and seek medical attention if they worsen.'
     else:
         urgency = 'none'
         recommendation = 'No concerning symptoms reported. However, symptoms can develop later. Continue to monitor and rest as appropriate.'
     
-    return {
+    result = {
         'urgency_level': urgency,
         'red_flags': red_flags_present,
         'red_flags_count': len(red_flags_present),
@@ -132,3 +170,9 @@ def evaluate_assessment(responses: Dict[str, Any]) -> Dict[str, Any]:
         'recommendation': recommendation,
         'disclaimer': 'This is a screening tool only, not a medical diagnosis. A concussion should only be diagnosed by a qualified healthcare professional. Always seek professional medical evaluation after any suspected head injury.'
     }
+    
+    if strike_analysis:
+        result['strike_analysis'] = strike_analysis
+        result['combined_risk_assessment'] = True
+    
+    return result
