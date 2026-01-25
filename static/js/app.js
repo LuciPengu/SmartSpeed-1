@@ -18,6 +18,101 @@ const SKILL_SPEED_RANGES = {
     elite: { min: 30, max: 45, avg: 37 }
 };
 
+const RANKS = [
+    { name: 'Rookie', icon: '🥉', minScore: 0 },
+    { name: 'Contender', icon: '🥈', minScore: 40 },
+    { name: 'Champion', icon: '🥇', minScore: 60 },
+    { name: 'Elite', icon: '💎', minScore: 80 },
+    { name: 'Legend', icon: '👑', minScore: 95 }
+];
+
+const BADGES = [
+    { id: 'first_analysis', name: 'First Strike', icon: '🎯', condition: () => true },
+    { id: 'no_symptoms', name: 'Iron Chin', icon: '🛡️', condition: (data) => data.symptomCount === 0 },
+    { id: 'quick_recovery', name: 'Quick Recovery', icon: '⚡', condition: (data) => data.urgency === 'none' || data.urgency === 'low' },
+    { id: 'thorough', name: 'Thorough Check', icon: '🔍', condition: (data) => data.impactCount >= 3 },
+    { id: 'safety_first', name: 'Safety First', icon: '🏥', condition: (data) => data.safetyScore >= 80 },
+    { id: 'warrior', name: 'Warrior Spirit', icon: '⚔️', condition: (data) => data.impactCount >= 5 }
+];
+
+function calculateSafetyScore() {
+    if (!assessmentResult) return 50;
+    
+    let score = 100;
+    
+    score -= (assessmentResult.symptom_total || 0) * 3;
+    score -= (assessmentResult.symptom_severity_score || 0) * 0.5;
+    
+    if ((assessmentResult.red_flags_count || 0) > 0) score -= 40;
+    
+    const orientationMax = assessmentResult.orientation_max || 5;
+    const memoryMax = assessmentResult.memory_max || 5;
+    score += ((assessmentResult.orientation_score || 0) / orientationMax) * 10;
+    score += ((assessmentResult.memory_score || 0) / memoryMax) * 10;
+    
+    const urgencyPenalty = {
+        'none': 0,
+        'low': 5,
+        'moderate': 15,
+        'high': 30,
+        'emergency': 50
+    };
+    score -= urgencyPenalty[assessmentResult.urgency_level] || 0;
+    
+    return Math.max(0, Math.min(100, Math.round(score)));
+}
+
+function getRank(score) {
+    let currentRank = RANKS[0];
+    for (const rank of RANKS) {
+        if (score >= rank.minScore) {
+            currentRank = rank;
+        }
+    }
+    return currentRank;
+}
+
+function getEarnedBadges() {
+    const data = {
+        symptomCount: assessmentResult?.symptom_total || 0,
+        urgency: assessmentResult?.urgency_level || 'none',
+        impactCount: riskData?.impact_count || 0,
+        safetyScore: calculateSafetyScore()
+    };
+    
+    return BADGES.filter(badge => badge.condition(data));
+}
+
+function animateNumber(element, endValue, duration = 1000, suffix = '') {
+    const startValue = 0;
+    const startTime = performance.now();
+    
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeProgress = 1 - Math.pow(1 - progress, 3);
+        const currentValue = Math.round(startValue + (endValue - startValue) * easeProgress);
+        element.textContent = currentValue + suffix;
+        
+        if (progress < 1) {
+            requestAnimationFrame(update);
+        }
+    }
+    
+    requestAnimationFrame(update);
+}
+
+function showFloatingPoints(x, y, text) {
+    const points = document.createElement('div');
+    points.className = 'floating-points';
+    points.textContent = text;
+    points.style.left = x + 'px';
+    points.style.top = y + 'px';
+    document.body.appendChild(points);
+    
+    setTimeout(() => points.remove(), 1000);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initializeUpload();
     initializeFighterSettings();
@@ -255,7 +350,7 @@ function showStep2(data) {
 
     impactsGrid.innerHTML = data.impacts.map(impact => {
         return `
-            <div class="impact-card" data-id="${impact.id}" onclick="toggleImpact(${impact.id})">
+            <div class="impact-card" data-id="${impact.id}" onclick="toggleImpact(${impact.id}, event)">
                 <img src="${impact.image_path}" alt="Impact ${impact.id}">
                 <div class="impact-info">
                     <div class="impact-title">
@@ -273,15 +368,24 @@ function showStep2(data) {
     document.getElementById('continue-to-assessment-btn').addEventListener('click', continueToAssessment);
 }
 
-function toggleImpact(id) {
+function toggleImpact(id, event) {
     const card = document.querySelector(`.impact-card[data-id="${id}"]`);
     
     if (selectedImpacts.has(id)) {
         selectedImpacts.delete(id);
         card.classList.remove('selected');
+        card.style.transform = 'scale(0.95)';
+        setTimeout(() => card.style.transform = '', 150);
     } else {
         selectedImpacts.add(id);
         card.classList.add('selected');
+        card.style.transform = 'scale(1.05)';
+        setTimeout(() => card.style.transform = '', 150);
+        
+        if (event) {
+            const rect = card.getBoundingClientRect();
+            showFloatingPoints(rect.left + rect.width / 2, rect.top, '+1');
+        }
     }
 
     document.getElementById('continue-to-assessment-btn').disabled = selectedImpacts.size === 0;
@@ -458,12 +562,17 @@ function showStep4() {
 }
 
 function displayAssessmentResults() {
+    const safetyScore = calculateSafetyScore();
+    const rank = getRank(safetyScore);
+    const earnedBadges = getEarnedBadges();
+    
     let symptomDetailsHtml = '';
-    if (assessmentResult.symptom_details.length > 0) {
+    const symptomDetails = assessmentResult.symptom_details || [];
+    if (symptomDetails.length > 0) {
         symptomDetailsHtml = `
             <h4>Reported Symptoms (by severity):</h4>
             <ul>
-                ${assessmentResult.symptom_details.map(s => `<li>${s.name}: ${s.severity}/6</li>`).join('')}
+                ${symptomDetails.map(s => `<li>${s.name}: ${s.severity}/6</li>`).join('')}
             </ul>
         `;
     }
@@ -477,9 +586,43 @@ function displayAssessmentResults() {
             </div>
         `;
     }
+    
+    const badgesHtml = BADGES.map((badge, index) => {
+        const isEarned = earnedBadges.find(b => b.id === badge.id);
+        return `
+            <div class="badge ${isEarned ? 'earned' : ''}" style="animation-delay: ${index * 0.1}s">
+                <span class="badge-icon">${badge.icon}</span>
+                <span class="badge-name">${badge.name}</span>
+            </div>
+        `;
+    }).join('');
 
     const resultHtml = `
-        <div class="assessment-result-card">
+        <div class="score-display animate-score">
+            <span class="score-label">Safety Score</span>
+            <span class="score-value" id="safety-score-value">0</span>
+            <div class="score-rank">
+                <span class="rank-icon">${rank.icon}</span>
+                <span>${rank.name}</span>
+            </div>
+        </div>
+        
+        <div class="xp-bar-container">
+            <div class="xp-bar-label">
+                <span>Progress to next rank</span>
+                <span id="xp-progress-text">0%</span>
+            </div>
+            <div class="xp-bar">
+                <div class="xp-bar-fill" id="xp-bar-fill"></div>
+            </div>
+        </div>
+        
+        <h4 style="text-align: center; margin: 20px 0 15px; color: var(--text-secondary);">Achievements Earned</h4>
+        <div class="badges-container">
+            ${badgesHtml}
+        </div>
+        
+        <div class="assessment-result-card" style="margin-top: 25px;">
             <h3>Concussion Screening Results</h3>
             ${redFlagWarning}
             <span class="urgency-badge ${assessmentResult.urgency_level}">${assessmentResult.urgency_level}</span>
@@ -489,22 +632,22 @@ function displayAssessmentResults() {
                 ${assessmentResult.recommendation}
             </div>
 
-            <div class="scores-grid">
-                <div class="score-item">
-                    <div class="score-value">${assessmentResult.symptom_total}/22</div>
-                    <div class="score-label">Symptoms Present</div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-symptoms">0</div>
+                    <div class="stat-label">Symptoms</div>
                 </div>
-                <div class="score-item">
-                    <div class="score-value">${assessmentResult.symptom_severity_score}/${assessmentResult.max_symptom_severity}</div>
-                    <div class="score-label">Symptom Severity</div>
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-severity">0</div>
+                    <div class="stat-label">Severity</div>
                 </div>
-                <div class="score-item">
-                    <div class="score-value">${assessmentResult.orientation_score}/${assessmentResult.orientation_max}</div>
-                    <div class="score-label">Orientation Score</div>
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-orientation">0</div>
+                    <div class="stat-label">Orientation</div>
                 </div>
-                <div class="score-item">
-                    <div class="score-value">${assessmentResult.memory_score}/${assessmentResult.memory_max}</div>
-                    <div class="score-label">Memory Score</div>
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-memory">0</div>
+                    <div class="stat-label">Memory</div>
                 </div>
             </div>
 
@@ -515,6 +658,45 @@ function displayAssessmentResults() {
     `;
 
     document.getElementById('assessment-results-section').innerHTML = resultHtml;
+    
+    setTimeout(() => {
+        const scoreEl = document.getElementById('safety-score-value');
+        const symptomsEl = document.getElementById('stat-symptoms');
+        const severityEl = document.getElementById('stat-severity');
+        const orientationEl = document.getElementById('stat-orientation');
+        const memoryEl = document.getElementById('stat-memory');
+        
+        if (scoreEl) animateNumber(scoreEl, safetyScore, 1500);
+        if (symptomsEl) animateNumber(symptomsEl, assessmentResult.symptom_total || 0, 800);
+        if (severityEl) animateNumber(severityEl, assessmentResult.symptom_severity_score || 0, 800);
+        if (orientationEl) animateNumber(orientationEl, assessmentResult.orientation_score || 0, 800);
+        if (memoryEl) animateNumber(memoryEl, assessmentResult.memory_score || 0, 800);
+        
+        const currentRankIndex = RANKS.indexOf(rank);
+        const nextRank = RANKS[currentRankIndex + 1];
+        let xpPercent = 100;
+        if (nextRank) {
+            const rangeStart = rank.minScore;
+            const rangeEnd = nextRank.minScore;
+            xpPercent = ((safetyScore - rangeStart) / (rangeEnd - rangeStart)) * 100;
+        }
+        
+        setTimeout(() => {
+            const xpFill = document.getElementById('xp-bar-fill');
+            const xpText = document.getElementById('xp-progress-text');
+            if (xpFill) xpFill.style.width = xpPercent + '%';
+            if (xpText) xpText.textContent = Math.round(xpPercent) + '%';
+        }, 500);
+        
+        document.querySelectorAll('.badge').forEach((badge, index) => {
+            setTimeout(() => {
+                badge.style.opacity = '1';
+                if (badge.classList.contains('earned')) {
+                    badge.classList.add('animate-badge');
+                }
+            }, 800 + index * 150);
+        });
+    }, 300);
 }
 
 function displayRiskResults() {
