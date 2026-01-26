@@ -51,7 +51,10 @@ def calculate_brain_injury_risk(impacts: List[Dict[str, Any]], fighter_settings:
             force_min = avg_force * 0.8
             force_max = avg_force * 1.2
         
-        g_force = avg_force / 9.81
+        # G-force = Force / (head_mass * gravity)
+        # Average adult head mass is ~4.5-5 kg
+        head_mass_kg = 4.5
+        g_force = avg_force / (head_mass_kg * 9.81)
         
         motion_intensity = impact.get('motion_intensity', 0.7)
         severity_multiplier = 0.8 + (motion_intensity * 0.4)
@@ -131,7 +134,9 @@ def calculate_single_impact_risk(velocity: float, acceleration: float,
     
     velocity_mps = velocity * 0.3
     force_estimate = puncher_weight_kg * velocity_mps * (1 + (acceleration / 100))
-    g_force = force_estimate / 9.81
+    # G-force = Force / (head_mass * gravity)
+    head_mass_kg = 4.5
+    g_force = force_estimate / (head_mass_kg * 9.81)
     
     if power_index > 2000:
         severity_multiplier = 1.5
