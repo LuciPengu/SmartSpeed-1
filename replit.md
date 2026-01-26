@@ -94,6 +94,8 @@ Modern glassware aesthetic with:
 - New history modal to view past analysis sessions
 
 ## API Endpoints
+
+### Web Interface
 - `GET /` - Main web interface
 - `POST /api/upload` - Upload and analyze video
 - `GET /api/session/{id}` - Get analysis results
@@ -110,6 +112,47 @@ Modern glassware aesthetic with:
 - `GET /api/sessions/{user_id}` - Get user's session history
 - `GET /api/sessions/{user_id}/{session_id}` - Get session details
 
+### External API (for other apps)
+All external endpoints require `X-API-Key` header with your API key.
+
+- `GET /api/external/health` - Health check (no auth required)
+- `POST /api/external/calculate-risk` - Calculate brain injury risk from impact data
+- `POST /api/external/concussion-assessment` - Evaluate concussion assessment
+- `GET /api/external/assessment-questions` - Get SCAT5 assessment questions
+- `POST /api/external/ai-summary` - Generate AI injury analysis
+
+#### Example: Calculate Risk
+```bash
+curl -X POST "https://your-app.replit.app/api/external/calculate-risk" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "impacts": [
+      {"speed_mph": 25, "power_newtons": 1200},
+      {"speed_mph": 30, "power_newtons": 1500}
+    ],
+    "fighter1_skill": "professional",
+    "fighter1_weight": 75,
+    "fighter1_intensity": 70,
+    "fighter2_skill": "amateur",
+    "fighter2_weight": 80,
+    "fighter2_intensity": 60
+  }'
+```
+
+#### Example: Concussion Assessment
+```bash
+curl -X POST "https://your-app.replit.app/api/external/concussion-assessment" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "red_flags": [],
+    "symptoms": [{"id": "headache", "severity": 3}],
+    "orientation": [{"id": "date", "correct": true}],
+    "memory": [{"id": "word1", "correct": true}]
+  }'
+```
+
 ## Dependencies
 - FastAPI, Uvicorn, python-multipart
 - OpenCV, MediaPipe, NumPy
@@ -123,6 +166,7 @@ Modern glassware aesthetic with:
 ## Environment Variables
 - `DATABASE_URL` - PostgreSQL connection string (auto-configured)
 - `REPLICATE_API_TOKEN` - API key for Replicate/GPT-4o integration
+- `HITSMART_API_KEY` - API key for external API access (set your own secure key)
 
 ## Running
 The application runs on port 5000 using:

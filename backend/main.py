@@ -20,6 +20,16 @@ from backend import auth
 
 init_db()
 
+API_KEY = os.environ.get("HITSMART_API_KEY")
+
+async def verify_api_key(request: Request):
+    """Verify API key for external API access"""
+    api_key = request.headers.get("X-API-Key") or request.headers.get("Authorization", "").replace("Bearer ", "")
+    if not API_KEY:
+        raise HTTPException(status_code=500, detail="API key not configured on server")
+    if api_key != API_KEY:
+        raise HTTPException(status_code=401, detail="Invalid or missing API key")
+
 app = FastAPI(title="Hitsmart Strike Calculator", version="1.0.0")
 
 app.add_middleware(
@@ -558,6 +568,150 @@ async def get_session_details(user_id: str, session_db_id: int):
             next(db_gen)
         except StopIteration:
             pass
+
+
+class ExternalRiskRequest(BaseModel):
+    impacts: List[Dict[str, Any]]
+    fighter1_skill: str = "professional"
+    fighter1_weight: float = 75.0
+    fighter1_intensity: float = 70.0
+    fighter2_skill: str = "professional"
+    fighter2_weight: float = 75.0
+    fighter2_intensity: float = 70.0
+
+class ExternalAssessmentRequest(BaseModel):
+    red_flags: List[Dict[str, Any]]
+    symptoms: List[Dict[str, Any]]
+    orientation: List[Dict[str, Any]]
+    memory: List[Dict[str, Any]]
+    strike_data: Optional[Dict[str, Any]] = None
+
+@app.get("/api/external/health")
+async def external_health():
+    """Health check endpoint - no auth required"""
+    return {"status": "ok", "service": "Hitsmart Strike Calculator API"}
+
+@app.post("/api/external/calculate-risk", dependencies=[Depends(verify_api_key)])
+async def external_calculate_risk(request: ExternalRiskRequest):
+    """
+    Calculate brain injury risk from impact data.
+    
+    Headers:
+        X-API-Key: Your API key
+    
+    Body:
+        impacts: List of impact objects with speed_mph and power_newtons
+        fighter1_skill: beginner, amateur, professional, or elite
+        fighter1_weight: Weight in kg
+        fighter1_intensity: Throwing intensity percentage (10-100)
+        fighter2_skill: beginner, amateur, professional, or elite  
+        fighter2_weight: Weight in kg
+        fighter2_intensity: Throwing intensity percentage (10-100)
+    
+    Returns:
+        Risk assessment with overall_risk, risk_percentage, and recommendations
+    """
+    try:
+        fighter_settings = {
+            "fighter1": {
+                "skill": request.fighter1_skill,
+                "weight": request.fighter1_weight,
+                "intensity": request.fighter1_intensity
+            },
+            "fighter2": {
+                "skill": request.fighter2_skill,
+                "weight": request.fighter2_weight,
+                "intensity": request.fighter2_intensity
+            }
+        }
+        
+        risk_result = calculate_brain_injury_risk(
+            request.impacts,
+            fighter_settings
+        )
+        
+        return {
+            "success": True,
+            "risk_data": risk_result
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/external/concussion-assessment", dependencies=[Depends(verify_api_key)])
+async def external_concussion_assessment(request: ExternalAssessmentRequest):
+    """
+    Evaluate concussion assessment responses.
+    
+    Headers:
+        X-API-Key: Your API key
+    
+    Body:
+        red_flags: List of red flag responses
+        symptoms: List of symptom responses with severity (0-6)
+        orientation: List of orientation question responses
+        memory: List of memory question responses
+        strike_data: Optional impact data for integrated assessment
+    
+    Returns:
+        Assessment result with urgency level, scores, and recommendations
+    """
+    try:
+        result = evaluate_assessment(
+            red_flags=request.red_flags,
+            symptoms=request.symptoms,
+            orientation=request.orientation,
+            memory=request.memory,
+            strike_data=request.strike_data
+        )
+        return {
+            "success": True,
+            "assessment": result
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/external/assessment-questions", dependencies=[Depends(verify_api_key)])
+async def external_get_assessment_questions():
+    """
+    Get SCAT5 concussion assessment questions.
+    
+    Headers:
+        X-API-Key: Your API key
+    
+    Returns:
+        All assessment questions organized by category
+    """
+    return get_assessment_questions()
+
+@app.post("/api/external/ai-summary", dependencies=[Depends(verify_api_key)])
+async def external_ai_summary(request: Request):
+    """
+    Generate AI-powered injury analysis summary.
+    
+    Headers:
+        X-API-Key: Your API key
+    
+    Body:
+        risk_data: Risk calculation results
+        fighter_settings: Fighter configuration
+        assessment_result: Optional concussion assessment results
+    
+    Returns:
+        AI-generated summary and recommendations
+    """
+    try:
+        body = await request.json()
+        risk_data = body.get("risk_data", {})
+        fighter_settings = body.get("fighter_settings", {})
+        assessment_result = body.get("assessment_result")
+        
+        summary = await generate_ai_summary(risk_data, fighter_settings, assessment_result)
+        return {
+            "success": True,
+            "summary": summary
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 if __name__ == "__main__":
