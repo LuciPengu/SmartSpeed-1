@@ -801,6 +801,24 @@ async def external_upload_video(
             os.remove(file_path)
 
 
+@app.post("/api/smartspeed/upload")
+async def smartspeed_upload_video(
+    request: Request,
+    file: UploadFile = File(...),
+    fighter1_skill: str = Form("professional"),
+    fighter1_weight: float = Form(75.0),
+    fighter1_intensity: float = Form(70.0),
+    fighter2_skill: str = Form("professional"),
+    fighter2_weight: float = Form(75.0),
+    fighter2_intensity: float = Form(70.0)
+):
+    """Alias endpoint for /api/external/upload - for SmartSpeed app compatibility"""
+    return await external_upload_video(
+        request, file, fighter1_skill, fighter1_weight, fighter1_intensity,
+        fighter2_skill, fighter2_weight, fighter2_intensity
+    )
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=5000)
