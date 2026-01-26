@@ -713,6 +713,93 @@ async def external_ai_summary(request: Request):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.post("/api/external/upload")
+async def external_upload_video(
+    request: Request,
+    file: UploadFile = File(...),
+    fighter1_skill: str = Form("professional"),
+    fighter1_weight: float = Form(75.0),
+    fighter1_intensity: float = Form(70.0),
+    fighter2_skill: str = Form("professional"),
+    fighter2_weight: float = Form(75.0),
+    fighter2_intensity: float = Form(70.0)
+):
+    """
+    Upload and analyze a video for punch impacts.
+    
+    Headers:
+        X-API-Key: Your API key
+    
+    Form Data:
+        file: Video file (MP4, AVI, MOV, MKV)
+        fighter1_skill: beginner, amateur, professional, or elite
+        fighter1_weight: Weight in kg
+        fighter1_intensity: Throwing intensity percentage (10-100)
+        fighter2_skill: beginner, amateur, professional, or elite
+        fighter2_weight: Weight in kg
+        fighter2_intensity: Throwing intensity percentage (10-100)
+    
+    Returns:
+        Session ID and detected impacts with frame images
+    """
+    await verify_api_key(request)
+    
+    valid_extensions = ['.mp4', '.avi', '.mov', '.mkv']
+    file_ext = os.path.splitext(file.filename)[1].lower()
+    if file_ext not in valid_extensions:
+        raise HTTPException(status_code=400, detail="Invalid file type. Supported: MP4, AVI, MOV, MKV")
+    
+    session_id = str(uuid.uuid4())[:8]
+    file_path = os.path.join(UPLOAD_DIR, f"{session_id}{file_ext}")
+    
+    try:
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+        
+        fighter_settings = {
+            "fighter1": {
+                "skill": fighter1_skill,
+                "weight": fighter1_weight,
+                "intensity": fighter1_intensity
+            },
+            "fighter2": {
+                "skill": fighter2_skill,
+                "weight": fighter2_weight,
+                "intensity": fighter2_intensity
+            }
+        }
+        
+        results = analyze_video(file_path, session_id, fighter_settings)
+        
+        analysis_results[session_id] = {
+            "impacts": results["impacts"],
+            "video_info": results["video_info"],
+            "fighter_settings": fighter_settings
+        }
+        
+        base_url = str(request.base_url).rstrip('/')
+        impacts_with_urls = []
+        for impact in results["impacts"]:
+            impact_copy = impact.copy()
+            if impact_copy.get("frame_path"):
+                impact_copy["frame_url"] = f"{base_url}/{impact_copy['frame_path']}"
+            impacts_with_urls.append(impact_copy)
+        
+        return {
+            "success": True,
+            "session_id": session_id,
+            "video_info": results["video_info"],
+            "impacts": impacts_with_urls,
+            "impact_count": len(results["impacts"])
+        }
+    except Exception as e:
+        if os.path.exists(file_path):
+            os.remove(file_path)
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        if os.path.exists(file_path):
+            os.remove(file_path)
+
 
 if __name__ == "__main__":
     import uvicorn

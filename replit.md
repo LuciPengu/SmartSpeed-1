@@ -116,6 +116,7 @@ Modern glassware aesthetic with:
 All external endpoints require `X-API-Key` header with your API key.
 
 - `GET /api/external/health` - Health check (no auth required)
+- `POST /api/external/upload` - Upload and analyze video for punch impacts
 - `POST /api/external/calculate-risk` - Calculate brain injury risk from impact data
 - `POST /api/external/concussion-assessment` - Evaluate concussion assessment
 - `GET /api/external/assessment-questions` - Get SCAT5 assessment questions
