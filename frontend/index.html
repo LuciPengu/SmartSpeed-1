@@ -111,6 +111,59 @@
             </div>
 
             <div class="upload-section">
+                <div class="video-guidelines">
+                    <h4>Video Guidelines</h4>
+                    <div class="guidelines-grid">
+                        <div class="guideline-item">
+                            <span class="guideline-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                            </span>
+                            <div class="guideline-text">
+                                <strong>Duration</strong>
+                                <span>30 seconds max (optimal)</span>
+                            </div>
+                        </div>
+                        <div class="guideline-item">
+                            <span class="guideline-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                    <circle cx="12" cy="13" r="4"></circle>
+                                </svg>
+                            </span>
+                            <div class="guideline-text">
+                                <strong>Camera Angle</strong>
+                                <span>Full body + punch range visible</span>
+                            </div>
+                        </div>
+                        <div class="guideline-item">
+                            <span class="guideline-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                                </svg>
+                            </span>
+                            <div class="guideline-text">
+                                <strong>Resolution</strong>
+                                <span>720p or higher recommended</span>
+                            </div>
+                        </div>
+                        <div class="guideline-item">
+                            <span class="guideline-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                                </svg>
+                            </span>
+                            <div class="guideline-text">
+                                <strong>Frame Rate</strong>
+                                <span>30+ FPS (60 FPS ideal)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="upload-area" id="upload-area">
                     <div class="upload-icon">
                         <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -220,6 +273,84 @@
                 <h3>Impact Frames Analysis</h3>
                 <div class="results-summary" id="final-results-summary"></div>
                 <div class="impacts-grid" id="final-impacts-grid"></div>
+            </div>
+            
+            <div class="g-force-scale-section">
+                <h3>G-Force Reference Scale</h3>
+                <p class="section-description">See where your impacts fall on the G-force spectrum</p>
+                <div class="g-scale-container">
+                    <div class="g-scale-bar">
+                        <div class="g-scale-marker" data-g="0.4" style="left: 0.13%;">
+                            <div class="marker-dot"></div>
+                            <div class="marker-label">0.4G<span>Plane Takeoff</span></div>
+                        </div>
+                        <div class="g-scale-marker" data-g="3" style="left: 0.95%;">
+                            <div class="marker-dot"></div>
+                            <div class="marker-label">3G<span>Hard Sneeze</span></div>
+                        </div>
+                        <div class="g-scale-marker" data-g="4.5" style="left: 1.42%;">
+                            <div class="marker-dot"></div>
+                            <div class="marker-label">4.5G<span>Whiplash Risk Starts</span></div>
+                        </div>
+                        <div class="g-scale-marker" data-g="10" style="left: 3.16%;">
+                            <div class="marker-dot"></div>
+                            <div class="marker-label">10G<span>Plopping in Chair</span></div>
+                        </div>
+                        <div class="g-scale-marker" data-g="18" style="left: 5.7%;">
+                            <div class="marker-dot"></div>
+                            <div class="marker-label">18G<span>Youth Hockey Hit</span></div>
+                        </div>
+                        <div class="g-scale-marker" data-g="20" style="left: 6.33%;">
+                            <div class="marker-dot"></div>
+                            <div class="marker-label">20G<span>Soccer Header</span></div>
+                        </div>
+                        <div class="g-scale-marker" data-g="25" style="left: 7.91%;">
+                            <div class="marker-dot"></div>
+                            <div class="marker-label">25G<span>Avg Football Tackle</span></div>
+                        </div>
+                        <div class="g-scale-marker warning" data-g="32" style="left: 10.13%;">
+                            <div class="marker-dot"></div>
+                            <div class="marker-label">32G<span>Child Concussion Risk</span></div>
+                        </div>
+                        <div class="g-scale-marker" data-g="58" style="left: 18.35%;">
+                            <div class="marker-dot"></div>
+                            <div class="marker-label">58G<span>Olympic Boxer Jab</span></div>
+                        </div>
+                        <div class="g-scale-marker danger" data-g="70" style="left: 22.15%;">
+                            <div class="marker-dot"></div>
+                            <div class="marker-label">70G<span>Adult Concussion Risk</span></div>
+                        </div>
+                        <div class="g-scale-marker" data-g="80" style="left: 25.32%;">
+                            <div class="marker-dot"></div>
+                            <div class="marker-label">80G<span>Hardest Recorded Punch</span></div>
+                        </div>
+                        <div class="g-scale-marker danger" data-g="120" style="left: 37.97%;">
+                            <div class="marker-dot"></div>
+                            <div class="marker-label">120G<span>Severe TBI Risk</span></div>
+                        </div>
+                        <div class="g-scale-marker critical" data-g="316" style="left: 100%;">
+                            <div class="marker-dot"></div>
+                            <div class="marker-label">316G<span>Severe Brain Bleed</span></div>
+                        </div>
+                    </div>
+                    <div class="g-scale-zones">
+                        <div class="g-zone safe" style="width: 10%;"><span>Safe</span></div>
+                        <div class="g-zone caution" style="width: 12%;"><span>Caution</span></div>
+                        <div class="g-zone warning" style="width: 16%;"><span>Risk</span></div>
+                        <div class="g-zone danger" style="width: 62%;"><span>Danger</span></div>
+                    </div>
+                    <div class="user-impacts-markers" id="user-g-markers"></div>
+                </div>
+                <div class="g-force-disclaimer">
+                    <h4>Force Isn't Everything</h4>
+                    <p>The G-number is only part of the story. A "lighter" hit can still cause serious injury depending on these factors:</p>
+                    <ul>
+                        <li><strong>Rotation:</strong> Punches that twist the head damage the brain more than straight impacts.</li>
+                        <li><strong>Surprise:</strong> If you don't see the punch coming, you cannot stiffen your neck to protect your brain.</li>
+                        <li><strong>Fatigue:</strong> Tired muscles react slower. You lose the ability to brace effectively against the blow.</li>
+                        <li><strong>Recovery:</strong> If you are not fully healed from a past concussion, your brain is more vulnerable to any force.</li>
+                    </ul>
+                </div>
             </div>
             
             <div class="action-buttons">
