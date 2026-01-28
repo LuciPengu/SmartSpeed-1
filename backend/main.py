@@ -86,8 +86,6 @@ class RiskCalculationRequest(BaseModel):
 class AssessmentRequest(BaseModel):
     red_flags: List[Dict[str, Any]]
     symptoms: List[Dict[str, Any]]
-    orientation: List[Dict[str, Any]]
-    memory: List[Dict[str, Any]]
     strike_data: Optional[Dict[str, Any]] = None
 
 
@@ -209,9 +207,7 @@ async def evaluate_concussion(request: AssessmentRequest):
     try:
         responses = {
             "red_flags": request.red_flags,
-            "symptoms": request.symptoms,
-            "orientation": request.orientation,
-            "memory": request.memory
+            "symptoms": request.symptoms
         }
         
         strike_data = None
