@@ -37,34 +37,13 @@ RED_FLAGS = [
     {"id": "restlessness", "name": "Increasing restlessness, agitation or combativeness", "critical": True}
 ]
 
-MEMORY_QUESTIONS = [
-    {"id": "venue", "question": "What venue are we at today?", "category": "orientation"},
-    {"id": "half", "question": "Which half/round is it now?", "category": "orientation"},
-    {"id": "scored_last", "question": "Who scored/hit last in this match?", "category": "memory"},
-    {"id": "last_opponent", "question": "What team/opponent did you face last week?", "category": "memory"},
-    {"id": "win_last", "question": "Did your team win the last match?", "category": "memory"}
-]
-
-ORIENTATION_QUESTIONS = [
-    {"id": "month", "question": "What month is it?", "points": 1},
-    {"id": "date", "question": "What is the date today?", "points": 1},
-    {"id": "day", "question": "What is the day of the week?", "points": 1},
-    {"id": "year", "question": "What year is it?", "points": 1},
-    {"id": "time", "question": "What time is it right now? (within 1 hour)", "points": 1}
-]
-
-
 def get_assessment_questions() -> Dict[str, Any]:
     return {
         "red_flags": RED_FLAGS,
         "symptoms": SCAT5_SYMPTOMS,
-        "memory_questions": MEMORY_QUESTIONS,
-        "orientation_questions": ORIENTATION_QUESTIONS,
         "instructions": {
             "symptoms": "Rate each symptom from 0 (none) to 6 (severe)",
-            "red_flags": "Check if any of these warning signs are present",
-            "memory": "Answer each question correctly (yes/no)",
-            "orientation": "Answer each question correctly (yes/no)"
+            "red_flags": "Check if any of these warning signs are present"
         }
     }
 
@@ -90,16 +69,6 @@ def evaluate_assessment(responses: Dict[str, Any], strike_data: Dict[str, Any] =
                 'name': next((s['name'] for s in SCAT5_SYMPTOMS if s['id'] == symptom.get('id')), symptom.get('id')),
                 'severity': severity
             })
-    
-    orientation_score = 0
-    for question in responses.get('orientation', []):
-        if question.get('correct', False):
-            orientation_score += 1
-    
-    memory_score = 0
-    for question in responses.get('memory', []):
-        if question.get('correct', False):
-            memory_score += 1
     
     strike_risk_modifier = 0
     strike_analysis = None
@@ -139,7 +108,7 @@ def evaluate_assessment(responses: Dict[str, Any], strike_data: Dict[str, Any] =
             recommendation = 'HIGH CONCERN: Significant symptoms combined with high-impact strikes detected. Medical evaluation strongly recommended. The combination of symptoms and strike intensity increases concussion risk.'
         else:
             recommendation = 'HIGH CONCERN: Significant symptoms present. Medical evaluation strongly recommended before any return to activity.'
-    elif combined_severity > 25 or combined_symptom_count > 5 or orientation_score < 3 or (strike_risk_modifier >= 2 and symptom_total > 0):
+    elif combined_severity > 25 or combined_symptom_count > 5 or (strike_risk_modifier >= 2 and symptom_total > 0):
         urgency = 'moderate'
         if strike_risk_modifier >= 1:
             recommendation = 'MODERATE CONCERN: Notable symptoms combined with impact exposure. Rest and monitor closely. Medical evaluation recommended if symptoms persist or worsen.'
@@ -163,10 +132,6 @@ def evaluate_assessment(responses: Dict[str, Any], strike_data: Dict[str, Any] =
         'symptom_severity_score': symptom_severity,
         'max_symptom_severity': 132,
         'symptom_details': sorted(symptom_details, key=lambda x: x['severity'], reverse=True),
-        'orientation_score': orientation_score,
-        'orientation_max': 5,
-        'memory_score': memory_score,
-        'memory_max': 5,
         'recommendation': recommendation,
         'disclaimer': 'This is a screening tool only, not a medical diagnosis. A concussion should only be diagnosed by a qualified healthcare professional. Always seek professional medical evaluation after any suspected head injury.'
     }

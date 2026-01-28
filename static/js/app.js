@@ -448,26 +448,6 @@ function showStep3() {
         </div>
     `).join('');
 
-    document.getElementById('orientation-list').innerHTML = assessmentData.orientation_questions.map(q => `
-        <div class="question-item">
-            <span>${q.question}</span>
-            <div class="question-toggle">
-                <button class="toggle-btn" data-id="${q.id}" data-correct="true" onclick="toggleQuestion(this, '${q.id}', 'orientation')">Correct</button>
-                <button class="toggle-btn incorrect" data-id="${q.id}" data-correct="false" onclick="toggleQuestion(this, '${q.id}', 'orientation')">Incorrect</button>
-            </div>
-        </div>
-    `).join('');
-
-    document.getElementById('memory-list').innerHTML = assessmentData.memory_questions.map(q => `
-        <div class="question-item">
-            <span>${q.question}</span>
-            <div class="question-toggle">
-                <button class="toggle-btn" data-id="${q.id}" data-correct="true" onclick="toggleQuestion(this, '${q.id}', 'memory')">Correct</button>
-                <button class="toggle-btn incorrect" data-id="${q.id}" data-correct="false" onclick="toggleQuestion(this, '${q.id}', 'memory')">Incorrect</button>
-            </div>
-        </div>
-    `).join('');
-
     document.getElementById('submit-assessment-btn').addEventListener('click', submitAssessment);
 }
 
@@ -477,11 +457,6 @@ function updateSymptomValue(id) {
     valueDisplay.textContent = slider.value;
 }
 
-function toggleQuestion(btn, id, section) {
-    const siblings = btn.parentElement.querySelectorAll('.toggle-btn');
-    siblings.forEach(s => s.classList.remove('active'));
-    btn.classList.add('active');
-}
 
 async function submitAssessment() {
     const redFlags = Array.from(document.querySelectorAll('#red-flags-list input[type="checkbox"]')).map(cb => ({
@@ -494,22 +469,6 @@ async function submitAssessment() {
         severity: parseInt(slider.value)
     }));
 
-    const orientation = assessmentData.orientation_questions.map(q => {
-        const correctBtn = document.querySelector(`#orientation-list .toggle-btn[data-id="${q.id}"][data-correct="true"]`);
-        return {
-            id: q.id,
-            correct: correctBtn ? correctBtn.classList.contains('active') : false
-        };
-    });
-
-    const memory = assessmentData.memory_questions.map(q => {
-        const correctBtn = document.querySelector(`#memory-list .toggle-btn[data-id="${q.id}"][data-correct="true"]`);
-        return {
-            id: q.id,
-            correct: correctBtn ? correctBtn.classList.contains('active') : false
-        };
-    });
-
     try {
         const response = await fetch('/api/concussion-assessment/evaluate', {
             method: 'POST',
@@ -517,8 +476,6 @@ async function submitAssessment() {
             body: JSON.stringify({ 
                 red_flags: redFlags, 
                 symptoms, 
-                orientation, 
-                memory,
                 strike_data: riskData
             })
         });
@@ -592,14 +549,6 @@ function displayAssessmentResults() {
                     <div class="stat-number" id="stat-symptoms">0</div>
                     <div class="stat-label">Symptoms</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="stat-orientation">0</div>
-                    <div class="stat-label">Orientation (/${assessmentResult.orientation_max || 5})</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="stat-memory">0</div>
-                    <div class="stat-label">Memory (/${assessmentResult.memory_max || 5})</div>
-                </div>
             </div>
 
             ${symptomDetailsHtml}
@@ -612,12 +561,8 @@ function displayAssessmentResults() {
     
     setTimeout(() => {
         const symptomsEl = document.getElementById('stat-symptoms');
-        const orientationEl = document.getElementById('stat-orientation');
-        const memoryEl = document.getElementById('stat-memory');
         
         if (symptomsEl) animateNumber(symptomsEl, assessmentResult.symptom_total || 0, 800);
-        if (orientationEl) animateNumber(orientationEl, assessmentResult.orientation_score || 0, 800);
-        if (memoryEl) animateNumber(memoryEl, assessmentResult.memory_score || 0, 800);
     }, 300);
 }
 
@@ -1059,8 +1004,6 @@ function showSessionDetails(session) {
             <h4>Concussion Screening</h4>
             <p><strong>Urgency:</strong> ${session.assessment_result.urgency_level || 'N/A'}</p>
             <p><strong>Symptoms:</strong> ${session.assessment_result.symptom_total || 0}</p>
-            <p><strong>Orientation:</strong> ${session.assessment_result.orientation_score || 0}/${session.assessment_result.orientation_max || 5}</p>
-            <p><strong>Memory:</strong> ${session.assessment_result.memory_score || 0}/${session.assessment_result.memory_max || 5}</p>
             ${session.assessment_result.red_flags_count > 0 ? '<p class="red-flag-text"><strong>Red Flags Detected!</strong></p>' : ''}
         </div>
     ` : '';
