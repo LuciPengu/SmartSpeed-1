@@ -2025,7 +2025,7 @@ header h1 {
 
 .g-scale-container {
     position: relative;
-    padding: 80px 0 60px;
+    padding: 50px 0 60px;
 }
 
 .g-scale-bar {
@@ -2112,11 +2112,21 @@ header h1 {
     pointer-events: none;
 }
 
-.user-g-marker {
+.user-impacts-markers {
     position: absolute;
     top: 0;
+    left: 0;
+    right: 0;
+    height: 16px;
+    z-index: 15;
+}
+
+.user-g-marker {
+    position: absolute;
+    top: -2px;
     transform: translateX(-50%);
     z-index: 10;
+    cursor: pointer;
 }
 
 .user-g-marker .marker-dot {
