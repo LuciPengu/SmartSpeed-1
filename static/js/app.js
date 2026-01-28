@@ -254,21 +254,23 @@ function calculateSpeedRange(impact, fighterIdx) {
     const pseudoRandom1 = Math.sin(seedVal * 12.9898) * 43758.5453 % 1;
     const pseudoRandom2 = Math.sin(seedVal * 78.233) * 43758.5453 % 1;
     
-    const variationRange = 0.05;
+    const variationRange = 0.03;
     const variation1 = (Math.abs(pseudoRandom1) - 0.5) * 2 * variationRange;
     const variation2 = (Math.abs(pseudoRandom2) - 0.5) * 2 * variationRange;
     
-    const speedRange = skillRanges.max - skillRanges.min;
-    const targetSpeed = skillRanges.min + speedRange * throwingIntensity;
-    const motionAdjust = 0.8 + (motionIntensity * 0.2);
+    const floorSpeed = skillRanges.min * 0.5;
+    const fullRange = skillRanges.max - floorSpeed;
+    const targetSpeed = floorSpeed + fullRange * throwingIntensity;
     
+    const motionAdjust = 0.9 + (motionIntensity * 0.1);
     const baseSpeed = targetSpeed * motionAdjust;
-    const minSpeed = baseSpeed * (0.85 + variation1);
-    const maxSpeed = baseSpeed * (1.0 + variation2);
+    
+    const minSpeed = baseSpeed * (0.88 + variation1);
+    const maxSpeed = baseSpeed * (1.02 + variation2);
     
     return {
-        min: Math.round(Math.max(skillRanges.min * 0.7, minSpeed)),
-        max: Math.round(Math.min(skillRanges.max * 1.15, maxSpeed)),
+        min: Math.round(Math.max(floorSpeed, minSpeed)),
+        max: Math.round(Math.min(skillRanges.max * 1.1, maxSpeed)),
         unit: 'mph'
     };
 }
