@@ -722,7 +722,7 @@ function displayImpactFrames() {
         const avgForce = (powerRange.min + powerRange.max) / 2;
         const headMass = 4.5;
         const gForce = avgForce / (headMass * 9.81);
-        gForceValues.push({ id: impact.id, gForce: gForce, fighter: impact.fighter });
+        gForceValues.push({ id: impact.id, gForce: gForce, fighter: impact.fighter, impact: impact, speedRange: speedRange, powerRange: powerRange });
         
         return `
             <div class="impact-card selected" data-id="${impact.id}">
@@ -764,10 +764,9 @@ function displayGForceMarkers(gForceValues) {
     
     markersContainer.innerHTML = gForceValues.map((item, index) => {
         const percentage = Math.min(100, (item.gForce / maxG) * 100);
-        const impact = selectedImpactsList.find(i => i.id === item.id);
-        const settings = item.fighter === 1 ? fighterSettings.fighter1 : fighterSettings.fighter2;
-        const speedRange = impact ? calculateSpeedRange(impact, item.fighter) : { min: 0, max: 0 };
-        const powerRange = impact ? calculatePowerRange(impact, item.fighter) : { min: 0, max: 0 };
+        const impact = item.impact;
+        const speedRange = item.speedRange;
+        const powerRange = item.powerRange;
         
         let riskLevel = 'Low';
         if (item.gForce >= 120) riskLevel = 'Severe';
