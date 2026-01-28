@@ -190,15 +190,28 @@ async def get_concussion_questions():
 
 @app.post("/api/concussion-assessment/evaluate")
 async def evaluate_concussion(request: AssessmentRequest):
-    responses = {
-        "red_flags": request.red_flags,
-        "symptoms": request.symptoms,
-        "orientation": request.orientation,
-        "memory": request.memory
-    }
-    
-    result = evaluate_assessment(responses, request.strike_data)
-    return result
+    try:
+        responses = {
+            "red_flags": request.red_flags,
+            "symptoms": request.symptoms,
+            "orientation": request.orientation,
+            "memory": request.memory
+        }
+        
+        strike_data = None
+        if request.strike_data:
+            strike_data = {
+                "impact_count": request.strike_data.get("impact_count", 0),
+                "risk_percentage": request.strike_data.get("risk_percentage", 0),
+                "max_single_impact_force": request.strike_data.get("max_single_impact_force", 0),
+                "total_force_estimate": request.strike_data.get("total_force_estimate", 0),
+                "avg_g_force": request.strike_data.get("avg_g_force", 0)
+            }
+        
+        result = evaluate_assessment(responses, strike_data)
+        return result
+    except Exception as e:
+        return {"error": str(e), "urgency_level": "none", "recommendation": "An error occurred. Please try again."}
 
 
 class AISummaryRequest(BaseModel):
