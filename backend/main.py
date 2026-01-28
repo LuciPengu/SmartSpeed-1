@@ -300,7 +300,7 @@ async def register(request: RegisterRequest):
             'first_name': new_user.first_name,
             'last_name': new_user.last_name
         }
-        session_id = auth.create_session(user_data)
+        session_id = auth.create_session(db, user_data)
         
         response = JSONResponse(content={"success": True, "user": user_data})
         response.set_cookie(
@@ -342,7 +342,7 @@ async def login(request: LoginRequest):
             'first_name': user.first_name,
             'last_name': user.last_name
         }
-        session_id = auth.create_session(user_data)
+        session_id = auth.create_session(db, user_data)
         
         response = JSONResponse(content={"success": True, "user": user_data})
         response.set_cookie(
@@ -371,16 +371,32 @@ async def get_current_user(request: Request):
     if not session_id:
         return {"authenticated": False, "user": None}
     
-    user = auth.get_user_from_session(session_id)
-    if user:
-        return {"authenticated": True, "user": user}
+    db_gen = get_db()
+    db = next(db_gen)
     
-    return {"authenticated": False, "user": None}
+    try:
+        user = auth.get_user_from_session(db, session_id)
+        if user:
+            return {"authenticated": True, "user": user}
+        return {"authenticated": False, "user": None}
+    finally:
+        try:
+            next(db_gen)
+        except StopIteration:
+            pass
 
 @app.get("/api/auth/logout")
 async def logout(request: Request, session_id: Optional[str] = Cookie(default=None)):
     if session_id:
-        auth.delete_session(session_id)
+        db_gen = get_db()
+        db = next(db_gen)
+        try:
+            auth.delete_session(db, session_id)
+        finally:
+            try:
+                next(db_gen)
+            except StopIteration:
+                pass
     
     response = JSONResponse(content={"success": True})
     response.delete_cookie("session_id")
