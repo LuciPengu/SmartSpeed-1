@@ -1934,51 +1934,63 @@ header h1 {
 
 /* Video Guidelines */
 .video-guidelines {
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 20px;
-    backdrop-filter: blur(10px);
+    background: linear-gradient(145deg, rgba(0, 50, 40, 0.4) 0%, rgba(0, 30, 25, 0.3) 100%);
+    border: 1px solid var(--border-glow);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
 }
 
 .video-guidelines h4 {
     color: var(--primary);
-    margin-bottom: 16px;
+    margin-bottom: 20px;
     font-size: 1rem;
     font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .guidelines-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
 }
 
 .guideline-item {
     display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 10px;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .guideline-icon {
     color: var(--primary);
     flex-shrink: 0;
-    margin-top: 2px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(52, 211, 153, 0.1);
+    border-radius: 10px;
 }
 
 .guideline-text {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
 }
 
 .guideline-text strong {
     color: var(--text-primary);
-    font-size: 0.85rem;
+    font-size: 0.9rem;
+    font-weight: 600;
 }
 
 .guideline-text span {
@@ -1988,12 +2000,12 @@ header h1 {
 
 /* G-Force Scale */
 .g-force-scale-section {
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(145deg, rgba(0, 50, 40, 0.4) 0%, rgba(0, 30, 25, 0.3) 100%);
+    border: 1px solid var(--border-glow);
     border-radius: 16px;
     padding: 28px;
     margin-top: 30px;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(var(--glass-blur));
 }
 
 .g-force-scale-section h3 {
@@ -2010,12 +2022,12 @@ header h1 {
 
 .g-scale-container {
     position: relative;
-    padding: 60px 20px 40px;
+    padding: 20px 0 60px;
 }
 
 .g-scale-bar {
     position: relative;
-    height: 12px;
+    height: 16px;
     background: linear-gradient(to right, 
         #22c55e 0%, 
         #22c55e 10%, 
@@ -2026,66 +2038,28 @@ header h1 {
         #ef4444 38%, 
         #ef4444 100%
     );
-    border-radius: 6px;
-    margin-bottom: 20px;
+    border-radius: 8px;
+    margin-bottom: 12px;
 }
 
-.g-scale-marker {
-    position: absolute;
-    top: -45px;
-    transform: translateX(-50%);
-    text-align: center;
-    cursor: default;
-}
-
-.marker-dot {
-    width: 8px;
-    height: 8px;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 50%;
-    margin: 0 auto 4px;
-    position: relative;
-}
-
-.marker-dot::after {
-    content: '';
-    position: absolute;
-    top: 8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 1px;
-    height: 45px;
-    background: rgba(255, 255, 255, 0.3);
-}
-
-.marker-label {
-    font-size: 0.7rem;
-    color: var(--text-secondary);
-    white-space: nowrap;
+.g-scale-labels {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-weight: 600;
+    justify-content: space-between;
+    padding: 0 4px;
+    margin-bottom: 16px;
 }
 
-.marker-label span {
-    font-size: 0.6rem;
-    color: var(--text-muted);
-    font-weight: 400;
-    max-width: 70px;
+.g-scale-label-item {
     text-align: center;
+    font-size: 0.7rem;
+    color: var(--text-muted);
 }
 
-.g-scale-marker.warning .marker-dot {
-    background: var(--warning);
-}
-
-.g-scale-marker.danger .marker-dot {
-    background: #f97316;
-}
-
-.g-scale-marker.critical .marker-dot {
-    background: var(--danger);
+.g-scale-label-item strong {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    margin-bottom: 2px;
 }
 
 .g-scale-zones {
@@ -2094,7 +2068,7 @@ header h1 {
 }
 
 .g-zone {
-    height: 24px;
+    height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2105,66 +2079,87 @@ header h1 {
 }
 
 .g-zone.safe {
-    background: rgba(34, 197, 94, 0.3);
-    border-radius: 4px 0 0 4px;
+    background: rgba(34, 197, 94, 0.25);
+    border-radius: 6px 0 0 6px;
     color: #22c55e;
 }
 
 .g-zone.caution {
-    background: rgba(234, 179, 8, 0.3);
+    background: rgba(234, 179, 8, 0.25);
     color: #eab308;
 }
 
 .g-zone.warning {
-    background: rgba(249, 115, 22, 0.3);
+    background: rgba(249, 115, 22, 0.25);
     color: #f97316;
 }
 
 .g-zone.danger {
-    background: rgba(239, 68, 68, 0.3);
-    border-radius: 0 4px 4px 0;
+    background: rgba(239, 68, 68, 0.25);
+    border-radius: 0 6px 6px 0;
     color: #ef4444;
 }
 
 .user-impacts-markers {
     position: absolute;
-    top: 0;
-    left: 20px;
-    right: 20px;
-    height: 100%;
+    top: 20px;
+    left: 0;
+    right: 0;
+    height: 16px;
     pointer-events: none;
 }
 
 .user-g-marker {
     position: absolute;
-    top: 60px;
+    top: 0;
     transform: translateX(-50%);
     z-index: 10;
 }
 
 .user-g-marker .marker-dot {
-    width: 14px;
-    height: 14px;
+    width: 20px;
+    height: 20px;
     background: var(--primary);
-    border: 2px solid white;
-    box-shadow: 0 0 10px var(--primary);
-}
-
-.user-g-marker .marker-dot::after {
-    display: none;
+    border: 3px solid white;
+    box-shadow: 0 0 12px var(--primary);
+    border-radius: 50%;
+    margin-top: -2px;
 }
 
 .user-g-marker .marker-label {
     position: absolute;
-    top: -24px;
+    top: 24px;
     left: 50%;
     transform: translateX(-50%);
     background: var(--primary);
     color: black;
-    padding: 2px 6px;
+    padding: 3px 8px;
     border-radius: 4px;
     font-weight: 700;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
+/* G-Force Reference List */
+.g-reference-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+    margin-top: 20px;
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.g-reference-item {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.g-reference-item .g-value {
+    color: var(--primary);
+    font-weight: 700;
+    margin-right: 6px;
 }
 
 /* G-Force Disclaimer */
