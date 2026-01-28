@@ -2142,7 +2142,7 @@ header h1 {
 
 .user-g-marker .marker-label {
     position: absolute;
-    bottom: 28px;
+    bottom: 24px;
     left: 50%;
     transform: translateX(-50%);
     background: var(--primary);
@@ -2152,7 +2152,6 @@ header h1 {
     font-weight: 700;
     font-size: 0.75rem;
     white-space: nowrap;
-    cursor: pointer;
     transition: all 0.2s ease;
     z-index: 20;
 }
@@ -2168,7 +2167,7 @@ header h1 {
 }
 
 .user-g-marker:hover .marker-label {
-    transform: translateX(-50%) scale(1.1);
+    transform: translateX(-50%) scale(1.05);
     box-shadow: 0 4px 12px rgba(52, 211, 153, 0.4);
 }
 
@@ -2185,16 +2184,18 @@ header h1 {
 .user-g-marker .marker-tooltip {
     display: none;
     position: absolute;
-    bottom: 60px;
+    bottom: 100%;
     left: 50%;
     transform: translateX(-50%);
+    margin-bottom: 8px;
     background: rgba(0, 0, 0, 0.95);
     border: 1px solid var(--primary);
     border-radius: 8px;
     padding: 10px 14px;
-    min-width: 140px;
-    z-index: 100;
+    min-width: 160px;
+    z-index: 200;
     text-align: left;
+    pointer-events: none;
 }
 
 .user-g-marker:hover .marker-tooltip {
