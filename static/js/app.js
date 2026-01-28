@@ -523,9 +523,17 @@ async function submitAssessment() {
             })
         });
 
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Assessment error:', errorText);
+            showToast('Error submitting assessment. Please try again.', 'error');
+            return;
+        }
+
         assessmentResult = await response.json();
         showStep4();
     } catch (error) {
+        console.error('Assessment error:', error);
         showToast('Error submitting assessment: ' + error.message, 'error');
     }
 }
