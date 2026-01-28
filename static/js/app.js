@@ -249,25 +249,26 @@ function calculateSpeedRange(impact, fighterIdx) {
     
     const motionIntensity = Math.min(1, impact.motion_intensity || 0.7);
     const throwingIntensity = (settings.intensity || 70) / 100;
-    const combinedIntensity = motionIntensity * throwingIntensity;
     
     const seedVal = (impact.frame || 1) * (fighterIdx + 1) * (impact.hand === 'LEFT' ? 1 : 2);
     const pseudoRandom1 = Math.sin(seedVal * 12.9898) * 43758.5453 % 1;
     const pseudoRandom2 = Math.sin(seedVal * 78.233) * 43758.5453 % 1;
     
-    const variationRange = throwingIntensity * 0.08;
-    const variationMin = (Math.abs(pseudoRandom1) - 0.5) * 2 * variationRange * (skillRanges.max - skillRanges.min);
-    const variationMax = (Math.abs(pseudoRandom2) - 0.5) * 2 * variationRange * (skillRanges.max - skillRanges.min);
+    const variationRange = 0.05;
+    const variation1 = (Math.abs(pseudoRandom1) - 0.5) * 2 * variationRange;
+    const variation2 = (Math.abs(pseudoRandom2) - 0.5) * 2 * variationRange;
     
-    const baseMin = skillRanges.min + (skillRanges.avg - skillRanges.min) * combinedIntensity * 0.5;
-    const baseMax = skillRanges.min + (skillRanges.max - skillRanges.min) * combinedIntensity;
+    const speedRange = skillRanges.max - skillRanges.min;
+    const targetSpeed = skillRanges.min + speedRange * throwingIntensity;
+    const motionAdjust = 0.8 + (motionIntensity * 0.2);
     
-    const adjustedMin = baseMin + variationMin;
-    const adjustedMax = baseMax + variationMax;
+    const baseSpeed = targetSpeed * motionAdjust;
+    const minSpeed = baseSpeed * (0.85 + variation1);
+    const maxSpeed = baseSpeed * (1.0 + variation2);
     
     return {
-        min: Math.round(Math.max(skillRanges.min * 0.8, adjustedMin)),
-        max: Math.round(Math.min(skillRanges.max * 1.1, adjustedMax)),
+        min: Math.round(Math.max(skillRanges.min * 0.7, minSpeed)),
+        max: Math.round(Math.min(skillRanges.max * 1.15, maxSpeed)),
         unit: 'mph'
     };
 }
@@ -709,10 +710,17 @@ function displayImpactFrames() {
         return;
     }
 
+    const gForceValues = [];
+    
     impactsGrid.innerHTML = selectedImpactsList.map(impact => {
         const speedRange = calculateSpeedRange(impact, impact.fighter);
         const powerRange = calculatePowerRange(impact, impact.fighter);
         const settings = impact.fighter === 1 ? fighterSettings.fighter1 : fighterSettings.fighter2;
+        
+        const avgForce = (powerRange.min + powerRange.max) / 2;
+        const headMass = 4.5;
+        const gForce = avgForce / (headMass * 9.81);
+        gForceValues.push({ id: impact.id, gForce: gForce, fighter: impact.fighter });
         
         return `
             <div class="impact-card selected" data-id="${impact.id}">
@@ -734,7 +742,30 @@ function displayImpactFrames() {
                         <div class="power-range-label">Est. Force</div>
                         <div class="power-range-value">${powerRange.min} - ${powerRange.max} ${powerRange.unit}</div>
                     </div>
+                    <div class="g-force-display">
+                        <div class="g-force-label">G-Force</div>
+                        <div class="g-force-value">${gForce.toFixed(1)}g</div>
+                    </div>
                 </div>
+            </div>
+        `;
+    }).join('');
+    
+    displayGForceMarkers(gForceValues);
+}
+
+function displayGForceMarkers(gForceValues) {
+    const markersContainer = document.getElementById('user-g-markers');
+    if (!markersContainer) return;
+    
+    const maxG = 316;
+    
+    markersContainer.innerHTML = gForceValues.map((item, index) => {
+        const percentage = Math.min(100, (item.gForce / maxG) * 100);
+        return `
+            <div class="user-g-marker" style="left: ${percentage}%;">
+                <div class="marker-label">${item.gForce.toFixed(1)}g</div>
+                <div class="marker-dot"></div>
             </div>
         `;
     }).join('');

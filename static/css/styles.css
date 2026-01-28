@@ -1931,3 +1931,327 @@ header h1 {
     from { opacity: 0; }
     to { opacity: 1; }
 }
+
+/* Video Guidelines */
+.video-guidelines {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.video-guidelines h4 {
+    color: var(--primary);
+    margin-bottom: 16px;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.guidelines-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+}
+
+.guideline-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.guideline-icon {
+    color: var(--primary);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.guideline-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.guideline-text strong {
+    color: var(--text-primary);
+    font-size: 0.85rem;
+}
+
+.guideline-text span {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+/* G-Force Scale */
+.g-force-scale-section {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 28px;
+    margin-top: 30px;
+    backdrop-filter: blur(10px);
+}
+
+.g-force-scale-section h3 {
+    color: var(--primary);
+    margin-bottom: 8px;
+    font-size: 1.2rem;
+}
+
+.g-force-scale-section .section-description {
+    color: var(--text-muted);
+    margin-bottom: 24px;
+    font-size: 0.9rem;
+}
+
+.g-scale-container {
+    position: relative;
+    padding: 60px 20px 40px;
+}
+
+.g-scale-bar {
+    position: relative;
+    height: 12px;
+    background: linear-gradient(to right, 
+        #22c55e 0%, 
+        #22c55e 10%, 
+        #eab308 10%, 
+        #eab308 22%, 
+        #f97316 22%, 
+        #f97316 38%, 
+        #ef4444 38%, 
+        #ef4444 100%
+    );
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.g-scale-marker {
+    position: absolute;
+    top: -45px;
+    transform: translateX(-50%);
+    text-align: center;
+    cursor: default;
+}
+
+.marker-dot {
+    width: 8px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    margin: 0 auto 4px;
+    position: relative;
+}
+
+.marker-dot::after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.marker-label {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-weight: 600;
+}
+
+.marker-label span {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    max-width: 70px;
+    text-align: center;
+}
+
+.g-scale-marker.warning .marker-dot {
+    background: var(--warning);
+}
+
+.g-scale-marker.danger .marker-dot {
+    background: #f97316;
+}
+
+.g-scale-marker.critical .marker-dot {
+    background: var(--danger);
+}
+
+.g-scale-zones {
+    display: flex;
+    margin-top: 8px;
+}
+
+.g-zone {
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.g-zone.safe {
+    background: rgba(34, 197, 94, 0.3);
+    border-radius: 4px 0 0 4px;
+    color: #22c55e;
+}
+
+.g-zone.caution {
+    background: rgba(234, 179, 8, 0.3);
+    color: #eab308;
+}
+
+.g-zone.warning {
+    background: rgba(249, 115, 22, 0.3);
+    color: #f97316;
+}
+
+.g-zone.danger {
+    background: rgba(239, 68, 68, 0.3);
+    border-radius: 0 4px 4px 0;
+    color: #ef4444;
+}
+
+.user-impacts-markers {
+    position: absolute;
+    top: 0;
+    left: 20px;
+    right: 20px;
+    height: 100%;
+    pointer-events: none;
+}
+
+.user-g-marker {
+    position: absolute;
+    top: 60px;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.user-g-marker .marker-dot {
+    width: 14px;
+    height: 14px;
+    background: var(--primary);
+    border: 2px solid white;
+    box-shadow: 0 0 10px var(--primary);
+}
+
+.user-g-marker .marker-dot::after {
+    display: none;
+}
+
+.user-g-marker .marker-label {
+    position: absolute;
+    top: -24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--primary);
+    color: black;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.7rem;
+}
+
+/* G-Force Disclaimer */
+.g-force-disclaimer {
+    margin-top: 30px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    border-left: 3px solid var(--primary);
+}
+
+.g-force-disclaimer h4 {
+    color: var(--primary);
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+
+.g-force-disclaimer p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+}
+
+.g-force-disclaimer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.g-force-disclaimer li {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    padding: 8px 0;
+    padding-left: 20px;
+    position: relative;
+}
+
+.g-force-disclaimer li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    background: var(--primary);
+    border-radius: 50%;
+}
+
+.g-force-disclaimer li strong {
+    color: var(--text-primary);
+}
+
+/* G-Force display in impact cards */
+.g-force-display {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.g-force-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.g-force-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+/* Hide some markers on mobile for clarity */
+@media (max-width: 768px) {
+    .g-scale-marker[data-g="3"],
+    .g-scale-marker[data-g="4.5"],
+    .g-scale-marker[data-g="10"],
+    .g-scale-marker[data-g="20"],
+    .g-scale-marker[data-g="25"] {
+        display: none;
+    }
+    
+    .guidelines-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
