@@ -111,59 +111,25 @@
             </div>
 
             <div class="upload-section">
-                <div class="video-guidelines">
-                    <h4>Video Guidelines</h4>
-                    <div class="guidelines-grid">
-                        <div class="guideline-item">
-                            <span class="guideline-icon">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                            </span>
-                            <div class="guideline-text">
-                                <strong>Duration</strong>
-                                <span>30 seconds max (optimal)</span>
-                            </div>
-                        </div>
-                        <div class="guideline-item">
-                            <span class="guideline-icon">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                                    <circle cx="12" cy="13" r="4"></circle>
-                                </svg>
-                            </span>
-                            <div class="guideline-text">
-                                <strong>Camera Angle</strong>
-                                <span>Full body + punch range visible</span>
-                            </div>
-                        </div>
-                        <div class="guideline-item">
-                            <span class="guideline-icon">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                                    <line x1="8" y1="21" x2="16" y2="21"></line>
-                                    <line x1="12" y1="17" x2="12" y2="21"></line>
-                                </svg>
-                            </span>
-                            <div class="guideline-text">
-                                <strong>Resolution</strong>
-                                <span>720p or higher recommended</span>
-                            </div>
-                        </div>
-                        <div class="guideline-item">
-                            <span class="guideline-icon">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                                </svg>
-                            </span>
-                            <div class="guideline-text">
-                                <strong>Frame Rate</strong>
-                                <span>30+ FPS (60 FPS ideal)</span>
-                            </div>
-                        </div>
+                <details class="video-guidelines-dropdown">
+                    <summary class="guidelines-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                        Video Guidelines
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </summary>
+                    <div class="guidelines-content">
+                        <div class="guideline-item"><strong>Duration:</strong> 30 sec max</div>
+                        <div class="guideline-item"><strong>Camera:</strong> Full body visible</div>
+                        <div class="guideline-item"><strong>Resolution:</strong> 720p+</div>
+                        <div class="guideline-item"><strong>FPS:</strong> 30+ (60 ideal)</div>
                     </div>
-                </div>
+                </details>
                 <div class="upload-area" id="upload-area">
                     <div class="upload-icon">
                         <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
