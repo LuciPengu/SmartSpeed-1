@@ -48,8 +48,24 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 analysis_results: Dict[str, Any] = {}
 
 UPLOAD_DIR = "static/uploads"
+FRAMES_DIR = "static/frames"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
-os.makedirs("static/frames", exist_ok=True)
+os.makedirs(FRAMES_DIR, exist_ok=True)
+
+def cleanup_old_frames(max_age_hours: int = 24):
+    """Remove frame directories older than max_age_hours"""
+    try:
+        now = datetime.now()
+        for session_dir in os.listdir(FRAMES_DIR):
+            session_path = os.path.join(FRAMES_DIR, session_dir)
+            if os.path.isdir(session_path):
+                dir_mtime = datetime.fromtimestamp(os.path.getmtime(session_path))
+                if (now - dir_mtime) > timedelta(hours=max_age_hours):
+                    shutil.rmtree(session_path)
+    except Exception as e:
+        print(f"Error cleaning up frames: {e}")
+
+cleanup_old_frames(24)
 
 
 class FighterSetting(BaseModel):
