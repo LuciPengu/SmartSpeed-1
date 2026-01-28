@@ -764,13 +764,40 @@ function displayGForceMarkers(gForceValues) {
     
     markersContainer.innerHTML = gForceValues.map((item, index) => {
         const percentage = Math.min(100, (item.gForce / maxG) * 100);
+        const impact = selectedImpactsList.find(i => i.id === item.id);
+        const settings = item.fighter === 1 ? fighterSettings.fighter1 : fighterSettings.fighter2;
+        const speedRange = impact ? calculateSpeedRange(impact, item.fighter) : { min: 0, max: 0 };
+        const powerRange = impact ? calculatePowerRange(impact, item.fighter) : { min: 0, max: 0 };
+        
+        let riskLevel = 'Low';
+        if (item.gForce >= 120) riskLevel = 'Severe';
+        else if (item.gForce >= 70) riskLevel = 'High';
+        else if (item.gForce >= 32) riskLevel = 'Moderate';
+        
         return `
-            <div class="user-g-marker" style="left: ${percentage}%;">
+            <div class="user-g-marker" style="left: ${percentage}%;" data-impact-id="${item.id}" onclick="scrollToImpact('${item.id}')">
+                <div class="marker-tooltip">
+                    <div class="marker-tooltip-title">Fighter ${item.fighter} - ${impact?.hand || 'Punch'}</div>
+                    <div class="marker-tooltip-row">G-Force: <span>${item.gForce.toFixed(1)}g</span></div>
+                    <div class="marker-tooltip-row">Speed: <span>${speedRange.min}-${speedRange.max} mph</span></div>
+                    <div class="marker-tooltip-row">Force: <span>${powerRange.min}-${powerRange.max} N</span></div>
+                    <div class="marker-tooltip-row">Risk: <span>${riskLevel}</span></div>
+                    <div class="marker-tooltip-row" style="margin-top:6px;font-size:0.65rem;color:var(--text-muted);">Click to view</div>
+                </div>
                 <div class="marker-label">${item.gForce.toFixed(1)}g</div>
                 <div class="marker-dot"></div>
             </div>
         `;
     }).join('');
+}
+
+function scrollToImpact(impactId) {
+    const impactCard = document.querySelector(`.impact-card[data-id="${impactId}"]`);
+    if (impactCard) {
+        impactCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        impactCard.classList.add('highlight');
+        setTimeout(() => impactCard.classList.remove('highlight'), 2000);
+    }
 }
 
 let isRegisterMode = false;

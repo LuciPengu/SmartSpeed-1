@@ -2025,7 +2025,7 @@ header h1 {
 
 .g-scale-container {
     position: relative;
-    padding: 20px 0 60px;
+    padding: 80px 0 60px;
 }
 
 .g-scale-bar {
@@ -2131,16 +2131,102 @@ header h1 {
 
 .user-g-marker .marker-label {
     position: absolute;
-    top: 24px;
+    bottom: 28px;
     left: 50%;
     transform: translateX(-50%);
     background: var(--primary);
     color: black;
-    padding: 3px 8px;
-    border-radius: 4px;
+    padding: 4px 10px;
+    border-radius: 6px;
     font-weight: 700;
     font-size: 0.75rem;
     white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 20;
+}
+
+.user-g-marker .marker-label::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--primary);
+}
+
+.user-g-marker:hover .marker-label {
+    transform: translateX(-50%) scale(1.1);
+    box-shadow: 0 4px 12px rgba(52, 211, 153, 0.4);
+}
+
+.user-g-marker .marker-dot {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.user-g-marker:hover .marker-dot {
+    transform: scale(1.2);
+    box-shadow: 0 0 20px var(--primary);
+}
+
+.user-g-marker .marker-tooltip {
+    display: none;
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.95);
+    border: 1px solid var(--primary);
+    border-radius: 8px;
+    padding: 10px 14px;
+    min-width: 140px;
+    z-index: 100;
+    text-align: left;
+}
+
+.user-g-marker:hover .marker-tooltip {
+    display: block;
+}
+
+.user-g-marker .marker-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--primary);
+}
+
+.marker-tooltip-title {
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+}
+
+.marker-tooltip-row {
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    margin-bottom: 3px;
+}
+
+.marker-tooltip-row span {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* Impact card highlight animation */
+.impact-card.highlight {
+    animation: highlightPulse 2s ease;
+}
+
+@keyframes highlightPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+    25%, 75% { box-shadow: 0 0 20px 5px rgba(52, 211, 153, 0.5); }
+    50% { box-shadow: 0 0 30px 8px rgba(52, 211, 153, 0.7); }
 }
 
 /* G-Force Reference List */
