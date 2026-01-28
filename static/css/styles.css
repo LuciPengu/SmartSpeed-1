@@ -2314,6 +2314,44 @@ header h1 {
     color: var(--text-primary);
 }
 
+/* Research Sources */
+.research-sources {
+    margin-top: 20px;
+    padding: 16px 20px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+}
+
+.research-sources h4 {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+}
+
+.research-sources ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+}
+
+.research-sources li {
+    font-size: 0.75rem;
+}
+
+.research-sources a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+
+.research-sources a:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+}
+
 /* G-Force display in impact cards */
 .g-force-display {
     margin-top: 10px;
