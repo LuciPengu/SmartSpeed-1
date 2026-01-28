@@ -593,10 +593,6 @@ function displayAssessmentResults() {
                     <div class="stat-label">Symptoms</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number" id="stat-severity">0</div>
-                    <div class="stat-label">Severity Score</div>
-                </div>
-                <div class="stat-card">
                     <div class="stat-number" id="stat-orientation">0</div>
                     <div class="stat-label">Orientation (/${assessmentResult.orientation_max || 5})</div>
                 </div>
@@ -616,12 +612,10 @@ function displayAssessmentResults() {
     
     setTimeout(() => {
         const symptomsEl = document.getElementById('stat-symptoms');
-        const severityEl = document.getElementById('stat-severity');
         const orientationEl = document.getElementById('stat-orientation');
         const memoryEl = document.getElementById('stat-memory');
         
         if (symptomsEl) animateNumber(symptomsEl, assessmentResult.symptom_total || 0, 800);
-        if (severityEl) animateNumber(severityEl, assessmentResult.symptom_severity_score || 0, 800);
         if (orientationEl) animateNumber(orientationEl, assessmentResult.orientation_score || 0, 800);
         if (memoryEl) animateNumber(memoryEl, assessmentResult.memory_score || 0, 800);
     }, 300);
@@ -1065,7 +1059,6 @@ function showSessionDetails(session) {
             <h4>Concussion Screening</h4>
             <p><strong>Urgency:</strong> ${session.assessment_result.urgency_level || 'N/A'}</p>
             <p><strong>Symptoms:</strong> ${session.assessment_result.symptom_total || 0}</p>
-            <p><strong>Severity Score:</strong> ${session.assessment_result.symptom_severity_score || 0}</p>
             <p><strong>Orientation:</strong> ${session.assessment_result.orientation_score || 0}/${session.assessment_result.orientation_max || 5}</p>
             <p><strong>Memory:</strong> ${session.assessment_result.memory_score || 0}/${session.assessment_result.memory_max || 5}</p>
             ${session.assessment_result.red_flags_count > 0 ? '<p class="red-flag-text"><strong>Red Flags Detected!</strong></p>' : ''}
