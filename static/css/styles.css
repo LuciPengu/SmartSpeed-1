@@ -2043,6 +2043,7 @@ header h1 {
     );
     border-radius: 8px;
     margin-bottom: 12px;
+    z-index: 1;
 }
 
 .g-scale-labels {
@@ -2114,10 +2115,10 @@ header h1 {
 
 .user-impacts-markers {
     position: absolute;
-    top: 0;
+    top: 50px;
     left: 0;
     right: 0;
-    height: 16px;
+    height: 20px;
     z-index: 15;
 }
 
