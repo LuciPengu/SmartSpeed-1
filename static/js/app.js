@@ -254,18 +254,9 @@ function calculateSpeedRange(impact, fighterIdx) {
     const baseMin = skillRanges.min + (skillRanges.avg - skillRanges.min) * combinedIntensity * 0.5;
     const baseMax = skillRanges.min + (skillRanges.max - skillRanges.min) * combinedIntensity;
     
-    const seedVal = (impact.id || 1) * (impact.frame || 1) * (fighterIdx + 1);
-    const pseudoRandom1 = Math.sin(seedVal * 12.9898) * 43758.5453 % 1;
-    const pseudoRandom2 = Math.sin(seedVal * 78.233) * 43758.5453 % 1;
-    const variationMin = (Math.abs(pseudoRandom1) - 0.5) * 4;
-    const variationMax = (Math.abs(pseudoRandom2) - 0.5) * 6;
-    
-    const adjustedMin = baseMin + variationMin;
-    const adjustedMax = baseMax + variationMax;
-    
     return {
-        min: Math.round(Math.max(skillRanges.min * 0.8, adjustedMin)),
-        max: Math.round(Math.min(skillRanges.max * 1.1, adjustedMax)),
+        min: Math.round(Math.max(skillRanges.min * 0.8, baseMin)),
+        max: Math.round(Math.min(skillRanges.max * 1.1, baseMax)),
         unit: 'mph'
     };
 }
@@ -279,13 +270,10 @@ function calculatePowerRange(impact, fighterIdx) {
     const maxSpeed = speedRange.max * mphToMs;
     
     const effectiveMass = settings.weight * 0.04;
+    const contactTime = 0.01;
     
-    const seedVal = (impact.id || 1) * (impact.frame || 1) * (fighterIdx + 1);
-    const pseudoRandom = Math.sin(seedVal * 34.567) * 43758.5453 % 1;
-    const contactTimeVariation = 0.008 + Math.abs(pseudoRandom) * 0.004;
-    
-    const minForce = (effectiveMass * minSpeed) / contactTimeVariation;
-    const maxForce = (effectiveMass * maxSpeed) / contactTimeVariation;
+    const minForce = (effectiveMass * minSpeed) / contactTime;
+    const maxForce = (effectiveMass * maxSpeed) / contactTime;
     
     return {
         min: Math.round(minForce),
