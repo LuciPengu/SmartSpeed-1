@@ -7,6 +7,8 @@ let currentUser = null;
 let authCheckPromise = null;
 let aiSummaryText = '';
 let conversationHistory = [];
+let subscriptionStatus = null;
+let hasActiveSubscription = false;
 let fighterSettings = {
     fighter1: { skill: 'professional', weight: 75, intensity: 70 },
     fighter2: { skill: 'professional', weight: 75, intensity: 70 }
@@ -804,9 +806,12 @@ async function checkAuthStatus() {
                     name: data.user.first_name || data.user.email?.split('@')[0] || 'User',
                     avatar: data.user.profile_image_url || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(data.user.first_name || 'U')}`
                 };
+                await checkSubscriptionStatus();
                 updateUserUI();
             } else {
                 currentUser = null;
+                hasActiveSubscription = false;
+                subscriptionStatus = null;
                 updateUserUI();
             }
         } catch (error) {
@@ -928,6 +933,7 @@ function updateUserUI() {
     const loginBtn = document.getElementById('login-btn');
     const loggedInSection = document.getElementById('user-logged-in');
     const saveBtn = document.getElementById('save-session-btn');
+    const subscriptionBanner = document.getElementById('subscription-banner');
     
     if (currentUser) {
         loginBtn.classList.add('hidden');
@@ -935,10 +941,82 @@ function updateUserUI() {
         document.getElementById('user-avatar').src = currentUser.avatar;
         document.getElementById('user-name').textContent = currentUser.name;
         if (saveBtn) saveBtn.style.display = 'inline-flex';
+        
+        if (subscriptionBanner) {
+            if (hasActiveSubscription) {
+                subscriptionBanner.classList.add('hidden');
+            } else {
+                subscriptionBanner.classList.remove('hidden');
+            }
+        }
     } else {
         loginBtn.classList.remove('hidden');
         loggedInSection.classList.add('hidden');
         if (saveBtn) saveBtn.style.display = 'none';
+        if (subscriptionBanner) subscriptionBanner.classList.add('hidden');
+    }
+}
+
+async function checkSubscriptionStatus() {
+    try {
+        const response = await fetch('/api/stripe/subscription', { credentials: 'include' });
+        const data = await response.json();
+        subscriptionStatus = data.subscription;
+        hasActiveSubscription = data.has_access;
+        return data;
+    } catch (error) {
+        console.error('Subscription check failed:', error);
+        hasActiveSubscription = false;
+        return null;
+    }
+}
+
+async function startSubscription() {
+    if (!currentUser) {
+        showAuthModal();
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/stripe/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ return_url: window.location.origin })
+        });
+        
+        const data = await response.json();
+        
+        if (data.url) {
+            window.location.href = data.url;
+        } else {
+            showToast('Failed to start checkout', 'error');
+        }
+    } catch (error) {
+        console.error('Checkout error:', error);
+        showToast('Failed to start checkout', 'error');
+    }
+}
+
+async function manageSubscription() {
+    try {
+        const response = await fetch('/api/stripe/portal', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ return_url: window.location.origin })
+        });
+        
+        const data = await response.json();
+        
+        if (data.url) {
+            window.location.href = data.url;
+        } else {
+            showToast('Failed to open subscription management', 'error');
+        }
+    } catch (error) {
+        console.error('Portal error:', error);
+        showToast('Failed to open subscription management', 'error');
     }
 }
 
