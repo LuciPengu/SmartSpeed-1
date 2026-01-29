@@ -2462,3 +2462,80 @@ header h1 {
         flex-direction: column;
     }
 }
+
+/* Subscription Modal */
+.subscription-modal-content {
+    max-width: 450px;
+    text-align: center;
+}
+
+.subscription-modal-body {
+    padding: 1.5rem;
+}
+
+.subscription-icon {
+    margin-bottom: 1.5rem;
+}
+
+.subscription-modal-body h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+}
+
+.subscription-description {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.subscription-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+    text-align: left;
+}
+
+.subscription-features li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    color: var(--text-secondary);
+}
+
+.feature-check {
+    color: var(--primary);
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.subscription-pricing {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.subscription-pricing .price {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.subscription-pricing .period {
+    font-size: 1rem;
+    color: var(--text-muted);
+}
+
+.trial-note {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.subscription-cta {
+    font-size: 1.1rem;
+    padding: 1rem 2rem;
+}

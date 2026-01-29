@@ -3,6 +3,22 @@ import stripe
 import httpx
 from datetime import datetime, timedelta
 
+def check_subscription_access(user) -> bool:
+    """Check if user has an active subscription or is in trial period"""
+    if not user:
+        return False
+    
+    status = getattr(user, 'subscription_status', None) or 'none'
+    trial_ends_at = getattr(user, 'trial_ends_at', None)
+    
+    if status in ['active', 'trialing']:
+        return True
+    
+    if trial_ends_at and trial_ends_at > datetime.utcnow():
+        return True
+    
+    return False
+
 async def get_stripe_credentials():
     """Fetch Stripe credentials from Replit connection API"""
     hostname = os.environ.get('REPLIT_CONNECTORS_HOSTNAME')
@@ -125,8 +141,8 @@ async def create_checkout_session(user_id: str, email: str, customer_id: str = N
             'trial_period_days': 7,
             'metadata': {'user_id': user_id}
         },
-        success_url=f"{return_url}?session_id={{CHECKOUT_SESSION_ID}}&success=true",
-        cancel_url=f"{return_url}?canceled=true",
+        success_url=f"{return_url}?checkout=success&session_id={{CHECKOUT_SESSION_ID}}",
+        cancel_url=f"{return_url}?checkout=cancelled",
         metadata={'user_id': user_id}
     )
     

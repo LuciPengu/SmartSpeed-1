@@ -290,6 +290,40 @@
             </div>
         </div>
         
+        <div id="subscription-modal" class="modal hidden">
+            <div class="modal-content subscription-modal-content">
+                <div class="modal-header">
+                    <h2>Subscription Required</h2>
+                    <button onclick="closeSubscriptionModal()" class="close-btn">&times;</button>
+                </div>
+                <div class="subscription-modal-body">
+                    <div class="subscription-icon">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                            <path d="M2 17l10 5 10-5"></path>
+                            <path d="M2 12l10 5 10-5"></path>
+                        </svg>
+                    </div>
+                    <h3>Unlock Full Video Analysis</h3>
+                    <p class="subscription-description">Get access to unlimited video analysis with our professional-grade punch detection and injury risk assessment.</p>
+                    <ul class="subscription-features">
+                        <li><span class="feature-check">&#10003;</span> Unlimited video uploads</li>
+                        <li><span class="feature-check">&#10003;</span> AI-powered analysis summaries</li>
+                        <li><span class="feature-check">&#10003;</span> Injury history tracking</li>
+                        <li><span class="feature-check">&#10003;</span> SCAT5 concussion screening</li>
+                    </ul>
+                    <div class="subscription-pricing">
+                        <span class="price">$9.99</span>
+                        <span class="period">/month</span>
+                    </div>
+                    <p class="trial-note">Start with a <strong>7-day free trial</strong>. Cancel anytime.</p>
+                    <button onclick="startSubscription()" class="btn primary full-width subscription-cta">
+                        Start Free Trial
+                    </button>
+                </div>
+            </div>
+        </div>
+        
         <div id="history-modal" class="modal hidden">
             <div class="modal-content">
                 <div class="modal-header">

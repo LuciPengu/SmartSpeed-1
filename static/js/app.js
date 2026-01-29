@@ -183,6 +183,11 @@ async function handleFileUpload(file) {
         return;
     }
     
+    if (!hasActiveSubscription) {
+        showSubscriptionModal();
+        return;
+    }
+    
     const validTypes = ['.mp4', '.avi', '.mov', '.mkv'];
     const fileExt = '.' + file.name.split('.').pop().toLowerCase();
     
@@ -785,6 +790,24 @@ function initializeAuth() {
         console.error('Authentication error:', urlParams.get('auth_error'));
         window.history.replaceState({}, document.title, '/');
     }
+    if (urlParams.get('checkout') === 'success') {
+        showToast('Subscription activated! You can now analyze videos.', 'success');
+        checkAuthStatus();
+        window.history.replaceState({}, document.title, '/');
+    }
+    if (urlParams.get('checkout') === 'cancelled') {
+        showToast('Checkout cancelled', 'info');
+        window.history.replaceState({}, document.title, '/');
+    }
+    
+    const subscriptionModal = document.getElementById('subscription-modal');
+    if (subscriptionModal) {
+        subscriptionModal.addEventListener('click', (e) => {
+            if (e.target === subscriptionModal) {
+                closeSubscriptionModal();
+            }
+        });
+    }
 }
 
 function loadUserFromStorage() {
@@ -1018,6 +1041,14 @@ async function manageSubscription() {
         console.error('Portal error:', error);
         showToast('Failed to open subscription management', 'error');
     }
+}
+
+function showSubscriptionModal() {
+    document.getElementById('subscription-modal').classList.remove('hidden');
+}
+
+function closeSubscriptionModal() {
+    document.getElementById('subscription-modal').classList.add('hidden');
 }
 
 async function showHistory() {

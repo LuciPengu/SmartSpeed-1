@@ -113,9 +113,34 @@ MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
 
 @app.post("/api/upload")
 async def upload_video(
+    request: Request,
     file: UploadFile = File(...),
     fighter_settings: str = Form(default="{}")
 ):
+    session_id = request.cookies.get("session_id")
+    if not session_id:
+        raise HTTPException(status_code=401, detail="Please sign in before uploading a video.")
+    
+    db_gen = get_db()
+    db = next(db_gen)
+    try:
+        user_data = auth.get_user_from_session(db, session_id)
+        if not user_data:
+            raise HTTPException(status_code=401, detail="Please sign in before uploading a video.")
+        
+        user = db.query(User).filter(User.id == user_data.get('id')).first()
+        if not user:
+            raise HTTPException(status_code=401, detail="User not found.")
+        
+        has_access = stripe_client.check_subscription_access(user)
+        if not has_access:
+            raise HTTPException(status_code=403, detail="Active subscription required. Please subscribe to analyze videos.")
+    finally:
+        try:
+            next(db_gen)
+        except StopIteration:
+            pass
+    
     filename_str = file.filename or ""
     if not filename_str.endswith(('.mp4', '.avi', '.mov', '.mkv')):
         raise HTTPException(status_code=400, detail="Invalid file format. Please upload a video file.")
