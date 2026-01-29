@@ -17,6 +17,7 @@ from backend.concussion_assessment import get_assessment_questions, evaluate_ass
 from backend.ai_summary import generate_ai_summary_stream, generate_ai_summary
 from backend.database import init_db, get_db, User, InjurySession, ImpactRecord
 from backend import auth
+from backend import stripe_client
 
 init_db()
 
@@ -594,6 +595,200 @@ async def get_session_details(user_id: str, session_db_id: int):
         raise
     except Exception as e:
         return {"error": str(e)}
+    finally:
+        try:
+            next(db_gen)
+        except StopIteration:
+            pass
+
+
+@app.get("/api/stripe/publishable-key")
+async def get_stripe_publishable_key():
+    try:
+        key = await stripe_client.get_publishable_key()
+        return {"publishable_key": key}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/stripe/product")
+async def get_stripe_product():
+    try:
+        product = await stripe_client.get_or_create_subscription_product()
+        return product
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+class CheckoutRequest(BaseModel):
+    return_url: str
+
+@app.post("/api/stripe/checkout")
+async def create_checkout(request: CheckoutRequest, session_id: str = Cookie(None)):
+    if not session_id:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    
+    db_gen = get_db()
+    db = next(db_gen)
+    
+    try:
+        from backend.database import OAuthSession
+        oauth_session = db.query(OAuthSession).filter(OAuthSession.session_id == session_id).first()
+        if not oauth_session:
+            raise HTTPException(status_code=401, detail="Session not found")
+        
+        user = db.query(User).filter(User.id == oauth_session.user_id).first()
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        result = await stripe_client.create_checkout_session(
+            user_id=user.id,
+            email=user.email,
+            customer_id=user.stripe_customer_id,
+            return_url=request.return_url
+        )
+        
+        if not user.stripe_customer_id:
+            user.stripe_customer_id = result['customer_id']
+            db.commit()
+        
+        return {"url": result['url'], "session_id": result['session_id']}
+    finally:
+        try:
+            next(db_gen)
+        except StopIteration:
+            pass
+
+@app.post("/api/stripe/portal")
+async def create_portal_session(request: CheckoutRequest, session_id: str = Cookie(None)):
+    if not session_id:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    
+    db_gen = get_db()
+    db = next(db_gen)
+    
+    try:
+        from backend.database import OAuthSession
+        oauth_session = db.query(OAuthSession).filter(OAuthSession.session_id == session_id).first()
+        if not oauth_session:
+            raise HTTPException(status_code=401, detail="Session not found")
+        
+        user = db.query(User).filter(User.id == oauth_session.user_id).first()
+        if not user or not user.stripe_customer_id:
+            raise HTTPException(status_code=400, detail="No subscription found")
+        
+        result = await stripe_client.create_customer_portal_session(
+            customer_id=user.stripe_customer_id,
+            return_url=request.return_url
+        )
+        
+        return {"url": result['url']}
+    finally:
+        try:
+            next(db_gen)
+        except StopIteration:
+            pass
+
+@app.get("/api/stripe/subscription")
+async def get_subscription_status(session_id: str = Cookie(None)):
+    if not session_id:
+        return {"subscription": None, "has_access": False}
+    
+    db_gen = get_db()
+    db = next(db_gen)
+    
+    try:
+        from backend.database import OAuthSession
+        oauth_session = db.query(OAuthSession).filter(OAuthSession.session_id == session_id).first()
+        if not oauth_session:
+            return {"subscription": None, "has_access": False}
+        
+        user = db.query(User).filter(User.id == oauth_session.user_id).first()
+        if not user:
+            return {"subscription": None, "has_access": False}
+        
+        if user.stripe_subscription_id:
+            sub_status = await stripe_client.get_subscription_status(user.stripe_subscription_id)
+            if sub_status:
+                has_access = sub_status['status'] in ['active', 'trialing']
+                return {
+                    "subscription": {
+                        "status": sub_status['status'],
+                        "trial_end": sub_status['trial_end'].isoformat() if sub_status['trial_end'] else None,
+                        "current_period_end": sub_status['current_period_end'].isoformat(),
+                        "cancel_at_period_end": sub_status['cancel_at_period_end']
+                    },
+                    "has_access": has_access
+                }
+        
+        return {
+            "subscription": {"status": user.subscription_status} if user.subscription_status != 'none' else None,
+            "has_access": user.subscription_status in ['active', 'trialing']
+        }
+    finally:
+        try:
+            next(db_gen)
+        except StopIteration:
+            pass
+
+@app.post("/api/stripe/webhook")
+async def stripe_webhook(request: Request):
+    payload = await request.body()
+    sig_header = request.headers.get('stripe-signature')
+    
+    if not sig_header:
+        raise HTTPException(status_code=400, detail="Missing signature")
+    
+    db_gen = get_db()
+    db = next(db_gen)
+    
+    try:
+        import stripe
+        credentials = await stripe_client.get_stripe_credentials()
+        stripe.api_key = credentials['secret_key']
+        
+        event_data = json.loads(payload)
+        event_type = event_data.get('type', '')
+        
+        if event_type == 'checkout.session.completed':
+            session = event_data['data']['object']
+            customer_id = session.get('customer')
+            subscription_id = session.get('subscription')
+            user_id = session.get('metadata', {}).get('user_id')
+            
+            if user_id and subscription_id:
+                user = db.query(User).filter(User.id == user_id).first()
+                if user:
+                    user.stripe_customer_id = customer_id
+                    user.stripe_subscription_id = subscription_id
+                    user.subscription_status = 'trialing'
+                    user.trial_ends_at = datetime.now() + timedelta(days=7)
+                    db.commit()
+        
+        elif event_type == 'customer.subscription.updated':
+            subscription = event_data['data']['object']
+            subscription_id = subscription.get('id')
+            status = subscription.get('status')
+            
+            user = db.query(User).filter(User.stripe_subscription_id == subscription_id).first()
+            if user:
+                user.subscription_status = status
+                if subscription.get('trial_end'):
+                    user.trial_ends_at = datetime.fromtimestamp(subscription['trial_end'])
+                db.commit()
+        
+        elif event_type == 'customer.subscription.deleted':
+            subscription = event_data['data']['object']
+            subscription_id = subscription.get('id')
+            
+            user = db.query(User).filter(User.stripe_subscription_id == subscription_id).first()
+            if user:
+                user.subscription_status = 'canceled'
+                user.stripe_subscription_id = None
+                db.commit()
+        
+        return {"received": True}
+    except Exception as e:
+        print(f"Webhook error: {e}")
+        return {"received": True}
     finally:
         try:
             next(db_gen)

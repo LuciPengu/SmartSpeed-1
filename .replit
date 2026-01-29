@@ -18,6 +18,7 @@ build = ["pip", "install", "-r", "requirements.txt"]
 
 [agent]
 expertMode = true
+integrations = ["stripe:2.0.0"]
 
 [workflows]
 runButton = "Project"
