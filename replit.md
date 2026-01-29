@@ -130,6 +130,8 @@ Modern glassware aesthetic with:
 ## Environment Variables
 - `DATABASE_URL` - PostgreSQL connection string (auto-configured)
 - `REPLICATE_API_TOKEN` - API key for Replicate/GPT-4o integration
+- `STRIPE_SECRET_KEY` - Stripe secret API key (sk_live_*)
+- `STRIPE_PUBLISHABLE_KEY` - Stripe publishable API key (pk_live_*)
 
 ## Running
 The application runs on port 5000 using:

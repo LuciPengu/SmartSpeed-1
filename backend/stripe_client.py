@@ -1,6 +1,5 @@
 import os
 import stripe
-import httpx
 from datetime import datetime, timedelta
 
 def check_subscription_access(user) -> bool:
@@ -19,60 +18,28 @@ def check_subscription_access(user) -> bool:
     
     return False
 
-async def get_stripe_credentials():
-    """Fetch Stripe credentials from Replit connection API"""
-    hostname = os.environ.get('REPLIT_CONNECTORS_HOSTNAME')
-    repl_identity = os.environ.get('REPL_IDENTITY')
-    web_renewal = os.environ.get('WEB_REPL_RENEWAL')
+def get_stripe_credentials():
+    """Get Stripe credentials from environment variables"""
+    secret_key = os.environ.get('STRIPE_SECRET_KEY')
+    publishable_key = os.environ.get('STRIPE_PUBLISHABLE_KEY')
     
-    if repl_identity:
-        x_replit_token = f'repl {repl_identity}'
-    elif web_renewal:
-        x_replit_token = f'depl {web_renewal}'
-    else:
-        raise Exception('X_REPLIT_TOKEN not found')
-    
-    is_production = os.environ.get('REPLIT_DEPLOYMENT') == '1'
-    target_environment = 'production' if is_production else 'development'
-    
-    url = f"https://{hostname}/api/v2/connection"
-    params = {
-        'include_secrets': 'true',
-        'connector_names': 'stripe',
-        'environment': target_environment
-    }
-    
-    async with httpx.AsyncClient() as client:
-        response = await client.get(
-            url,
-            params=params,
-            headers={
-                'Accept': 'application/json',
-                'X_REPLIT_TOKEN': x_replit_token
-            }
-        )
-        data = response.json()
-    
-    connection = data.get('items', [{}])[0]
-    settings = connection.get('settings', {})
-    
-    if not settings.get('publishable') or not settings.get('secret'):
-        raise Exception(f'Stripe {target_environment} connection not found')
+    if not secret_key or not publishable_key:
+        raise Exception('Stripe API keys not configured. Please add STRIPE_SECRET_KEY and STRIPE_PUBLISHABLE_KEY to secrets.')
     
     return {
-        'publishable_key': settings['publishable'],
-        'secret_key': settings['secret']
+        'publishable_key': publishable_key,
+        'secret_key': secret_key
     }
 
 async def get_stripe_client():
     """Get configured Stripe client"""
-    credentials = await get_stripe_credentials()
+    credentials = get_stripe_credentials()
     stripe.api_key = credentials['secret_key']
     return stripe
 
 async def get_publishable_key():
     """Get Stripe publishable key for frontend"""
-    credentials = await get_stripe_credentials()
+    credentials = get_stripe_credentials()
     return credentials['publishable_key']
 
 HITSMART_PRICE_ID = None
