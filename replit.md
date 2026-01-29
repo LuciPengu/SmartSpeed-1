@@ -68,7 +68,14 @@ Modern glassware aesthetic with:
 - Clean, professional design
 
 ## Recent Changes (January 2026)
-- **Simplified UI & Toast Notifications** (Latest):
+- **Stripe Subscription Integration** (Latest):
+  - Monthly subscription ($9.99/month) with 7-day free trial required for video analysis
+  - Subscription banner for non-subscribers encouraging trial signup
+  - Subscription modal with feature list and pricing when trying to analyze without subscription
+  - Server-side and client-side subscription gating on video uploads
+  - Stripe webhook handling for subscription status updates
+  - Customer portal integration for subscription management
+- **Simplified UI & Toast Notifications**:
   - Removed ranking/scoring systems for cleaner UX
   - Custom toast notifications instead of browser alerts
   - Session details modal shows full concussion screening results
