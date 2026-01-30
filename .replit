@@ -47,3 +47,8 @@ outputType = "webview"
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[userenv]
+
+[userenv.shared]
+STRIPE_WEBHOOK_SECRET = "whsec_TzGpcWVImoHMqyxjr5QQ5x8w8cyvyT86"

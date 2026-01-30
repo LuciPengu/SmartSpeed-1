@@ -813,6 +813,10 @@ async def stripe_webhook(request: Request):
     if not sig_header:
         raise HTTPException(status_code=400, detail="Missing signature")
     
+    webhook_secret = os.environ.get('STRIPE_WEBHOOK_SECRET')
+    if not webhook_secret:
+        raise HTTPException(status_code=500, detail="Webhook secret not configured")
+    
     db_gen = get_db()
     db = next(db_gen)
     
@@ -821,11 +825,11 @@ async def stripe_webhook(request: Request):
         credentials = await stripe_client.get_stripe_credentials()
         stripe.api_key = credentials['secret_key']
         
-        event_data = json.loads(payload)
-        event_type = event_data.get('type', '')
+        event = stripe.Webhook.construct_event(payload, sig_header, webhook_secret)
+        event_type = event['type']
         
         if event_type == 'checkout.session.completed':
-            session = event_data['data']['object']
+            session = event['data']['object']
             customer_id = session.get('customer')
             subscription_id = session.get('subscription')
             user_id = session.get('metadata', {}).get('user_id')
@@ -840,7 +844,7 @@ async def stripe_webhook(request: Request):
                     db.commit()
         
         elif event_type == 'customer.subscription.updated':
-            subscription = event_data['data']['object']
+            subscription = event['data']['object']
             subscription_id = subscription.get('id')
             status = subscription.get('status')
             
@@ -852,7 +856,7 @@ async def stripe_webhook(request: Request):
                 db.commit()
         
         elif event_type == 'customer.subscription.deleted':
-            subscription = event_data['data']['object']
+            subscription = event['data']['object']
             subscription_id = subscription.get('id')
             
             user = db.query(User).filter(User.stripe_subscription_id == subscription_id).first()
