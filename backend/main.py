@@ -132,9 +132,14 @@ async def upload_video(
         if not user:
             raise HTTPException(status_code=401, detail="User not found.")
         
-        has_access = stripe_client.check_subscription_access(user)
-        if not has_access:
-            raise HTTPException(status_code=403, detail="Active subscription required. Please subscribe to analyze videos.")
+        ADMIN_EMAILS = ['nealconwayp@gmail.com']
+        user_email = (user.email or '').lower().strip()
+        is_admin = user_email in [e.lower() for e in ADMIN_EMAILS]
+        
+        if not is_admin:
+            has_access = stripe_client.check_subscription_access(user)
+            if not has_access:
+                raise HTTPException(status_code=403, detail="Active subscription required. Please subscribe to analyze videos.")
     finally:
         try:
             next(db_gen)
