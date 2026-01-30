@@ -781,6 +781,13 @@ async def get_subscription_status(session_id: str = Cookie(None)):
         if not user:
             return {"subscription": None, "has_access": False}
         
+        ADMIN_EMAILS = ['nealconwayp@gmail.com']
+        if user.email in ADMIN_EMAILS:
+            return {
+                "subscription": {"status": "admin"},
+                "has_access": True
+            }
+        
         if user.stripe_subscription_id:
             sub_status = await stripe_client.get_subscription_status(user.stripe_subscription_id)
             if sub_status:
