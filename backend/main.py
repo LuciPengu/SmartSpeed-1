@@ -783,12 +783,14 @@ async def get_subscription_status(session_id: str = Cookie(None)):
         
         ADMIN_EMAILS = ['nealconwayp@gmail.com']
         user_email = (user.email or '').lower().strip()
+        print(f"Checking subscription for user: {user_email}")
         if user_email in [e.lower() for e in ADMIN_EMAILS]:
             print(f"Admin access granted for: {user_email}")
             return {
                 "subscription": {"status": "admin"},
                 "has_access": True
             }
+        print(f"User {user_email} is not an admin, checking stripe subscription")
         
         if user.stripe_subscription_id:
             sub_status = await stripe_client.get_subscription_status(user.stripe_subscription_id)
