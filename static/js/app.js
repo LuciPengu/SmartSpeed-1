@@ -923,6 +923,7 @@ async function handleAuthSubmit() {
         const response = await fetch(endpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
             body: JSON.stringify(body)
         });
         
@@ -939,6 +940,7 @@ async function handleAuthSubmit() {
             avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(data.user.first_name || data.user.email)}&background=10b981&color=fff`
         };
         
+        await checkSubscriptionStatus();
         updateUserUI();
         document.getElementById('auth-modal').classList.add('hidden');
         
