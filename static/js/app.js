@@ -952,8 +952,10 @@ async function handleAuthSubmit() {
 }
 
 async function handleLogout() {
-    await fetch('/api/auth/logout');
+    await fetch('/api/auth/logout', { credentials: 'include' });
     currentUser = null;
+    hasActiveSubscription = false;
+    subscriptionStatus = null;
     updateUserUI();
 }
 
