@@ -782,7 +782,9 @@ async def get_subscription_status(session_id: str = Cookie(None)):
             return {"subscription": None, "has_access": False}
         
         ADMIN_EMAILS = ['nealconwayp@gmail.com']
-        if user.email in ADMIN_EMAILS:
+        user_email = (user.email or '').lower().strip()
+        if user_email in [e.lower() for e in ADMIN_EMAILS]:
+            print(f"Admin access granted for: {user_email}")
             return {
                 "subscription": {"status": "admin"},
                 "has_access": True
