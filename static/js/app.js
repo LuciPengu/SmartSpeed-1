@@ -791,8 +791,13 @@ function initializeAuth() {
         window.history.replaceState({}, document.title, '/');
     }
     if (urlParams.get('checkout') === 'success') {
-        showToast('Subscription activated! You can now analyze videos.', 'success');
-        checkAuthStatus();
+        const stripeSessionId = urlParams.get('session_id');
+        if (stripeSessionId) {
+            verifyCheckoutSession(stripeSessionId);
+        } else {
+            showToast('Subscription activated! You can now analyze videos.', 'success');
+            checkAuthStatus();
+        }
         window.history.replaceState({}, document.title, '/');
     }
     if (urlParams.get('checkout') === 'cancelled') {
@@ -1049,6 +1054,31 @@ function showSubscriptionModal() {
 
 function closeSubscriptionModal() {
     document.getElementById('subscription-modal').classList.add('hidden');
+}
+
+async function verifyCheckoutSession(stripeSessionId) {
+    try {
+        const response = await fetch('/api/stripe/verify-session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ session_id: stripeSessionId })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success && data.has_access) {
+            hasActiveSubscription = true;
+            showToast('Subscription activated! You can now analyze videos.', 'success');
+            await checkAuthStatus();
+        } else {
+            showToast('Subscription verification pending. Please refresh the page.', 'info');
+        }
+    } catch (error) {
+        console.error('Verify session error:', error);
+        showToast('Subscription activated! Please refresh if needed.', 'success');
+        await checkAuthStatus();
+    }
 }
 
 async function showHistory() {

@@ -712,6 +712,57 @@ async def create_portal_session(request: CheckoutRequest, session_id: str = Cook
         except StopIteration:
             pass
 
+@app.post("/api/stripe/verify-session")
+async def verify_checkout_session(request: Request, session_id: str = Cookie(None)):
+    """Verify checkout session and activate subscription after redirect from Stripe"""
+    if not session_id:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    
+    body = await request.json()
+    checkout_session_id = body.get('session_id')
+    
+    if not checkout_session_id:
+        raise HTTPException(status_code=400, detail="Missing session_id")
+    
+    db_gen = get_db()
+    db = next(db_gen)
+    
+    try:
+        from backend.database import OAuthSession
+        oauth_session = db.query(OAuthSession).filter(OAuthSession.session_id == session_id).first()
+        if not oauth_session:
+            raise HTTPException(status_code=401, detail="Session not found")
+        
+        user = db.query(User).filter(User.id == oauth_session.user_id).first()
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        stripe_api = await stripe_client.get_stripe_client()
+        checkout = stripe_api.checkout.Session.retrieve(checkout_session_id)
+        
+        if checkout.payment_status == 'paid' or checkout.status == 'complete':
+            user.stripe_customer_id = checkout.customer
+            user.stripe_subscription_id = checkout.subscription
+            user.subscription_status = 'trialing' if checkout.subscription else 'active'
+            user.trial_ends_at = datetime.now() + timedelta(days=7)
+            db.commit()
+            
+            return {
+                "success": True,
+                "subscription_status": user.subscription_status,
+                "has_access": True
+            }
+        
+        return {"success": False, "has_access": False}
+    except Exception as e:
+        print(f"Verify session error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        try:
+            next(db_gen)
+        except StopIteration:
+            pass
+
 @app.get("/api/stripe/subscription")
 async def get_subscription_status(session_id: str = Cookie(None)):
     if not session_id:
