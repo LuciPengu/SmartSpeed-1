@@ -1,7 +1,7 @@
 # Hitsmart Strike Calculator
 
 ## Overview
-A web application that analyzes sparring/boxing footage to detect punch impacts, assess brain injury risk based on punch metrics and fighter weight, and provides a SCAT5-based concussion screening assessment.
+A web application that analyzes sparring/boxing footage to detect punch impacts, assess brain injury risk based on punch metrics and fighter weight, and provides a SCAT5-based concussion screening assessment. Now includes a comprehensive educational course on concussion science alongside the calculator.
 
 ## Project Structure
 ```
@@ -58,6 +58,14 @@ A web application that analyzes sparring/boxing footage to detect punch impacts,
    - Save analysis sessions to PostgreSQL database
    - View past injury history with full concussion screening details
    - Track cumulative exposure over time
+10. **Concussion Science Course**: Comprehensive 6-lesson educational course:
+    - Lesson 1: Physics of the Hit (linear vs rotational forces, mechanoporation)
+    - Lesson 2: The Energy Crisis (neurometabolic cascade, vulnerability window)
+    - Lesson 3: The Invisible Injury (why scans look normal, TBI classification)
+    - Lesson 4: Recovery Protocol (11 R's framework, SCAT6 symptom clusters)
+    - Lesson 5: Return-to-Sport Ladder (6-step progression)
+    - Lesson 6: Long-Term Risks (CTE, Second Impact Syndrome)
+    - Based on 2022 Amsterdam Consensus and peer-reviewed research
 
 ## UI Theme
 Modern glassware aesthetic with:
@@ -68,7 +76,14 @@ Modern glassware aesthetic with:
 - Clean, professional design
 
 ## Recent Changes (January 2026)
-- **Stripe Subscription Integration** (Latest):
+- **Concussion Science Course Tab** (Latest):
+  - New tab navigation system to switch between Calculator and Course sections
+  - 6 comprehensive lessons on concussion science based on 2022 Amsterdam Consensus
+  - Interactive lesson navigation with glassmorphism UI matching main theme
+  - Educational images from Concussion Alliance with proper citations
+  - TBI classification table, Return-to-Sport ladder, symptom clusters, and more
+  - Fully responsive design for mobile devices
+- **Stripe Subscription Integration**:
   - Monthly subscription ($9.99/month) with 7-day free trial required for video analysis
   - Subscription banner for non-subscribers encouraging trial signup
   - Subscription modal with feature list and pricing when trying to analyze without subscription
