@@ -46,6 +46,29 @@
             </div>
         </header>
 
+        <!-- Tab Navigation -->
+        <nav class="main-tabs">
+            <button class="tab-btn active" data-tab="calculator">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+                    <line x1="8" y1="6" x2="16" y2="6"></line>
+                    <line x1="8" y1="10" x2="16" y2="10"></line>
+                    <line x1="8" y1="14" x2="12" y2="14"></line>
+                </svg>
+                Strike Calculator
+            </button>
+            <button class="tab-btn" data-tab="course">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                </svg>
+                Concussion Course
+            </button>
+        </nav>
+
+        <!-- Calculator Tab -->
+        <div id="calculator-tab" class="tab-content active">
+
         <div id="subscription-banner" class="subscription-banner hidden">
             <div class="subscription-content">
                 <div class="subscription-text">
@@ -289,6 +312,386 @@
                 <button id="restart-btn" class="btn secondary">Start New Analysis</button>
             </div>
         </div>
+
+        </div><!-- End Calculator Tab -->
+
+        <!-- Course Tab -->
+        <div id="course-tab" class="tab-content">
+            <div class="course-container">
+                <div class="course-header">
+                    <h2>Concussion Science for Combat Athletes</h2>
+                    <p class="course-subtitle">Evidence-based education from the 2022 Amsterdam Consensus</p>
+                </div>
+
+                <!-- Lesson Navigation -->
+                <div class="lesson-nav">
+                    <button class="lesson-nav-btn active" data-lesson="1">1. Physics of Impact</button>
+                    <button class="lesson-nav-btn" data-lesson="2">2. The Energy Crisis</button>
+                    <button class="lesson-nav-btn" data-lesson="3">3. Invisible Injury</button>
+                    <button class="lesson-nav-btn" data-lesson="4">4. Recovery Protocol</button>
+                    <button class="lesson-nav-btn" data-lesson="5">5. Return to Sport</button>
+                    <button class="lesson-nav-btn" data-lesson="6">6. Long-Term Risks</button>
+                </div>
+
+                <!-- Lesson 1: Physics of the Hit -->
+                <div class="lesson-content active" id="lesson-1">
+                    <div class="lesson-card">
+                        <div class="lesson-header">
+                            <span class="lesson-number">01</span>
+                            <h3>The Physics of the Hit</h3>
+                        </div>
+                        <div class="lesson-body">
+                            <div class="key-stat-box">
+                                <span class="key-stat-value">&lt;10%</span>
+                                <span class="key-stat-label">of concussions involve loss of consciousness</span>
+                            </div>
+                            
+                            <p class="lesson-intro">You don't need to be knocked out to have a concussion. A concussion is a brain injury caused by a physical blow that creates a metabolic crisis inside your skull.</p>
+                            
+                            <div class="info-card">
+                                <h4>Linear vs. Rotational Forces</h4>
+                                <p>While a straight jab can cause damage, <strong>hooks and overhands that create rotation are often worse</strong>. They stretch and tear the delicate wiring (axons) in your brain.</p>
+                                <ul>
+                                    <li><strong>Linear forces</strong> (straight impacts) cause focal injuries</li>
+                                    <li><strong>Rotational forces</strong> (angular acceleration) are particularly dangerous because they induce shearing and stretching of white matter tracts</li>
+                                </ul>
+                            </div>
+
+                            <div class="image-container">
+                                <img src="https://images.squarespace-cdn.com/content/v1/63813f208be08634a208db60/8bf361ae-db47-47e1-956e-9fb076217589/brain.deformation.head.movement.web%40Concussion_Alliance.jpg?format=1500w" alt="Brain deformation during head movement" loading="lazy">
+                                <p class="image-caption">Brain deformation during rotational head movement - Concussion Alliance</p>
+                            </div>
+
+                            <div class="info-card warning">
+                                <h4>Mechanoporation: "The Leak"</h4>
+                                <p>The force of a punch creates tiny "pores" in your brain cell membranes. This causes vital chemicals (potassium) to leak out and dangerous ones (calcium, sodium) to rush in.</p>
+                                <p>This mechanical insult is the primary trigger for the neurometabolic cascade that follows.</p>
+                            </div>
+
+                            <div class="source-citation">
+                                <strong>Sources:</strong> NIH Concussion Research, Amsterdam 2022 Consensus, StatPearls NCBI
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lesson 2: The Energy Crisis -->
+                <div class="lesson-content" id="lesson-2">
+                    <div class="lesson-card">
+                        <div class="lesson-header">
+                            <span class="lesson-number">02</span>
+                            <h3>The "Energy Crisis"</h3>
+                        </div>
+                        <div class="lesson-body">
+                            <p class="lesson-intro">After a hard hit, your brain enters a state of emergency. The clinical symptoms of a concussion are the macroscopic manifestation of a microscopic, cellular "energy crisis" known as the neurometabolic cascade.</p>
+
+                            <div class="image-container">
+                                <img src="https://images.squarespace-cdn.com/content/v1/63813f208be08634a208db60/ae7b642d-41bf-4285-b3bd-cee2fc7edfd1/changes.in.the.brain.after.a.concussion.web%40concussion.alliance.2020-2025.jpg?format=1500w" alt="Changes in the brain after a concussion" loading="lazy">
+                                <p class="image-caption">Metabolic changes in the brain after concussion - Concussion Alliance</p>
+                            </div>
+
+                            <div class="crisis-steps">
+                                <div class="crisis-step">
+                                    <div class="crisis-icon">1</div>
+                                    <div class="crisis-content">
+                                        <h4>The Power Drain</h4>
+                                        <p>Your brain cells work overtime to fix the chemical leaks. They demand massive amounts of energy (glucose). The ATP-requiring membrane pumps shift into overdrive, triggering a state of <strong>hyperglycolysis</strong>.</p>
+                                    </div>
+                                </div>
+                                <div class="crisis-step">
+                                    <div class="crisis-icon">2</div>
+                                    <div class="crisis-content">
+                                        <h4>The Clogged Pipe</h4>
+                                        <p>While the demand for energy goes up, blood flow to the brain actually goes down. This "uncoupling" creates a massive energy shortage. This is the metabolic crisis.</p>
+                                    </div>
+                                </div>
+                                <div class="crisis-step">
+                                    <div class="crisis-icon">3</div>
+                                    <div class="crisis-content">
+                                        <h4>The Vulnerability Window</h4>
+                                        <p>During this crisis, your brain is extremely fragile. <strong>A second hit now can lead to permanent damage or even death (Second Impact Syndrome)</strong>.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="info-card danger">
+                                <h4>Mitochondrial Dysfunction</h4>
+                                <p>The influx of calcium into cells causes the mitochondria to malfunction. This results in the production of free radicals and shifts the brain into a state of <strong>metabolic depression (hypometabolism)</strong> that can last 7-10 days in adults and potentially longer in younger athletes.</p>
+                            </div>
+
+                            <div class="source-citation">
+                                <strong>Sources:</strong> The New Neurometabolic Cascade of Concussion (PMC), Amsterdam 2022 Consensus
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lesson 3: The Invisible Injury -->
+                <div class="lesson-content" id="lesson-3">
+                    <div class="lesson-card">
+                        <div class="lesson-header">
+                            <span class="lesson-number">03</span>
+                            <h3>The "Invisible" Injury</h3>
+                        </div>
+                        <div class="lesson-body">
+                            <div class="info-card warning">
+                                <h4>Dangerous Myth</h4>
+                                <p>One of the most dangerous myths in boxing is that a clean CT or MRI scan means you are fine.</p>
+                            </div>
+
+                            <p class="lesson-intro">Standard hospital scans look for bleeding or structural breaks. A concussion is a <strong>functional problem</strong>, not a structural one. It's like a software crash, not a broken screen. You cannot see a concussion on a standard MRI.</p>
+
+                            <div class="image-container">
+                                <img src="https://images.squarespace-cdn.com/content/v1/63813f208be08634a208db60/ae0d22bd-e255-4ebd-855e-313b04f44973/brain.neurons.axons%40Concussion.Alliance.png?format=1500w" alt="Brain neurons and axons" loading="lazy">
+                                <p class="image-caption">Healthy brain neurons and axon structure - Concussion Alliance</p>
+                            </div>
+
+                            <div class="comparison-table">
+                                <div class="table-header">
+                                    <span>TBI Severity</span>
+                                    <span>GCS Score</span>
+                                    <span>LOC Duration</span>
+                                    <span>Imaging</span>
+                                </div>
+                                <div class="table-row highlight">
+                                    <span><strong>Mild (Concussion)</strong></span>
+                                    <span>13-15</span>
+                                    <span>0-30 min</span>
+                                    <span>Normal</span>
+                                </div>
+                                <div class="table-row">
+                                    <span>Moderate</span>
+                                    <span>9-12</span>
+                                    <span>30 min - 24 hrs</span>
+                                    <span>Normal/Abnormal</span>
+                                </div>
+                                <div class="table-row">
+                                    <span>Severe</span>
+                                    <span>3-8</span>
+                                    <span>&gt; 24 hours</span>
+                                    <span>Normal/Abnormal</span>
+                                </div>
+                            </div>
+
+                            <div class="image-container">
+                                <img src="https://images.squarespace-cdn.com/content/v1/63813f208be08634a208db60/08f63cc7-3b21-49c4-97e6-eb19be6b8c99/brain.deformation.axons.damaged+.web%40concussion.alliance.2020-2025.jpg?format=1500w" alt="Damaged axons" loading="lazy">
+                                <p class="image-caption">Axonal damage from biomechanical forces - invisible on standard imaging</p>
+                            </div>
+
+                            <div class="info-card">
+                                <h4>Advanced Imaging</h4>
+                                <p>Research tools like DTI (Diffusion Tensor Imaging) and fMRI can detect the microscopic white matter damage, but these are not yet standard clinical practice.</p>
+                            </div>
+
+                            <div class="source-citation">
+                                <strong>Sources:</strong> International Consensus on Sports Concussion (NFHS), PMC Neuroimaging Review
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lesson 4: Recovery Protocol -->
+                <div class="lesson-content" id="lesson-4">
+                    <div class="lesson-card">
+                        <div class="lesson-header">
+                            <span class="lesson-number">04</span>
+                            <h3>Recovery: The 11 R's</h3>
+                        </div>
+                        <div class="lesson-body">
+                            <p class="lesson-intro">The medical community uses the "11 R's" to manage recovery. For a fighter, these are the most critical:</p>
+
+                            <div class="recovery-grid">
+                                <div class="recovery-item">
+                                    <div class="recovery-letter">R</div>
+                                    <div class="recovery-text">
+                                        <h4>Recognize & Remove</h4>
+                                        <p>If you show signs of confusion, poor balance, or "glassy eyes," you must be pulled from the gym immediately.</p>
+                                    </div>
+                                </div>
+                                <div class="recovery-item">
+                                    <div class="recovery-letter">R</div>
+                                    <div class="recovery-text">
+                                        <h4>Rest</h4>
+                                        <p>You need "relative rest" for the first 24-48 hours. This means limited screens and no training. Not strict bed rest.</p>
+                                    </div>
+                                </div>
+                                <div class="recovery-item">
+                                    <div class="recovery-letter">R</div>
+                                    <div class="recovery-text">
+                                        <h4>Rehab</h4>
+                                        <p>If dizziness or neck pain lasts, specific neck and balance exercises can speed up your return.</p>
+                                    </div>
+                                </div>
+                                <div class="recovery-item">
+                                    <div class="recovery-letter">R</div>
+                                    <div class="recovery-text">
+                                        <h4>Return to Play</h4>
+                                        <p>Never jump straight back into sparring. Follow the 6-step ladder.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="symptom-clusters">
+                                <h4>Symptom Clusters (SCAT6)</h4>
+                                <div class="cluster-grid">
+                                    <div class="cluster-card">
+                                        <h5>Migraine/Somatic</h5>
+                                        <p>Headache, pressure in head, neck pain, nausea, light/noise sensitivity</p>
+                                    </div>
+                                    <div class="cluster-card">
+                                        <h5>Cognitive-Fatigue</h5>
+                                        <p>Feeling slowed down, "in a fog," difficulty concentrating, fatigue, confusion</p>
+                                    </div>
+                                    <div class="cluster-card">
+                                        <h5>Affective (Emotional)</h5>
+                                        <p>More emotional, irritability, sadness, nervous or anxious</p>
+                                    </div>
+                                    <div class="cluster-card">
+                                        <h5>Sleep</h5>
+                                        <p>Drowsiness, trouble falling asleep, sleeping more or less than usual</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="source-citation">
+                                <strong>Sources:</strong> Amsterdam 2022 Consensus - The 11 R's Framework, SCAT6 Assessment Tool
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lesson 5: Return to Sport -->
+                <div class="lesson-content" id="lesson-5">
+                    <div class="lesson-card">
+                        <div class="lesson-header">
+                            <span class="lesson-number">05</span>
+                            <h3>Return-to-Sport Ladder</h3>
+                        </div>
+                        <div class="lesson-body">
+                            <div class="info-card warning">
+                                <h4>Critical Rule</h4>
+                                <p>Each step takes at least 24 hours. If symptoms return, go back one step and wait another 24 hours before trying again.</p>
+                            </div>
+
+                            <div class="rts-ladder">
+                                <div class="rts-step">
+                                    <div class="rts-number">1</div>
+                                    <div class="rts-content">
+                                        <h4>Light Activity</h4>
+                                        <p>Daily chores, walking. Goal: Gradual return to activities of daily living.</p>
+                                    </div>
+                                </div>
+                                <div class="rts-step">
+                                    <div class="rts-number">2</div>
+                                    <div class="rts-content">
+                                        <h4>Light Cardio</h4>
+                                        <p>Stationary bike or light jogging. Goal: Get the heart rate up slightly.</p>
+                                    </div>
+                                </div>
+                                <div class="rts-step">
+                                    <div class="rts-number">3</div>
+                                    <div class="rts-content">
+                                        <h4>Sport Drills</h4>
+                                        <p>Shadowboxing, footwork (no head movement/impact). Goal: Add movement without risk.</p>
+                                    </div>
+                                </div>
+                                <div class="rts-step">
+                                    <div class="rts-number">4</div>
+                                    <div class="rts-content">
+                                        <h4>Heavy Drills</h4>
+                                        <p>Heavy bag, pads, complex coordination (non-contact). Goal: Increase coordination and cognitive load.</p>
+                                    </div>
+                                </div>
+                                <div class="rts-step highlight">
+                                    <div class="rts-number">5</div>
+                                    <div class="rts-content">
+                                        <h4>Full Contact</h4>
+                                        <p>Hard sparring (only after being 100% symptom-free). Goal: Restore confidence and assess functional skills.</p>
+                                    </div>
+                                </div>
+                                <div class="rts-step highlight">
+                                    <div class="rts-number">6</div>
+                                    <div class="rts-content">
+                                        <h4>Competition</h4>
+                                        <p>Fighting. Goal: Unrestricted competition.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="source-citation">
+                                <strong>Sources:</strong> Amsterdam 2022 Consensus Return-to-Sport Protocol, INTEGRIS Health Recovery Stages
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lesson 6: Long-Term Risks -->
+                <div class="lesson-content" id="lesson-6">
+                    <div class="lesson-card">
+                        <div class="lesson-header">
+                            <span class="lesson-number">06</span>
+                            <h3>Long-Term Risks</h3>
+                        </div>
+                        <div class="lesson-body">
+                            <div class="key-stat-box danger">
+                                <span class="key-stat-value">30+ days</span>
+                                <span class="key-stat-label">for brain chemistry to fully normalize (even when symptoms resolve in 7-14 days)</span>
+                            </div>
+
+                            <div class="info-card danger">
+                                <h4>Chronic Traumatic Encephalopathy (CTE)</h4>
+                                <p>Research suggests that <strong>repetitive hits—even "sub-concussive" ones that don't cause symptoms</strong>—are the main risk factor for long-term brain disease.</p>
+                                <p>Sub-concussive impacts are biomechanical forces to the head that do not result in overt clinical signs but may still cause microstructural injury over time.</p>
+                            </div>
+
+                            <div class="info-card warning">
+                                <h4>Second Impact Syndrome</h4>
+                                <p>A rare but often <strong>fatal</strong> event where a second concussion occurs before the brain has recovered from the first. This leads to rapid and uncontrollable brain swelling.</p>
+                                <p>This is why no athlete should return to contact sports while still symptomatic.</p>
+                            </div>
+
+                            <div class="info-card">
+                                <h4>The Hidden Recovery</h4>
+                                <p>Your symptoms might vanish in 7-14 days, but studies using Magnetic Resonance Spectroscopy (MRS) show that NAA levels (a marker of neuronal health) often don't return to normal until <strong>30 days post-injury</strong>.</p>
+                                <p><strong>Don't rush back just because you "feel fine."</strong></p>
+                            </div>
+
+                            <div class="risk-factors">
+                                <h4>Risk Factors for Persistent Symptoms</h4>
+                                <ul>
+                                    <li>History of migraines</li>
+                                    <li>Pre-existing mental health conditions</li>
+                                    <li>Female sex</li>
+                                    <li>High initial symptom burden</li>
+                                    <li>Previous concussion history</li>
+                                </ul>
+                            </div>
+
+                            <div class="source-citation">
+                                <strong>Sources:</strong> NIH Concussion Research, PMC Neuroimaging Studies, Temporal Window of Metabolic Brain Vulnerability (PubMed)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course Footer -->
+                <div class="course-footer">
+                    <div class="disclaimer">
+                        <h4>Medical Disclaimer</h4>
+                        <p>This educational content is based on the 2022 Amsterdam Consensus on Concussion in Sport and peer-reviewed research. It is intended for informational purposes only and does not constitute medical advice. Always consult a qualified healthcare professional for diagnosis and treatment of head injuries.</p>
+                    </div>
+                    <div class="works-cited">
+                        <h4>Primary Sources</h4>
+                        <ul>
+                            <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5899515/" target="_blank">NIH - Concussion: Mild TBI with Potential Sequelae</a></li>
+                            <li><a href="https://www.ncbi.nlm.nih.gov/books/NBK537017/" target="_blank">StatPearls - Concussion Overview</a></li>
+                            <li><a href="https://www.mayoclinic.org/diseases-conditions/concussion/symptoms-causes/syc-20355594" target="_blank">Mayo Clinic - Concussion Symptoms</a></li>
+                            <li><a href="https://bjsm.bmj.com/content/57/11/695" target="_blank">Amsterdam 2022 Consensus Statement (BJSM)</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div><!-- End Course Tab -->
         
         <div id="subscription-modal" class="modal hidden">
             <div class="modal-content subscription-modal-content">
