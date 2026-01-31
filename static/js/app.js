@@ -1417,3 +1417,61 @@ function escapeHtml(text) {
     div.textContent = text;
     return div.innerHTML;
 }
+
+// ===== Tab Navigation =====
+function initTabNavigation() {
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetTab = btn.dataset.tab;
+            
+            // Update button states
+            tabButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Update content visibility
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            const targetContent = document.getElementById(`${targetTab}-tab`);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
+        });
+    });
+}
+
+// ===== Lesson Navigation =====
+function initLessonNavigation() {
+    const lessonButtons = document.querySelectorAll('.lesson-nav-btn');
+    const lessonContents = document.querySelectorAll('.lesson-content');
+    
+    lessonButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetLesson = btn.dataset.lesson;
+            
+            // Update button states
+            lessonButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Update content visibility
+            lessonContents.forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            const targetContent = document.getElementById(`lesson-${targetLesson}`);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
+        });
+    });
+}
+
+// Initialize tab and lesson navigation on page load
+document.addEventListener('DOMContentLoaded', () => {
+    initTabNavigation();
+    initLessonNavigation();
+});
