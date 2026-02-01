@@ -58,12 +58,16 @@ A web application that analyzes sparring/boxing footage to detect punch impacts,
    - Save analysis sessions to PostgreSQL database
    - View past injury history with full concussion screening details
    - Track cumulative exposure over time
-10. **Concussion Science Course**: Comprehensive 5-lesson educational course ($29.99 one-time purchase):
-    - Lesson 1: What is a Concussion (physics, energy crisis, invisible injury, TBI classification table, long-term risks)
-    - Lesson 2: The Full-Body Shutdown (energy crisis, sympathetic storm, leaky gut connection, eyes/ears/neck triad, sleep crash, hidden hormone drop, emotional brakes)
-    - Lesson 3: Getting Back in the Ring (Second Impact Syndrome, end of dark room, 6-step return-to-sport ladder, mindset/nocebo effect, fueling the repair with nutrition)
-    - Lesson 4: Fixing Your Proprioception (VOMS vestibular/ocular screening, expose and recover strategy, frequency-based rehab, when to see a specialist)
-    - Lesson 5: The Neck Connection (cervical spine thresholds 4.5g vs 70-120g brain, cervicogenic symptoms, manual therapy vs self-care)
+10. **Concussion Science Course**: Comprehensive 9-lesson educational course ($29.99 one-time purchase):
+    - Lesson 1: What is a Concussion (physics, energy crisis, invisible injury, TBI classification, long-term risks)
+    - Lesson 2: Setting Expectations (second impact syndrome, nocebo effect, fear avoidance)
+    - Lesson 3: Understanding & Managing (ripple effects, leaky gut, hormones, emotional brakes)
+    - Lesson 4: Nervous System (sympathetic storm, calm guide, vagal exercises)
+    - Lesson 5: Aerobic Exercise (BDNF, 3-point rule, 6-step return-to-sport ladder)
+    - Lesson 6: Diet & Nutrition (omega-3, creatine, magnesium, progress killers)
+    - Lesson 7: Sleep (glymphatic clearance, sleep blueprint, four Ps)
+    - Lesson 8: Neck (cervical thresholds, cervicogenic symptoms, treatment)
+    - Lesson 9: Visual / Vestibular (VOMS, expose and recover, frequency-based rehab)
     - Educational images from Concussion Alliance, Complete Concussions, Cognitive FX USA
     - Based on 2022 Amsterdam Consensus, Canadian Guideline on Concussion in Sport (2024), and peer-reviewed research
     - Course purchase includes 1 month FREE Strike Calculator subscription bonus
@@ -78,12 +82,16 @@ Modern glassware aesthetic with:
 
 ## Recent Changes (February 2026)
 - **Restructured Concussion Science Course** (Latest):
-  - Reorganized to 5 comprehensive lessons based on attached course document
+  - Reorganized to 9 comprehensive lessons based on attached course document
   - Lesson 1: What is a Concussion (physics, energy crisis, invisible injury)
-  - Lesson 2: The Full-Body Shutdown (energy crisis, sympathetic storm, leaky gut, triad, sleep, hormones, emotions)
-  - Lesson 3: Getting Back in the Ring (second impact syndrome, dark room, 6-step ladder, mindset, nutrition)
-  - Lesson 4: Fixing Your Proprioception (VOMS, expose and recover, frequency-based rehab)
-  - Lesson 5: The Neck Connection (cervicogenic symptoms, manual therapy vs self-care)
+  - Lesson 2: Setting Expectations (second impact syndrome, nocebo effect, fear avoidance)
+  - Lesson 3: Understanding & Managing (ripple effects, leaky gut, hormones, emotional brakes)
+  - Lesson 4: Nervous System (sympathetic storm, calm guide, vagal exercises)
+  - Lesson 5: Aerobic Exercise (BDNF, 3-point rule, 6-step return-to-sport ladder)
+  - Lesson 6: Diet & Nutrition (omega-3, creatine, magnesium, progress killers)
+  - Lesson 7: Sleep (glymphatic clearance, sleep blueprint, four Ps)
+  - Lesson 8: Neck (cervical thresholds, cervicogenic symptoms, treatment)
+  - Lesson 9: Visual / Vestibular (VOMS, expose and recover, frequency-based rehab)
   - Based on Amsterdam 2022 Consensus and Canadian Guideline on Concussion in Sport (2024)
 - **Production Error Fix**:
   - Added global exception handler to ensure all errors return JSON instead of HTML error pages
