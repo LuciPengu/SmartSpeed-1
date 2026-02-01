@@ -1044,7 +1044,22 @@ header h1 {
 }
 
 .header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
     text-align: left;
+}
+
+.header-logo {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    object-fit: contain;
+}
+
+.header-text {
+    display: flex;
+    flex-direction: column;
 }
 
 .header-right {
