@@ -1,0 +1,241 @@
+
+Simple explanation:
+Concussion Recovery: The Fighter’s Guide to Getting Back in the Ring
+The old advice for a concussion was "stay in a dark room until you feel better." Research now shows that too much rest actually slows you down.
+Modern recovery is active, not passive.
+1. The "Energy Crisis" in Your Brain
+A concussion isn't a bruise or a bleed that shows up on an MRI. It is a functional "power failure." When you take a hard shot, your brain cells leak potassium and soak up calcium. This creates a massive demand for energy (ATP) to fix the balance [13].
+At the same time, blood flow to the brain drops. Your brain is essentially "running lean"—it needs more fuel but has less coming in [17]. This is why you feel "foggy." Even after your symptoms vanish, your brain’s energy levels may still be low for weeks.
+2. The Golden Rule: No "Second Hits"
+The biggest risk is Second Impact Syndrome (SIS). If you take another hit while your brain is still in that energy crisis, your brain can lose the ability to regulate its own blood flow. This causes rapid swelling and can be fatal or lead to permanent damage [15, 21]. "No symptoms" does not mean you are healed.
+
+https://completeconcussions.com/wp-content/uploads/2024/07/image2.png 
+3. The End of the "Dark Room"
+You should rest for the first 24–48 hours only [2]. After that, total rest makes things worse by causing anxiety and deconditioning [1].
+Active Recovery: Within 2–10 days, you should start light exercise that doesn't make your symptoms worse [6]. This helps "re-train" your nervous system and gets blood flowing back to the brain and throughout the body like it did pre-injury [26].
+4. Training Your Way Back (The 6 Steps)
+Light Daily Life: Walking, light chores [8].
+Progressive Aerobic Exercise: 15–20 mins on a stationary bike. No lifting [11].
+We get into more detail on how to go about this safely and effectively in an upcoming lesson.
+Sport-Specific Work: Running drills, shadowboxing. No head impact [6].
+Non-Contact Drills: Heavy bag, pads, complex footwork, and lifting [8].
+Note: This should be at least 14 days out from injury. Start light. 
+Full-Contact Practice: Technical and hard sparring [11].
+This should be at least 30 days out from the injury 
+Competition: Full return to the ring [11].
+5. Mindset: Don't Let Fear Slow You Down
+If you believe every small headache is a sign of permanent brain damage, your recovery will take longer. This is called the "Nocebo Effect" [30].
+Avoid "Fear-Avoidance": If you stop moving entirely because you're scared of symptoms, your body gets "unfit," making you even more sensitive to light and movement [31, 26]. Trust the gradual process and remember you’re not back at square one just because you feel symptoms. 
+
+https://www.cognitivefxusa.com/hs-fs/hubfs/image1-4.jpg?width=1104&height=762&name=image1-4.jpg 
+It is ok to feel some symptoms within reason. But listen to your body and follow the Rule of Three!
+6. Fueling the Repair
+Specific nutrients can help bridge the energy gap [42]:
+Healthy nutrition (diet, hydration, supplements)  is key for concussion recovery. We get into more detail on how to go about this effectively in an upcoming lesson.
+
+
+
+
+
+Deep Dive: 
+The Evolving Clinical Landscape of Concussion Recovery: A Multidisciplinary Analysis of Active Rehabilitation, Physiological Homeostasis, and Psychological Resilience
+The paradigm of concussion management has undergone a radical transformation over the last decade, shifting from a passive, symptom-based observation model toward an active, physiologically-driven rehabilitation framework. Historically, patients were advised to remain in darkened rooms until all symptoms had spontaneously resolved—a practice colloquially known as "cocooning." However, contemporary medical research and the most recent international consensus statements now emphasize that such strict rest is not only unnecessary but potentially detrimental to the recovery process.1 The 6th International Conference on Concussion in Sport, held in Amsterdam in 2022, alongside the updated Canadian Guideline on Concussion in Sport (2024), provides a robust evidence-based foundation for a more nuanced approach that prioritizes early, sub-symptom threshold activity and addresses the complex interplay between the brain's metabolic state and the patient's psychological outlook.4
+The Global Clinical Framework: The 13 Rs of Concussion Management
+A sophisticated understanding of concussion recovery begins with the structured framework provided by the Amsterdam 2022 Consensus Statement. This statement expanded the previous "11 Rs" to "13 Rs," reflecting the growing complexity of clinical care and the need for long-term health considerations in athletes.6 This framework provides a logical flow for the medical assessment and management of sport-related concussions (SRC).
+
+The 13 Rs of Concussion Management
+Core Clinical Objective and Significance
+Recognize
+On-field identification of signs and symptoms via tools like the CRT6.6
+Reduce
+Implementing rule changes and training modifications to decrease incidence.2
+Remove
+Immediate cessation of play upon suspicion of injury to avoid secondary impacts.1
+Refer
+Triage to emergency services or specialized care for persisting symptoms.2
+Re-evaluate
+Comprehensive assessment using standardized tools like the SCAT6 or SCOAT6.2
+Rest
+A limited 24-48 hour period of relative, rather than absolute, physical and cognitive rest.2
+Rehabilitate
+Tailored physical, vestibular, and ocular therapies based on specific impairments.2
+Recover
+Integration of clinical symptom resolution with physiological and neurocognitive readiness.2
+Return-to-Learn
+A gradual, stepwise reintegration into academic or work-related cognitive tasks.1
+Return-to-Sport
+An individualized, exertion-based progression to full competitive play.6
+Reconsider
+Evaluation of the patient's comprehensive medical and concussion history.6
+Residual Effects
+Long-term monitoring for chronic cognitive, emotional, or neurodegenerative signs.4
+Retire
+Nuanced, multidisciplinary counseling regarding the cessation of contact sports.6
+Refine
+Continuous updating of institutional protocols based on emerging literature.6
+
+This holistic framework serves as the baseline for setting clinical expectations. It acknowledges that recovery is not a singular event but a series of overlapping physiological and behavioral milestones. The transition from "Remove" to "Recover" involves navigating an "energy crisis" within the brain, where the subjective experience of symptoms is only one piece of a much larger metabolic puzzle.13
+Pathophysiology and the Metabolic Energy Crisis
+The fundamental reason why "no symptoms" does not guarantee recovery lies in the neurometabolic cascade triggered by the initial impact. A concussion is not a structural injury in the traditional sense; it rarely shows up on standard neuroimaging like CT or MRI because it represents a functional disruption of brain cells rather than a gross anatomical tear or bleed.2 When the brain is subjected to rotational or linear forces, the stretching and shearing of neurons lead to the indiscriminate release of excitatory neurotransmitters, primarily glutamate.13
+This release triggers a profound ionic shift: potassium ions () leak out of the neurons, while sodium and calcium ions () flood inward.13 In an effort to restore the resting membrane potential, the sodium-potassium () pumps go into overdrive, demanding massive amounts of adenosine triphosphate (ATP).13 This leads to a state of acute hypermetabolism, where the brain’s demand for glucose spikes dramatically. However, this demand occurs in a context of reduced cerebral blood flow (CBF), creating a significant disparity between energy supply and demand.13
+The brain essentially enters a metabolic "energy crisis." Research using advanced MRI techniques, such as arterial spin labeling, has demonstrated that even after athletes report being symptom-free and return to baseline on cognitive tests, their cerebral blood flow may remain significantly reduced.17 In one study, concussed players showed clinical recovery by day 8, yet their neurophysiological markers and blood flow remained abnormal, indicating that the neurons were still under physiologic stress.17 This persistent vulnerability explains why athletes are at heightened risk for a second, more severe injury if they return to play prematurely.17
+The Biological Window of Vulnerability: Second Impact Syndrome
+The most severe consequence of mismanaging the return to sport timeline is Second Impact Syndrome (SIS). SIS occurs when an individual, usually an adolescent or young adult, sustains a second head impact before the brain has fully recovered from an initial concussion.15 During the metabolic energy crisis following the first injury, the brain's ability to regulate its own blood flow—a process known as autoregulation—is compromised.15
+A second impact, even if relatively minor, can trigger a catastrophic loss of this autoregulation, leading to rapid vascular engorgement, diffuse cerebral swelling, and a massive increase in intracranial pressure.15 This pressure can cause the brain to herniate, often leading to permanent disability or death within minutes of the second hit.15 While SIS is statistically rare, its mortality rate is reported to be over 50%, with nearly 100% of survivors suffering permanent neurological damage.21 This biological reality underscores the clinical mandate that "no symptoms" is a necessary but insufficient criterion for clearance; physiological readiness must also be established.13
+The Fallacy of Rest: Moving Toward Active Recovery
+Modern clinical practice has moved decisively away from the "rest until symptom-free" model. Prolonged rest, particularly for more than 48 hours, has been shown to be counterproductive, potentially leading to social isolation, anxiety, and physical deconditioning.1 The current consensus, reflected in both the Amsterdam 2022 and Ontario Neurotrauma Foundation (ONF) guidelines, recommends a brief period of "relative rest" for the first 24-48 hours, followed by a gradual increase in activity.2
+Relative rest is defined as activities of daily living that do not significantly exacerbate symptoms, such as light household chores, social interactions in calm environments, and slow walks.2 Within 2-10 days post-injury, patients are encouraged to begin sub-symptom threshold aerobic exercise.6
+The Role of Aerobic Exercise in Neurological Repair
+The introduction of prescribed aerobic exercise is one of the most significant advancements in concussion rehabilitation. Controlled exertion has been shown to facilitate recovery by improving autonomic nervous system regulation and normalizing cerebral blood flow.26 Clinical trials have demonstrated that early aerobic intervention can reduce the risk of persistent post-concussion symptoms (PPCS) by nearly 50%.24
+To safely implement this, the Buffalo Concussion Treadmill Test (BCTT) is used to determine the exact heart rate threshold at which a patient's symptoms begin to exacerbate.24 Once this threshold is identified, the patient is prescribed an exercise program at a specific percentage of that heart rate.
+
+Exercise Prescription Metric
+Application and Protocol
+Heart Rate Threshold (HRt)
+The heart rate at which symptoms increase by  points on a 10-point scale during testing.24
+Prescription Intensity (Athletes)
+90% of the HRt, performed for 20 minutes daily.24
+Prescription Intensity (Deconditioned)
+80% of the HRt, performed for 20 minutes daily.24
+Frequency and Progression
+5-7 days per week; threshold HR increased by 5-10% weekly if tolerated.24
+
+This approach allows the brain to adapt to metabolic stress without triggering the full energy crisis, effectively "training" the autonomic nervous system to recover its pre-injury function.27
+Psychological Factors: The Influence of Mindset and Expectations
+Concussion recovery is as much a psychological journey as it is a biological one. Research consistently demonstrates that a patient's beliefs and expectations about their injury can significantly influence their recovery timeline.30 Two critical psychological barriers that clinicians must address are the nocebo effect and fear-avoidance behavior.30
+The Nocebo Effect and the Power of Language
+The nocebo effect is the counterpart to the placebo effect; it occurs when negative expectations lead to the worsening of physical symptoms.30 In the context of concussion, this is often fueled by negative messaging from healthcare providers or media portrayals of the long-term effects of brain injury.30
+Language plays a vital role in this process. Studies have shown that the terminology used to describe the injury can alter outcomes. Patients who are told they have a "mild traumatic brain injury" often expect worse outcomes and report more severe symptoms than those who are told they have a "concussion," even though the underlying pathology is identical.30 Furthermore, the "Good Ole Days" bias causes patients to misattribute everyday lapses—such as misplacing keys or feeling a standard headache—to their concussion, leading to a false sense of neurological decline and increased anxiety.30
+Anxiety itself has a physiological impact on the concussed brain. It triggers the release of stress hormones like cortisol and substances like cholecystokinin (CCK), which can heighten pain sensitivity and lower the brain's natural levels of dopamine and opioids.30 This biological state makes the physical symptoms of concussion feel more intense and harder to manage.
+Fear-Avoidance Behavior and the Cycle of Disability
+Fear-avoidance occurs when a patient avoids physical or cognitive exertion because they believe that any increase in symptoms is a sign of further brain damage or a setback in recovery.30 While this avoidance may seem protective, it often creates a self-perpetuating cycle of disability.26
+Symptom Anticipation: The fear of symptoms returning causes the patient to avoid activity, even in the absence of current symptoms.31
+Deconditioning: This lack of activity leads to cardiovascular and autonomic deconditioning, making the patient even more sensitive to exertion when they do attempt to move.9
+Chronic Sensitivity: Prolonged avoidance prevents the brain from "re-calibrating" to normal light, sound, and motion, leading to chronic hypersensitivity and persisting symptoms.22
+To combat this, the Fear Avoidance after Concussion Tool (FACT) is used to identify patients at risk.32 Management then focuses on education and "Graded Exposure Therapy" (GET), which involves controlled, incremental exposure to feared stimuli or activities, helping the patient regain confidence in their brain’s ability to handle stress.26
+The Return-to-Sport (RTS) and Return-to-Learn (RTL) Timelines
+Recovery from a concussion is a non-linear process that typically lasts up to four weeks in both children and adults, though approximately 30% of patients will experience symptoms beyond this timeframe.1 The progression back to full activity must be gradual and monitored by a healthcare professional.11
+Stepwise Return to Sport Progression
+The RTS protocol is a six-step journey where each step represents a minimum of 24 hours of successful participation without a significant increase in symptoms.11
+
+Step
+Level of Activity
+Clinical Objective
+1
+Symptom-limited activity
+Gradual re-introduction of daily activities (e.g., walking, social interaction).8
+2
+Light aerobic exercise
+Walking or stationary bike for 15-20 minutes; no resistance training.11
+3
+Individual sport-specific exercise
+Running or skating drills; no risk of head impact or contact.6
+4
+Non-contact training drills
+More complex drills, multi-plane movement, and resistance training.8
+5
+Full-contact practice
+Participation in normal training activities after medical clearance.11
+6
+Competition
+Full, unrestricted return to game play.11
+
+A key change in the 2022 and 2024 updates is that medical clearance is now recommended before moving to Step 4 (non-contact training), whereas previous guidelines recommended clearance before Step 5.6 This shift ensures that the athlete is physiologically ready for more complex, high-intensity drills before they are ever exposed to the risk of unintentional contact.8
+The Return-to-Learn Strategy for Students
+For student-athletes, academic reintegration is the primary priority, and students should achieve a full "Return-to-Learn" before returning to competitive sport.1 The RTL strategy involves four steps:
+Initial Rest: 24-48 hours of relative rest with reduced screen time.1
+Return to School (Environment): Attending half-days or partial classes; prioritizing presence over performance.1
+Return to Learn (Workload): Gradual introduction of homework and cognitive tasks; temporary academic accommodations (e.g., no exams, extra time).1
+Full Academic Participation: Full workload without accommodations; this must be tolerated before advancing to heavy physical training.1
+A Holistic Multidisciplinary Approach to Recovery
+Full recovery often requires more than just time and rest. A holistic approach identifies and treats the specific "sub-types" of concussion symptoms, which may involve the vestibular system, the ocular (vision) system, the cervical spine, or the metabolic/autonomic systems.3
+Vision and Vestibular Rehabilitation
+Oculomotor issues, such as difficulties with eye tracking, focus, and coordination, are incredibly common, appearing in up to 82% of concussed patients.37 One of the most prevalent conditions is convergence insufficiency (CI), where the eyes have difficulty turning inward to focus on near objects.38
+The CONCUSS trial demonstrated that specialized, office-based vision therapy (OBVAM) is highly effective for these issues, showing significantly better outcomes than a "wait and see" approach.39 Similarly, vestibular therapy helps patients who experience dizziness or balance problems by retraining the brain to integrate signals from the inner ear and the eyes.7
+Nutritional Support for the Recovering Brain
+Emerging research suggests that specific nutrients can support the brain's metabolic needs and dampen the inflammatory response following injury.42 While these should supplement a balanced diet, certain compounds have shown potential neuroprotective benefits.45
+
+Nutrient
+Clinical Relevance in Concussion
+Evidence-Based Dosing Considerations
+Omega-3 Fatty Acids
+Reduce neuroinflammation and support neuronal membrane repair.42
+2-4g/day of combined EPA and DHA.42
+Creatine Monohydrate
+Buffers ATP levels and supports brain energy homeostasis.42
+5g/day; may consider a 20g/day loading phase for 4 days.42
+Magnesium
+Blocks excitotoxicity and reduces headache frequency.42
+400mg/day of a bioavailable form.42
+Vitamin D
+Important for immune modulation; deficiency is linked to prolonged recovery.44
+Target serum levels  ng/mL; supplementation as needed.44
+Riboflavin (B2)
+Supports mitochondrial energy production.42
+400mg daily for 14 days post-injury.46
+
+Sleep Hygiene and Fatigue Management
+Cognitive fatigue and sleep disturbances are among the most debilitating symptoms of concussion.16 Poor sleep prevents the brain from effectively utilizing the glymphatic system to clear metabolic waste, further prolonging the "energy crisis".33
+Effective energy management involves the "Four Ps":
+Plan: Scheduling demanding tasks for times when energy is highest.47
+Prioritize: Focusing on essential activities and letting go of the non-essential.47
+Pace: Taking frequent, scheduled breaks before symptoms flare up.47
+Position: Performing tasks in comfortable, ergonomically supportive ways to minimize neck strain and visual load.48
+Conclusion: Setting Realistic and Evidence-Based Expectations
+The road to concussion recovery is defined by a delicate balance between respecting the brain's physiological limits and actively pushing toward restoration. Patients and their families must understand that "no symptoms" is merely the beginning of the recovery conversation, not the end.17 The persistence of physiological stress in the brain, long after clinical symptoms have vanished, necessitates a cautious, stepwise approach to exertion.13
+Recovery is optimized when it is:
+Active: Starting light movement early to prevent deconditioning and autonomic dysfunction.2
+Holistic: Addressing the ocular, vestibular, and cervical systems alongside metabolic and nutritional needs.3
+Resilient: Actively countering fear-avoidance behaviors and the nocebo effect through education and graded exposure.26
+Monitored: Guided by a healthcare professional who uses objective measures—like the BCTT and cognitive testing—to supplement subjective reporting.2
+By embracing this multidisciplinary and proactive model, athletes and students can navigate their recovery with confidence, ensuring a safe and durable return to the activities they love while protecting their most vital asset: their long-term brain health.29 The transition from a passive victim of injury to an active participant in rehabilitation is the hallmark of modern concussion care.29
+Works cited
+Following Return-to-Play Guidelines Essential in Concussion Recovery - NFHS, accessed January 29, 2026, https://nfhs.org/stories/following-return-to-play-guidelines-essential-in-concussion-recovery
+International Consensus on Sports Concussion: Summary for Schools - NFHS, accessed January 29, 2026, https://nfhs.org/stories/international-consensus-on-sports-concussion-summary-for-schools
+A Physiological Approach to Prolonged Recovery From Sport-Related Concussion - NIH, accessed January 29, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC5384826/
+Consensus statement on concussion in sport: the 6th International Conference on Concussion in Sport-Amsterdam, October 2022 - PubMed, accessed January 29, 2026, https://pubmed.ncbi.nlm.nih.gov/37316210/
+Canadian Guideline on Concussion in Sport - Parachute.ca, accessed January 29, 2026, https://parachute.ca/en/professional-resource/concussion-collection/canadian-guideline-on-concussion-in-sport/
+Highly Anticipated Concussion Consensus Statement Released, accessed January 29, 2026, https://www.mmwr.com/highly-anticipated-concussion-consensus-statement-released/
+Toronto Concussion Physiotherapy & Treatment Clinic | LSM - Leaside Sports Medicine, accessed January 29, 2026, https://www.leasidesportsmedicine.com/programs-of-care/concussion-physiotherapy/
+Updated Recommendations for Concussion Management in Canada (2024) Backgrounder, accessed January 29, 2026, https://lacrosse.ca/wp-content/uploads/2025/03/Backgrounder-Concussion-Recommendation-Updates-NSOs.pdf
+A Physiological Approach to Assessment and Rehabilitation of Acute Concussion in Collegiate and Professional Athletes - Frontiers, accessed January 29, 2026, https://www.frontiersin.org/journals/neurology/articles/10.3389/fneur.2018.01115/full
+Concussion - Parachute.ca, accessed January 29, 2026, https://parachute.ca/en/injury-topic/concussion/
+Returning to Sports | HEADS UP - CDC, accessed January 29, 2026, https://www.cdc.gov/heads-up/guidelines/returning-to-sports.html
+Concussion RTP Protocol Changes from 6th Consensus Statement, accessed January 29, 2026, https://concussionspoteducation.com/blog/rtp-6th-international-concussion-statement
+The Neurometabolic Cascade of Concussion - PMC - NIH, accessed January 29, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC155411/
+Investigation on the Relationship between Metabolic Changes and Symptom Burden in Sport-Related Concussion Recovery, accessed January 29, 2026, https://clinmedjournals.org/articles/ijbdt/international-journal-of-brain-disorders-and-treatment-ijbdt-10-049.php?jid=ijbdt
+Second Impact Syndrome - StatPearls - NCBI Bookshelf - NIH, accessed January 29, 2026, https://www.ncbi.nlm.nih.gov/books/NBK448119/
+Canadian Concussion Centre in Toronto - UHN, accessed January 29, 2026, https://www.uhn.ca/Krembil/Canadian-Concussion-Centre
+Reduced Blood Flow Seen in Brain After Clinical Recovery of Acute ..., accessed January 29, 2026, https://www.rsna.org/media/press/i/1846
+Second-Impact Syndrome: The Hidden Danger of Concussions | CORE Center, accessed January 29, 2026, https://www.dchosp.org/news/2025/april/second-impact-syndrome-the-hidden-danger-of-retu/
+Second Impact Syndrome The Deadly Consequence of Premature Return to Play After Concussion - Columbia Pain Management, accessed January 29, 2026, https://columbiapain.org/second-impact-syndrome-the-deadly-consequence-of-premature-return-to-play-after-concussion/
+(PDF) Second Impact Syndrome - ResearchGate, accessed January 29, 2026, https://www.researchgate.net/publication/26325853_Second_Impact_Syndrome
+Understanding concussion - UHN Foundation, accessed January 29, 2026, https://uhnfoundation.ca/stories/understanding-concussion/
+Concussion / Mild Traumatic Brain Injury (mTBI) - Gov.bc.ca, accessed January 29, 2026, https://www2.gov.bc.ca/assets/gov/health/practitioner-pro/bc-guidelines/concussion-mbti-full-guideline.pdf
+Guidelines for Recovery - Concussion Alliance, accessed January 29, 2026, https://www.concussionalliance.org/recovery-guide
+How to Perform a Buffalo Concussion Treadmill Test, accessed January 29, 2026, https://completeconcussions.com/concussion-treatment/how-to-perform-a-buffalo-concussion-treadmill-test/
+No tolerance for exercise intolerance: Prescribing exercise after sport-related concussion - OHSU, accessed January 29, 2026, https://www.ohsu.edu/sites/default/files/2023-10/Kosderka%20slides.pdf
+Graded Exposure Therapy for Fear Avoidance Behaviour After Concussion (GET FAB): protocol for a multisite Canadian - BMJ Open, accessed January 29, 2026, https://bmjopen.bmj.com/content/bmjopen/14/6/e086602.full.pdf
+The Buffalo Concussion Bike Test for Concussion Assessment in Adolescents - PMC - NIH, accessed January 29, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC6822206/
+Administration of the Buffalo Concussion Treadmill Test (BCTT) - WSIB, accessed January 29, 2026, https://www.wsib.ca/sites/default/files/2020-10/gradedexercisetherapyandbuffaloconcussiontreadmilltest.pdf
+Concussion Treatment Program | TCC, accessed January 29, 2026, https://torontoconcussion.ca/concussion-program/
+How Negative Expectations Are Slowing Your Concussion Recovery ..., accessed January 29, 2026, https://completeconcussions.com/concussion-tips-information/how-negative-expectations-are-slowing-your-concussion-recovery-and-how-to-break-free/
+Fear Avoidance After Concussion: When Overcaution Slows Recovery - Oculogica, accessed January 29, 2026, https://oculogica.com/fear-avoidance-after-concussion-when-overcaution-slows-recovery/
+Fear Avoidance after Concussion Tool (FACT): patient-reported outcome measure development and content validation - NIH, accessed January 29, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC12606469/
+Navigating Cognitive Fatigue in Concussion Recovery: Strategies for Clinicians - Medbridge, accessed January 29, 2026, https://www.medbridge.com/blog/cognitive-fatigue-concussion-recovery
+Canadian Guideline on Concussion in Sport, 2nd ... - Parachute.ca, accessed January 29, 2026, https://parachute.ca/wp-content/uploads/2019/06/Concussion-Guideline-2024.pdf
+Pediatric concussion guidelines - PMC - NIH, accessed January 29, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC4196809/
+SCHOOLFirst:Enabling successful return-to-school for Canadian youth following a concussion - Holland Bloorview, accessed January 29, 2026, https://hollandbloorview.ca/sites/default/files/migrate/files/SCHOOLFirstHandbook-ENG.pdf
+Vision Therapy - Concussion Alliance, accessed January 29, 2026, https://www.concussionalliance.org/vision-therapy
+Integration of Vision and Vestibular Therapy for Vestibulo-Ocular Post-Concussion Disorder – A Case Study - NSUWorks, accessed January 29, 2026, https://nsuworks.nova.edu/cgi/viewcontent.cgi?article=1754&context=ijahsp
+Vision therapy yields faster recovery from concussion-related eye condition, accessed January 29, 2026, https://www.aoa.org/news/clinical-eye-care/diseases-and-conditions/vision-therapy-yields-faster-recovery-from-concussion-related-eye-condition
+Visual Rehabilitation in Post Mild Traumatic Brain Injury. Case-Based Review - MDPI, accessed January 29, 2026, https://www.mdpi.com/2813-1053/1/1/5
+The Efficacy of an Integrated Visual-Vestibular Rehabilitation Model in Concussion Patients Suffering from Prolonged Vestibulo- - LVHN Scholarly Works, accessed January 29, 2026, https://scholarlyworks.lvhn.org/cgi/viewcontent.cgi?article=1114&context=research-scholars
+Mitigating Traumatic Brain Injury: A Narrative Review of Supplementation and Dietary Protocols - PMC - PubMed Central, accessed January 29, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC11314487/
+Study Details | NCT05847608 | Omega-3 Treatment for Concussion in Adolescents, accessed January 29, 2026, https://clinicaltrials.gov/study/NCT05847608
+Do Supplements Speed Up Concussion Recovery? What Science Tells Us - Sway Medical, accessed January 29, 2026, https://www.swaymedical.com/articles/supplements-for-concussion-recovery
+Feed your head - viaSport, accessed January 29, 2026, https://viasport.ca/articles/feed-your-head/
+Nutrition for Concussions: What Does the Research Show?, accessed January 29, 2026, https://www.idealnutrition.com.au/nutrition-for-concussions-what-does-the-research-show/
+Concussion & You - Holland Bloorview, accessed January 29, 2026, https://hollandbloorview.ca/sites/default/files/migrate/files/Concussion%20handbook%20March%202017%20-no%20crops.pdf
+Managing Persistent Post-Concussion Symptoms - University Health Network, accessed January 29, 2026, https://www.uhn.ca/Krembil/Canadian-Concussion-Centre/Education/Documents/Managing-Persistent-Concussion-Symptoms.pdf
+Patient Rehab Resources | Free Concussion Rehab Downloads | TCC, accessed January 29, 2026, https://torontoconcussion.ca/patient-resources/
