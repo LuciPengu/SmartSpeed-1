@@ -3373,16 +3373,19 @@ header h1 {
 
 /* Course Paywall Styles */
 .course-paywall {
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(6, 78, 59, 0.4) 100%);
-    border: 1px solid var(--primary-border);
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-glow);
     border-radius: 16px;
-    padding: 3rem 2rem;
+    padding: 2.5rem 2rem;
     margin-bottom: 2rem;
     text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .paywall-content {
-    max-width: 500px;
+    max-width: 450px;
     margin: 0 auto;
 }
 
@@ -3395,49 +3398,52 @@ header h1 {
 }
 
 .course-paywall h3 {
-    font-size: 1.8rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
     color: var(--text-primary);
+    font-weight: 600;
 }
 
 .paywall-subtitle {
     color: var(--text-secondary);
     margin-bottom: 1.5rem;
+    line-height: 1.6;
 }
 
 .paywall-price {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 2rem;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.25rem;
+    margin-bottom: 0.5rem;
 }
 
 .price-amount {
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: 700;
-    color: var(--primary);
+    color: var(--text-primary);
 }
 
 .price-label {
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    display: block;
 }
 
 .paywall-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
     text-align: left;
-    margin-bottom: 2rem;
 }
 
 .feature-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid var(--border-glow);
-}
-
-.feature-item:last-child {
-    border-bottom: none;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    color: var(--text-secondary);
 }
 
 .feature-item svg {
@@ -3446,11 +3452,11 @@ header h1 {
 }
 
 .feature-item.bonus {
-    background: linear-gradient(135deg, rgba(52, 211, 153, 0.15) 0%, rgba(6, 182, 212, 0.15) 100%);
+    background: linear-gradient(135deg, rgba(52, 211, 153, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
     border-radius: 8px;
-    padding: 1rem;
+    padding: 0.75rem 1rem;
     margin-top: 0.5rem;
-    border: 1px solid var(--primary-border);
+    border: 1px solid var(--border-glow);
 }
 
 .feature-item.bonus svg {
@@ -3473,26 +3479,27 @@ header h1 {
 
 .paywall-note {
     margin-top: 1rem;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     color: var(--text-muted);
 }
 
 #course-content-wrapper.locked {
-    filter: blur(5px);
+    filter: blur(4px);
     pointer-events: none;
     user-select: none;
+    opacity: 0.6;
 }
 
 @media (max-width: 768px) {
     .course-paywall {
-        padding: 2rem 1.5rem;
+        padding: 1.5rem 1.25rem;
     }
     
     .price-amount {
-        font-size: 2.5rem;
+        font-size: 2rem;
     }
     
     .course-paywall h3 {
-        font-size: 1.5rem;
+        font-size: 1.25rem;
     }
 }
