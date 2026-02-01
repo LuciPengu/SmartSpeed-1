@@ -2613,10 +2613,7 @@ header h1 {
 .course-header h2 {
     font-size: 2rem;
     font-weight: 700;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--text-primary);
     margin-bottom: 0.5rem;
 }
 
@@ -3471,10 +3468,24 @@ header h1 {
     align-items: center;
     justify-content: center;
     gap: 10px;
+    background: linear-gradient(135deg, #34d399 0%, #10b981 50%, #059669 100%);
+    color: var(--bg-dark);
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(52, 211, 153, 0.3);
+    transition: all 0.3s ease;
+}
+
+.paywall-btn:hover {
+    background: linear-gradient(135deg, #4ade80 0%, #34d399 50%, #10b981 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(52, 211, 153, 0.4);
 }
 
 .paywall-btn svg {
-    stroke: currentColor;
+    stroke: var(--bg-dark);
 }
 
 .paywall-note {
