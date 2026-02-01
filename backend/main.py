@@ -821,6 +821,148 @@ async def get_subscription_status(session_id: str = Cookie(None)):
         except StopIteration:
             pass
 
+@app.get("/api/stripe/course-product")
+async def get_course_product():
+    """Get the Concussion Science Course product info"""
+    try:
+        product = await stripe_client.get_or_create_course_product()
+        return {"product": product, "price": 29.99, "includes_free_month": True}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/stripe/course-checkout")
+async def create_course_checkout(request: CheckoutRequest, session_id: str = Cookie(None)):
+    """Create a Stripe checkout session for the Concussion Science Course"""
+    if not session_id:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    
+    db_gen = get_db()
+    db = next(db_gen)
+    
+    try:
+        from backend.database import OAuthSession
+        oauth_session = db.query(OAuthSession).filter(OAuthSession.session_id == session_id).first()
+        if not oauth_session:
+            raise HTTPException(status_code=401, detail="Session not found")
+        
+        user = db.query(User).filter(User.id == oauth_session.user_id).first()
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        if user.course_purchased:
+            raise HTTPException(status_code=400, detail="Course already purchased")
+        
+        result = await stripe_client.create_course_checkout_session(
+            user_id=user.id,
+            email=user.email,
+            customer_id=user.stripe_customer_id,
+            return_url=request.return_url
+        )
+        
+        if not user.stripe_customer_id:
+            user.stripe_customer_id = result['customer_id']
+            db.commit()
+        
+        return {"url": result['url'], "session_id": result['session_id']}
+    finally:
+        try:
+            next(db_gen)
+        except StopIteration:
+            pass
+
+@app.post("/api/stripe/verify-course-session")
+async def verify_course_checkout_session(request: Request, session_id: str = Cookie(None)):
+    """Verify course checkout session and grant course access + 1 month free subscription"""
+    if not session_id:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    
+    body = await request.json()
+    checkout_session_id = body.get('session_id')
+    
+    if not checkout_session_id:
+        raise HTTPException(status_code=400, detail="Missing session_id")
+    
+    db_gen = get_db()
+    db = next(db_gen)
+    
+    try:
+        from backend.database import OAuthSession
+        oauth_session = db.query(OAuthSession).filter(OAuthSession.session_id == session_id).first()
+        if not oauth_session:
+            raise HTTPException(status_code=401, detail="Session not found")
+        
+        user = db.query(User).filter(User.id == oauth_session.user_id).first()
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        stripe_api = await stripe_client.get_stripe_client()
+        checkout = stripe_api.checkout.Session.retrieve(checkout_session_id)
+        
+        if checkout.payment_status == 'paid' or checkout.status == 'complete':
+            user.stripe_customer_id = checkout.customer
+            user.course_purchased = True
+            user.course_purchased_at = datetime.now()
+            user.free_month_granted = True
+            user.free_month_ends_at = datetime.now() + timedelta(days=30)
+            db.commit()
+            
+            return {
+                "success": True,
+                "course_access": True,
+                "free_month_ends_at": user.free_month_ends_at.isoformat(),
+                "message": "Course purchased! You now have access to all course content and 1 month FREE access to the Strike Calculator."
+            }
+        
+        return {"success": False, "course_access": False}
+    except Exception as e:
+        print(f"Verify course session error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        try:
+            next(db_gen)
+        except StopIteration:
+            pass
+
+@app.get("/api/course/access")
+async def get_course_access(session_id: str = Cookie(None)):
+    """Check if user has access to the Concussion Science Course"""
+    if not session_id:
+        return {"has_access": False, "course_purchased": False}
+    
+    db_gen = get_db()
+    db = next(db_gen)
+    
+    try:
+        from backend.database import OAuthSession
+        oauth_session = db.query(OAuthSession).filter(OAuthSession.session_id == session_id).first()
+        if not oauth_session:
+            return {"has_access": False, "course_purchased": False}
+        
+        user = db.query(User).filter(User.id == oauth_session.user_id).first()
+        if not user:
+            return {"has_access": False, "course_purchased": False}
+        
+        ADMIN_EMAILS = ['nealconwayp@gmail.com']
+        user_email = (user.email or '').lower().strip()
+        if user_email in [e.lower() for e in ADMIN_EMAILS]:
+            return {
+                "has_access": True,
+                "course_purchased": True,
+                "is_admin": True
+            }
+        
+        return {
+            "has_access": user.course_purchased == True,
+            "course_purchased": user.course_purchased == True,
+            "purchased_at": user.course_purchased_at.isoformat() if user.course_purchased_at else None,
+            "free_month_ends_at": user.free_month_ends_at.isoformat() if user.free_month_ends_at else None
+        }
+    finally:
+        try:
+            next(db_gen)
+        except StopIteration:
+            pass
+
 @app.post("/api/stripe/webhook")
 async def stripe_webhook(request: Request):
     payload = await request.body()

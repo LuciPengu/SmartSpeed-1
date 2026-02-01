@@ -9,6 +9,7 @@ let aiSummaryText = '';
 let conversationHistory = [];
 let subscriptionStatus = null;
 let hasActiveSubscription = false;
+let hasCoursePurchased = false;
 let fighterSettings = {
     fighter1: { skill: 'professional', weight: 75, intensity: 70 },
     fighter2: { skill: 'professional', weight: 75, intensity: 70 }
@@ -94,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeFighterSettings();
     initializeAuth();
     loadUserFromStorage();
+    updateCoursePaywall();
 });
 
 function initializeFighterSettings() {
@@ -804,6 +806,20 @@ function initializeAuth() {
         showToast('Checkout cancelled', 'info');
         window.history.replaceState({}, document.title, '/');
     }
+    if (urlParams.get('course_checkout') === 'success') {
+        const courseSessionId = urlParams.get('session_id');
+        if (courseSessionId) {
+            verifyCourseSession(courseSessionId);
+        } else {
+            showToast('Course unlocked! Enjoy your learning journey.', 'success');
+            checkCourseAccess();
+        }
+        window.history.replaceState({}, document.title, '/');
+    }
+    if (urlParams.get('course_checkout') === 'cancelled') {
+        showToast('Course purchase cancelled', 'info');
+        window.history.replaceState({}, document.title, '/');
+    }
     
     const subscriptionModal = document.getElementById('subscription-modal');
     if (subscriptionModal) {
@@ -835,12 +851,15 @@ async function checkAuthStatus() {
                     avatar: data.user.profile_image_url || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(data.user.first_name || 'U')}`
                 };
                 await checkSubscriptionStatus();
+                await checkCourseAccess();
                 updateUserUI();
             } else {
                 currentUser = null;
                 hasActiveSubscription = false;
+                hasCoursePurchased = false;
                 subscriptionStatus = null;
                 updateUserUI();
+                updateCoursePaywall();
             }
         } catch (error) {
             console.error('Auth check failed:', error);
@@ -1081,6 +1100,89 @@ async function verifyCheckoutSession(stripeSessionId) {
     } catch (error) {
         console.error('Verify session error:', error);
         showToast('Subscription activated! Please refresh if needed.', 'success');
+        await checkAuthStatus();
+    }
+}
+
+async function checkCourseAccess() {
+    try {
+        const response = await fetch('/api/course/access', { credentials: 'include' });
+        const data = await response.json();
+        hasCoursePurchased = data.has_access;
+        updateCoursePaywall();
+        return data;
+    } catch (error) {
+        console.error('Course access check failed:', error);
+        hasCoursePurchased = false;
+        updateCoursePaywall();
+        return null;
+    }
+}
+
+function updateCoursePaywall() {
+    const paywall = document.getElementById('course-paywall');
+    const contentWrapper = document.getElementById('course-content-wrapper');
+    
+    if (hasCoursePurchased) {
+        paywall?.classList.add('hidden');
+        contentWrapper?.classList.remove('locked');
+    } else {
+        paywall?.classList.remove('hidden');
+        contentWrapper?.classList.add('locked');
+    }
+}
+
+async function purchaseCourse() {
+    if (!currentUser) {
+        showAuthModal();
+        showToast('Please sign in to purchase the course', 'warning');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/stripe/course-checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ return_url: window.location.origin })
+        });
+        
+        const data = await response.json();
+        
+        if (data.url) {
+            window.location.href = data.url;
+        } else {
+            showToast('Failed to start checkout', 'error');
+        }
+    } catch (error) {
+        console.error('Course checkout error:', error);
+        showToast('Failed to start checkout', 'error');
+    }
+}
+
+async function verifyCourseSession(stripeSessionId) {
+    try {
+        const response = await fetch('/api/stripe/verify-course-session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ session_id: stripeSessionId })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success && data.course_purchased) {
+            hasCoursePurchased = true;
+            updateCoursePaywall();
+            showToast('Course unlocked! Enjoy your learning journey + 1 month FREE Strike Calculator access!', 'success');
+            await checkAuthStatus();
+            await checkSubscriptionStatus();
+        } else {
+            showToast('Purchase verification pending. Please refresh the page.', 'info');
+        }
+    } catch (error) {
+        console.error('Verify course session error:', error);
+        showToast('Course purchased! Please refresh if content is still locked.', 'success');
         await checkAuthStatus();
     }
 }

@@ -1,5 +1,5 @@
 import os
-from sqlalchemy import create_engine, Column, String, Float, Integer, DateTime, Text, ForeignKey, JSON
+from sqlalchemy import create_engine, Column, String, Float, Integer, DateTime, Text, ForeignKey, JSON, Boolean
 from sqlalchemy.orm import sessionmaker, relationship, declarative_base
 from datetime import datetime
 
@@ -24,6 +24,11 @@ class User(Base):
     stripe_subscription_id = Column(String, nullable=True)
     subscription_status = Column(String, default='none')
     trial_ends_at = Column(DateTime, nullable=True)
+    
+    course_purchased = Column(Boolean, default=False)
+    course_purchased_at = Column(DateTime, nullable=True)
+    free_month_granted = Column(Boolean, default=False)
+    free_month_ends_at = Column(DateTime, nullable=True)
     
     injury_sessions = relationship("InjurySession", back_populates="user", cascade="all, delete-orphan")
 

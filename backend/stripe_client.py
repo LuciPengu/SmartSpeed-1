@@ -3,12 +3,13 @@ import stripe
 from datetime import datetime, timedelta
 
 def check_subscription_access(user) -> bool:
-    """Check if user has an active subscription or is in trial period"""
+    """Check if user has an active subscription, is in trial period, or has free month from course purchase"""
     if not user:
         return False
     
     status = getattr(user, 'subscription_status', None) or 'none'
     trial_ends_at = getattr(user, 'trial_ends_at', None)
+    free_month_ends_at = getattr(user, 'free_month_ends_at', None)
     
     if status in ['active', 'trialing']:
         return True
@@ -16,7 +17,17 @@ def check_subscription_access(user) -> bool:
     if trial_ends_at and trial_ends_at > datetime.utcnow():
         return True
     
+    if free_month_ends_at and free_month_ends_at > datetime.utcnow():
+        return True
+    
     return False
+
+def check_course_access(user) -> bool:
+    """Check if user has purchased the concussion course"""
+    if not user:
+        return False
+    
+    return getattr(user, 'course_purchased', False) == True
 
 def get_stripe_credentials():
     """Get Stripe credentials from environment variables"""
@@ -43,6 +54,7 @@ async def get_publishable_key():
     return credentials['publishable_key']
 
 HITSMART_PRICE_ID = None
+COURSE_PRICE_ID = None
 
 async def get_or_create_subscription_product():
     """Create the Hitsmart subscription product and price if they don't exist"""
@@ -81,6 +93,77 @@ async def get_or_create_subscription_product():
     HITSMART_PRICE_ID = price.id
     
     return {'product_id': product.id, 'price_id': price.id}
+
+async def get_or_create_course_product():
+    """Create the Concussion Science Course product and price if they don't exist"""
+    global COURSE_PRICE_ID
+    
+    stripe_client = await get_stripe_client()
+    
+    products = stripe_client.Product.search(query="name:'Concussion Science Course'")
+    
+    if products.data:
+        product = products.data[0]
+        prices = stripe_client.Price.list(product=product.id, active=True)
+        if prices.data:
+            COURSE_PRICE_ID = prices.data[0].id
+            return {'product_id': product.id, 'price_id': COURSE_PRICE_ID}
+    
+    product = stripe_client.Product.create(
+        name='Concussion Science Course',
+        description='Comprehensive 7-lesson course on concussion science, recovery protocols, and brain health. Includes 1 month FREE access to Hitsmart Strike Calculator.',
+        metadata={
+            'app': 'hitsmart',
+            'type': 'course',
+            'includes_free_month': 'true'
+        }
+    )
+    
+    price = stripe_client.Price.create(
+        product=product.id,
+        unit_amount=2999,
+        currency='usd',
+        metadata={
+            'type': 'course',
+            'free_month_included': 'true'
+        }
+    )
+    
+    COURSE_PRICE_ID = price.id
+    
+    return {'product_id': product.id, 'price_id': price.id}
+
+async def create_course_checkout_session(user_id: str, email: str, customer_id: str = None, return_url: str = None):
+    """Create a Stripe checkout session for one-time course purchase"""
+    stripe_client = await get_stripe_client()
+    
+    if not COURSE_PRICE_ID:
+        await get_or_create_course_product()
+    
+    if not customer_id:
+        customer = stripe_client.Customer.create(
+            email=email,
+            metadata={'user_id': user_id}
+        )
+        customer_id = customer.id
+    
+    session = stripe_client.checkout.Session.create(
+        customer=customer_id,
+        payment_method_types=['card'],
+        line_items=[{
+            'price': COURSE_PRICE_ID,
+            'quantity': 1
+        }],
+        mode='payment',
+        success_url=f"{return_url}?course_checkout=success&session_id={{CHECKOUT_SESSION_ID}}",
+        cancel_url=f"{return_url}?course_checkout=cancelled",
+        metadata={
+            'user_id': user_id,
+            'type': 'course'
+        }
+    )
+    
+    return {'session_id': session.id, 'url': session.url, 'customer_id': customer_id}
 
 async def create_checkout_session(user_id: str, email: str, customer_id: str = None, return_url: str = None):
     """Create a Stripe checkout session for subscription with 7-day trial"""

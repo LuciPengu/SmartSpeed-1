@@ -323,6 +323,50 @@
                     <p class="course-subtitle">Evidence-based education from the 2022 Amsterdam Consensus</p>
                 </div>
 
+                <!-- Course Paywall (shown when not purchased) -->
+                <div id="course-paywall" class="course-paywall hidden">
+                    <div class="paywall-content">
+                        <div class="paywall-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        </div>
+                        <h3>Unlock the Complete Course</h3>
+                        <p class="paywall-subtitle">Get lifetime access to all 7 lessons + exclusive deep dive content</p>
+                        
+                        <div class="paywall-price">
+                            <span class="price-amount">$29.99</span>
+                            <span class="price-label">one-time payment</span>
+                        </div>
+                        
+                        <div class="paywall-features">
+                            <div class="feature-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                <span>7 comprehensive lessons with deep dive science</span>
+                            </div>
+                            <div class="feature-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                <span>Educational videos and research images</span>
+                            </div>
+                            <div class="feature-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                <span>Evidence-based supplement protocols</span>
+                            </div>
+                            <div class="feature-item bonus">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                <span><strong>BONUS:</strong> 1 month FREE Strike Calculator access</span>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-primary paywall-btn" onclick="purchaseCourse()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                            Purchase Course
+                        </button>
+                        
+                        <p class="paywall-note">Secure payment powered by Stripe</p>
+                    </div>
+                </div>
+
+                <!-- Course Content (shown when purchased) -->
+                <div id="course-content-wrapper">
                 <!-- Lesson Navigation -->
                 <div class="lesson-nav">
                     <button class="lesson-nav-btn active" data-lesson="1">1. What is a Concussion</button>
@@ -1490,6 +1534,7 @@
                         </ul>
                     </div>
                 </div>
+                </div><!-- End course-content-wrapper -->
             </div>
         </div><!-- End Course Tab -->
         

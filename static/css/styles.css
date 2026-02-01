@@ -3370,3 +3370,129 @@ header h1 {
         grid-template-columns: 1fr;
     }
 }
+
+/* Course Paywall Styles */
+.course-paywall {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(6, 78, 59, 0.4) 100%);
+    border: 1px solid var(--primary-border);
+    border-radius: 16px;
+    padding: 3rem 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.paywall-content {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.paywall-icon {
+    margin-bottom: 1.5rem;
+}
+
+.paywall-icon svg {
+    stroke: var(--primary);
+}
+
+.course-paywall h3 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.paywall-subtitle {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.paywall-price {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.price-amount {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.price-label {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.paywall-features {
+    text-align: left;
+    margin-bottom: 2rem;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-glow);
+}
+
+.feature-item:last-child {
+    border-bottom: none;
+}
+
+.feature-item svg {
+    stroke: var(--primary);
+    flex-shrink: 0;
+}
+
+.feature-item.bonus {
+    background: linear-gradient(135deg, rgba(52, 211, 153, 0.15) 0%, rgba(6, 182, 212, 0.15) 100%);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    border: 1px solid var(--primary-border);
+}
+
+.feature-item.bonus svg {
+    stroke: #fbbf24;
+}
+
+.paywall-btn {
+    width: 100%;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.paywall-btn svg {
+    stroke: currentColor;
+}
+
+.paywall-note {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+#course-content-wrapper.locked {
+    filter: blur(5px);
+    pointer-events: none;
+    user-select: none;
+}
+
+@media (max-width: 768px) {
+    .course-paywall {
+        padding: 2rem 1.5rem;
+    }
+    
+    .price-amount {
+        font-size: 2.5rem;
+    }
+    
+    .course-paywall h3 {
+        font-size: 1.5rem;
+    }
+}
