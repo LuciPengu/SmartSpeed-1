@@ -1470,6 +1470,24 @@ function initLessonNavigation() {
     });
 }
 
+// ===== Deep Dive Toggle =====
+function toggleDeepDive(contentId) {
+    const content = document.getElementById(contentId);
+    const btn = content.previousElementSibling;
+    
+    if (content.classList.contains('active')) {
+        content.classList.remove('active');
+        btn.classList.remove('active');
+    } else {
+        content.classList.add('active');
+        btn.classList.add('active');
+        // Scroll to the deep dive content smoothly
+        setTimeout(() => {
+            content.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+    }
+}
+
 // Initialize tab and lesson navigation on page load
 document.addEventListener('DOMContentLoaded', () => {
     initTabNavigation();
