@@ -1,0 +1,259 @@
+
+
+Simple Explanation: 
+
+Concussion: The Full-Body Shutdown
+A concussion isn’t just a "ding" in your brain. It is a full-body system disruption. When you take a hard shot, the damage triggers a chain reaction that affects your nervous system, your stomach, your sleep, and your hormones.
+Understanding this "whole-body" crash is the only way to recover properly and get back in the ring safely.
+1. The Energy Crisis in Your Brain
+When your head snaps back or rotates, your brain cells stretch and leak. They dump out important chemicals and suck in things they don't need (like calcium). [9]
+This creates an "energy crisis." Your brain works overtime to fix the leaks, burning through all its fuel. Once that fuel is gone, your brain enters a "low-power mode" that can last for weeks. This is why you feel "foggy" and slow. [11]
+https://images.squarespace-cdn.com/content/v1/63813f208be08634a208db60/ae7b642d-41bf-4285-b3bd-cee2fc7edfd1/changes.in.the.brain.after.a.concussion.web%40concussion.alliance.2020-2025.jpg?format=2500w 
+2. The "Sympathetic Storm" (Nervous System)
+Your nervous system has a "gas pedal" (stress) and a "brake" (rest). A concussion gets the gas pedal stuck to the floor. This is called a "sympathetic storm." [2]
+
+https://images.squarespace-cdn.com/content/v1/63813f208be08634a208db60/dc5b4bfc-717d-4f7c-825a-be1074f4c935/Autonomic.nervous.system.function.and.dysfunction%40concussion.alliance.2021.web.jpg?format=2500w 
+https://static1.squarespace.com/static/63813f208be08634a208db60/t/641a3bd53582a5720c96341a/1679440853883/Autonomic%2BNervous%2BSystem.pdf 
+Heart Rate Variability (HRV): This measures how well your body handles stress. After a hit, your HRV usually drops. This means your "brakes" aren't working, and your body is stuck in a permanent state of fight-or-flight. [14]
+Blood Flow: Your brain loses its ability to control blood pressure. If you jump back into hard training too early, your brain can't protect itself from pressure spikes, which can cause permanent damage. [16]
+3. The "Leaky Gut" Connection
+Within hours of a hit, the stress on your brain actually opens up the lining of your stomach. This is often called "leaky gut." [5]
+Bad bacteria and toxins leak from your gut into your bloodstream. 
+Once these toxins enter the bloodstream, they trigger a systemic immune response. This can breach the blood-brain barrier, which may already be compromised from the initial impact. This leads to:
+Neuroinflammation: Activation of the brain's immune cells (microglia).
+Secondary Injury: Inflammation that persists long after the physical impact has passed.
+Why Diet Matters
+Junk food—specifically highly processed sugars and seed oils—is pro-inflammatory.
+Sugar: Spikes blood glucose, which can worsen metabolic dysfunction in a brain already struggling for energy.
+Gut Health: Poor nutrition prevents the gut lining from repairing itself, keeping the "leak" open and the brain inflamed.
+
+
+https://completeconcussions.com/wp-content/uploads/2024/04/image6.png 
+
+4. The Triad: Eyes, Ears, and Neck
+Recovery usually fails because fighters only treat their heads. You have to treat the "Triad":
+Eyes: Your eyes might lose the ability to track moving objects. [12]
+Ears: Your inner ear (vestibular system) gets "out of sync" with your eyes. [27]
+Neck: It takes 70g of force to cause a concussion, but only 4.5g to cause whiplash. If you have a concussion, you have a neck injury. An injured neck sends "bad data" to your brain, making you feel dizzy and off-balance. [8, 10]
+
+https://www.cognitivefxusa.com/hs-fs/hubfs/vestibular-therapy-for-concussion-symptoms-1.jpg?width=1104&height=922&name=vestibular-therapy-for-concussion-symptoms-1.jpg 
+5. The Sleep Crash
+A concussion damages the "master clock" in your brain that controls sleep. [6]
+Melatonin: Your body stops producing melatonin at the right time, making it impossible to fall asleep. [6]
+Waste Clearing: Your brain only cleans out "trash" (toxins) while you sleep. If you aren't sleeping, your brain stays "dirty" and inflamed. [6]
+
+https://journals.sagepub.com/cms/10.1177/00368504231189536/asset/24d4b080-0626-4cc3-917c-af0100a0961a/assets/images/large/10.1177_00368504231189536-fig1.jpg 
+6. The Hidden Hormone Drop
+The pituitary gland (the "master gland") sits in a fragile spot in your skull. When your brain moves, the stalks of this gland can stretch or tear. [32]
+About 25% of fighters end up with "hidden" hormone issues months after a hit. This can lead to:
+Lower testosterone/libido.
+Muscle loss and constant fatigue.
+Deep depression that feels like it came out of nowhere. [34]
+
+https://www.cognitivefxusa.com/hs-fs/hubfs/post-traumatic-brain-injury-hormone-dysregulation-3.jpg?width=1800&name=post-traumatic-brain-injury-hormone-dysregulation-3.jpg 
+7. The Emotional "Brakes"
+The "amygdala" is the part of your brain that handles fear and anger. Usually, your "front brain" keeps it under control. A concussion disrupts the wires between them. [39]
+This is why concussed fighters often feel "snappy," irritable, or suddenly anxious. It’s not a personality flaw; it’s a disruption in your brain’s wiring. [37]
+How to Recover: The Fighter’s Protocol
+In the following lessons we will address each cause and its related symptoms with appropriate treatment to get back to your healthy and resilient self ASAP!
+But remember: patience is key. 
+Rushing back into intense training and sparring too soon after a concussion can do WAY more harm than good. 
+
+
+
+
+Deep Dive:
+
+The Systemic Pathophysiology of Concussion: A Multisystemic Analysis of Extra-Cerebral Regulatory Failure
+The medical community has historically categorized concussion, or mild traumatic brain injury (mTBI), as a transient neurological event primarily localized within the cranium. However, a robust and expanding body of research indicates that the biomechanical forces of a head injury trigger a profound and far-reaching systemic cascade that extends well beyond the brain parenchyma.1 This systemic involvement encompasses the autonomic nervous system (ANS), the gastrointestinal tract, the endocrine system, circadian rhythm regulators, and the integrated sensorimotor systems of the eyes, ears, and neck.4 Understanding concussion as a multisystemic failure is critical for professional clinicians and researchers, as the overlap between post-concussive symptoms and other chronic medical conditions—such as fibromyalgia, chronic fatigue syndrome, and POTS—is rooted in the shared dysregulation of these fundamental regulatory pathways.4
+The Neurometabolic Cascade and the Initiation of Systemic Secondary Injury
+A concussion is initiated by biomechanical forces, including acceleration, deceleration, and rotational inertia, which cause the brain to move within the skull.1 These forces result in the stretching and shearing of axons, particularly in deep brain regions and white matter tracts, which appear most sensitive to regional stretching.1 While these structural changes are often microscopic and undetectable on standard clinical neuroimaging, they trigger a complex neurometabolic cascade.9
+At the cellular level, the physical deformation of neurons leads to widespread depolarization and the indiscriminate release of excitatory neurotransmitters, primarily glutamate.10 This process results in massive ionic imbalances, where potassium () flows out of the cell and calcium () and sodium () flow in.9 To restore homeostasis, adenosine triphosphate (ATP)-dependent pumps are upregulated, leading to a state of cellular hypermetabolism.11 This acute energy crisis is followed by mitochondrial dysfunction, which induces a prolonged period of hypometabolism and impaired glucose utilization.11
+This intracranial crisis does not remain isolated. The primary injury initiates a cascade of systemic alterations referred to as extracranial multiorgan dysfunction (MODS).2 Research indicates that over 68% of moderate to severe TBI patients develop MODS within 72 hours of injury, affecting the pulmonary, circulatory, renal, and coagulation systems.2 Even in mild TBI, where overt hemorrhage or contusion is absent, a systemic immune response is activated.1 Glial cells, such as microglia and astrocytes, act as "cushioning material" for neurons but are themselves sensitive to mechanical signals, becoming activated and releasing damage-associated molecular patterns (DAMPs) into the systemic circulation.1
+Autonomic Nervous System Dysregulation and Cardiovascular Dynamics
+The autonomic nervous system is the primary mediator of the body’s internal environment, and its dysregulation is a hallmark of persistent post-concussive symptoms.4 Concussion-induced injuries to the hypothalamus, the nucleus tractus solitarius, and the medulla—areas responsible for autonomic control—lead to a condition known as dysautonomia.2
+Heart Rate Variability as a Metric of Autonomic Integrity
+Heart rate variability (HRV) serves as a sensitive, objective marker of the balance between the sympathetic nervous system (SNS) and the parasympathetic nervous system (PNS).14 Concussion frequently results in a "sympathetic storm," characterized by an overactive SNS and a withdrawal of PNS (vagal) tone.2
+
+HRV Parameter
+Definition
+Typical Concussion Finding
+Clinical Implication
+NN Interval
+The time between consecutive heartbeats
+Reduced average interval
+Indicates heightened physiological stress 15
+RMSSD
+Root mean square of successive differences
+Significant decrease
+Reflects loss of vagal/parasympathetic control 14
+SDNN
+Standard deviation of NN intervals
+Persistent reduction
+Overall reduction in autonomic flexibility 15
+LF/HF Ratio
+Ratio of low to high frequency power
+Increased ratio
+Shifts toward sympathetic dominance 14
+
+Longitudinal studies of adolescent athletes indicate that those with a history of multiple concussions exhibit significantly impaired cardio-autonomic recovery after exercise.15 This finding suggests that concussion is not a transient event; rather, it may permanently alter the bidirectional feedback loops between the brain and the cardiac system.15
+Cerebral Blood Flow and Autoregulation Failure
+The autonomic nervous system also governs cerebral blood flow (CBF) and cerebral autoregulation (CA)—the process by which the brain maintains constant blood flow despite changes in systemic blood pressure.16 Concussion disrupts CA, meaning the cerebrovasculature can no longer effectively buffer blood pressure oscillations.16 Normally, the brain functions as a high-pass filter, allowing high-frequency fluctuations but dampening low-frequency ones; following a concussion, this filtering mechanism fails, leaving the brain vulnerable to surges in pressure or ischemic drops.16
+Reductions in both global and regional CBF have been documented to persist for over 30 days post-injury, far exceeding the typical 7-to-10-day window of clinical symptom resolution.16 This discrepancy between clinical and physiological recovery is critical, as returning to high-impact activities during this period of "cerebral vulnerability" increases the risk of catastrophic secondary injury.16 Symptoms like "brain fog," dizziness, and orthostatic intolerance (similar to postural orthostatic tachycardia syndrome or POTS) are often manifestations of this impaired baroreflex efficiency and inefficient cerebral perfusion.14
+The Gut-Brain-Microbiome Axis: Intestinal Permeability and Toxemia
+Perhaps the most significant evidence of concussion’s systemic reach is its impact on the gastrointestinal tract. The brain-gut axis is a bidirectional network linking the central nervous system (CNS) to the enteric nervous system, regulated by the vagus nerve, the HPA axis, and the immune system.5
+Mechanisms of the "Leaky Gut"
+Within hours of a concussion, the sympathetic "storm" and subsequent catecholamine release (epinephrine/norepinephrine) disrupt the intestinal barrier.5 This leads to increased mucosal permeability, colloquially known as "leaky gut".5 This physiological failure allows inflammatory molecules, toxins, and bacteria to escape the intestinal lumen and enter the bloodstream.18
+The feedback loop involved in gut-brain failure includes:
+Vagal Dysfunction: The vagus nerve normally provides an anti-inflammatory signal (the cholinergic anti-inflammatory pathway or CAP) that suppresses cytokine production. TBI reduces vagal tone, allowing pro-inflammatory cytokines like , , and  to proliferate.5
+Systemic Inflammation: The release of DAMPs and intestinal toxins into the circulation triggers Systemic Immune Response Syndrome (SIRS).5
+Blood-Brain Barrier Compromise: These circulating inflammatory mediators can breach the blood-brain barrier (BBB), exacerbating neuroinflammation and perpetuating a cycle of neurodegeneration and GI distress.5
+Dysbiosis and Neuroactive Metabolites
+Research into the gut microbiome has revealed that TBI causes a rapid shift in microbial composition, termed dysbiosis.5 This involves a loss of beneficial bacteria that produce short-chain fatty acids (SCFAs), such as butyric acid, which are essential for maintaining BBB integrity and regulating neuro-immune homeostasis.20
+
+Microbiome Component
+Function in Health
+Post-Concussion Change
+Impact on Brain
+Short-Chain Fatty Acids (SCFAs)
+Maintain BBB and gut integrity
+Significant reduction
+Increased neuroinflammation and brain fog 20
+Microbial Diversity
+Resilience to pathogens
+Reduced alpha diversity
+Lower cognitive scores and mood instability 17
+Vagus Nerve Signaling
+Monitors gut-derived DAMPs
+Impaired/Blunted
+Loss of inhibitory control over brain inflammation 5
+Enteric Neurotransmitters
+90% of serotonin produced in gut
+Reduced production
+Anxiety, depression, and "emotional lability" 18
+
+Clinical trials suggest that early enteral nutrition and probiotic supplementation can mitigate these systemic effects, potentially improving neurological recovery by restoring the gut-microbiota-brain homeostasis.20
+Disruption of Sleep Architecture and Circadian Rhythms
+Sleep disturbances are reported by 40% to 65% of mTBI patients and are major predictors of poor long-term prognosis, affecting fatigue, pain, and cognitive function.22 These disruptions are rooted in trauma to the specific neural circuits that regulate the sleep-wake cycle.
+Damage to the Suprachiasmatic Nucleus (SCN)
+The suprachiasmatic nucleus, located in the anterior hypothalamus, is the primary pacemaker for the body's 24.2-hour rhythm (Process C).6 The SCN is largely composed of inhibitory GABAergic interneurons, which research indicates are preferentially affected by mechanical brain trauma.24 Injury to the SCN disrupts the secretion of melatonin from the pineal gland, which is essential for suppressing CNS arousal for sleep.6
+The mechanisms of sleep disruption include:
+Melatonin Misalignment: Concussed patients often exhibit abnormal dim-light melatonin onset (DLMO), causing a mismatch between internal rhythms and the environmental cycle.6
+Process S Impairment: The homeostatic drive for sleep, mediated by adenosine accumulation during wakefulness, is also altered, leading to difficulties falling or staying asleep.6
+Neural Circuitry Damage: Shearing forces impact the thalamo-cortical circuits and the reticular activating system, leading to fragmented sleep architecture and a specific reduction in REM sleep, which is critical for memory consolidation.6
+Classification of Post-Traumatic Sleep Disorders
+Clinicians often misdiagnose these circadian disruptions as simple insomnia, yet the underlying pathophysiology requires distinct interventions.23
+
+Disorder Type
+Primary Pathophysiology
+Common Presentation
+Delayed Sleep Phase (DSPS)
+Melatonin rhythm shift
+Inability to fall asleep until early morning 26
+Irregular Sleep-Wake (ISWP)
+Loss of 24-hour periodicity
+Multiple short sleep episodes across 24 hours 26
+Post-Traumatic Hypersomnia
+Excessive homeostatic drive
+Sleeping 10+ hours with daytime somnolence 22
+Sleep Apnea
+Brainstem/respiratory dysregulation
+Snoring, gasping, and unrefreshing sleep 22
+
+Untreated sleep disorders create a "vicious cycle" where the lack of restorative sleep prevents the brain from clearing metabolic waste (through the glymphatic system), thereby prolonging neuroinflammation and cognitive deficits.6
+The Visual, Vestibular, and Cervical Triad
+Functional recovery from concussion depends heavily on the integration of three distinct but interconnected systems: the eyes (visual), the inner ear (vestibular), and the neck (cervical).7 These systems must work in unison to maintain gaze stability and spatial orientation.
+Vestibulo-Ocular Dysfunction
+Dizziness and visual disturbances occur in up to 90% of acute concussion cases.27 Vestibulo-ocular post-concussion disorder involves a breakdown in the coordination between head movement and eye movement. Key reflexes affected include:
+Vestibulo-Ocular Reflex (VOR): This reflex ensures clear vision during head motion. Damage leads to blurred vision, motion sensitivity, and vertigo.12
+Cervico-Ocular Reflex (COR): This reflex, which uses neck proprioceptive input to stabilize the eyes, is often upregulated following a concussion to compensate for a failing VOR.29
+Cervicogenic Post-Concussion Disorder
+The forces required to cause a concussion (approximately 70-100g) are significantly higher than those required to cause a cervical strain (whiplash, approximately 4.5g).10 Consequently, almost all concussions involve a concomitant neck injury.8 Cervicogenic PCD is characterized by:
+Reduced Range of Motion: Specifically, limited cervical rotation (often only 20-40 degrees).8
+Proprioceptive Errors: Impaired joint position sense, where the patient cannot accurately perceive the position of their head in space.8
+Headache Provocation: Headaches that are triggered or worsened by neck movements or palpation of the upper cervical spine.8
+Successful rehabilitation requires a hierarchical approach. Clinicians must first address cervical spine limitations and Benign Paroxysmal Positional Vertigo (BPPV) before initiating complex vision and vestibular exercises, as the latter can be overly provocative if the foundation of cervical stability is missing.8
+Neuro-Endocrine Disruption and Hypopituitarism
+One of the most under-recognized systemic effects of concussion is its impact on the endocrine system. The pituitary gland is particularly vulnerable due to its vascular anatomy.32
+The Vascular Vulnerability of the Pituitary
+The pituitary gland is supplied by long and short hypophyseal portal vessels. The long vessels traverse the pituitary stalk and are highly susceptible to mechanical shearing or compression from raised intracranial pressure.32 This vulnerability explains the high prevalence of post-traumatic hypopituitarism (PTHP), which is estimated to affect 25% to 50% of TBI patients.34
+
+Axis
+Hormone
+Clinical Manifestation of Deficiency
+Somatotropic
+Growth Hormone (GH)
+Fatigue, muscle loss, depression, cognitive decline 33
+Adrenocortical
+ACTH / Cortisol
+Poor stress tolerance, low blood pressure, lethargy 32
+Gonadotropic
+LH / FSH
+Reduced libido, mood swings, loss of bone density 34
+Thyrotropic
+TSH / Thyroxine
+Cold intolerance, weight gain, cognitive slowing 35
+
+PTHP is "occult" in nature; symptoms often emerge months or even years after the initial injury, leading to frequent misdiagnosis as depression or PTSD.34 In pediatric and adolescent athletes, this can manifest as a stagnation in growth or physical skills.35
+Psychological and Mental Health Sequelae
+Concussion fundamentally alters the neural networks responsible for emotional regulation. Approximately 20% of patients experience significant mental health symptoms, including anxiety, depression, and social withdrawal.36
+Amygdala Hyper-Responsivity and Decoupling
+The amygdala is the brain's emotional processing hub. In a healthy state, it is governed by top-down inhibitory control from the prefrontal cortex.25 Concussion disrupts this balance in two ways:
+Hypo-Frontal Connectivity: There is decreased functional connectivity between the amygdala and the ventromedial prefrontal cortex (vmPFC) and anterior cingulate cortex (ACC), reducing the brain's ability to "down-regulate" emotional responses to stress.39
+Hyper-Posterior Connectivity: Increased connectivity with posterior networks is often observed in patients with high symptom severity, reflecting a maladaptive recruitment of neural resources or a "fixation" on internalizing pathology.39
+This decoupling explains why concussed patients often experience "emotional lability"—sudden outbursts of anger or bouts of tearfulness—and why they are at a higher risk for PTSD.37 Furthermore, genetic risk factors, such as specific polymorphisms in HPA axis genes (, ), interact with the physical injury to predict the severity of post-traumatic anxiety.38
+Integrative Clinical Management: The Multi-Systemic Framework
+The complexity of post-concussion syndrome necessitates a biopsychosocial management strategy that addresses the "vicious cycles" of multi-organ failure.40 The Ziaks Integrative Neurological Concussion (ZINC) Protocol and other contemporary frameworks advocate for a phased, multisystemic approach.31
+Primary Regulatory Stabilization
+Rehabilitation must focus on stabilizing the body's three primary regulatory systems: the autonomic, the endocrine, and the immune.4
+Autonomic Stabilization: Utilizing resonant frequency breathing training (approximately 6 breaths per minute) to increase vagal tone and HRV.4
+Subthreshold Exercise: Graded aerobic exercise performed at 80% of the symptom-exacerbation heart rate promotes autonomic stability and increases CBF without triggering the neurometabolic crisis.4
+Nutritional Support: Addressing the gut-brain axis through an anti-inflammatory diet and probiotics to reduce systemic inflammation.20
+Hormonal Surveillance: Routine screening for GH and ACTH deficiencies in patients who fail to recover within the typical 3-month window.34
+By viewing concussion not as a simple "hit to the head" but as a systemic regulatory collapse, clinicians can provide more accurate diagnoses and targeted therapies. The transition from acute injury to chronic illness is often driven by these extracranial failures; thus, "regulating the regulators" is the key to successful concussion recovery.
+Synthesis of Systemic Implications
+In summary, the modern understanding of concussion reveals that the brain is only the starting point for a complex, body-wide pathophysiology. The initial biomechanical force triggers a "sympathetic storm" that dysregulates the heart, alters the gut microbiome, increases intestinal permeability, and disrupts the delicate vascular supply of the pituitary gland. These physiological changes, in turn, drive systemic inflammation that feeds back into the brain, prolonging neuroinflammation and disrupting the neural networks of the amygdala and SCN. This interconnectedness explains why sleep disturbances, digestive issues, neck pain, and anxiety are not "secondary" symptoms but are core components of the injury itself. Effective recovery requires a paradigm shift: treating the concussion means treating the whole person, with a specific focus on restoring the integrity of the body’s primary regulatory systems.
+Works cited
+The Immune System's Role in the Consequences of Mild Traumatic ..., accessed January 29, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC7928307/
+Early Autonomic Dysfunction in Traumatic Brain Injury: An Article Review on the Impact on Multiple Organ Dysfunction - MDPI, accessed January 29, 2026, https://www.mdpi.com/2077-0383/14/2/557
+Autonomic nervous system dysfunction in pediatric sport-related concussion: a systematic review - PubMed Central, accessed January 29, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC10814701/
+Concussion and the Autonomic, Immune, and Endocrine Systems ..., accessed January 29, 2026, https://www.mdpi.com/2075-4426/15/1/33
+Brain-gut axis dysfunction in the pathogenesis of traumatic brain injury - PubMed Central, accessed January 29, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC8203445/
+Sleep, Sleep Disorders, and Circadian Health following Mild ..., accessed January 29, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC6239093/
+Visio-Vestibular Markers for Concussion - Center for Injury Research and Prevention (CIRP), accessed January 29, 2026, https://injury.research.chop.edu/research/concussion-and-brain-health/objective-measures-concussion/visio-vestibular-markers-concussion
+Integration of Vision and Vestibular Therapy for ... - NSUWorks, accessed January 29, 2026, https://nsuworks.nova.edu/cgi/viewcontent.cgi?article=1754&context=ijahsp
+A review of brain regions and associated post-concussion symptoms - PMC, accessed January 29, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC10435092/
+Cervical Injury Assessments for Concussion Evaluation: A Review - PMC - PubMed Central, accessed January 29, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC5264559/
+Autonomic Dysfunction after Mild Traumatic Brain Injury - PMC - PubMed Central - NIH, accessed January 29, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC5575620/
+Traumatic brain injury and vestibulo-ocular function: current challenges and future prospects, accessed January 29, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC5398755/
+Multiorgan Dysfunction After Severe Traumatic Brain Injury: Epidemiology, Mechanisms, and Clinical Management - PMC - PubMed Central, accessed January 29, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC8448997/
+Concussion and the autonomic nervous system: An introduction to ..., accessed January 29, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC6027940/
+Long-Term Influence of Concussion on Cardio-Autonomic Function in Adolescent Hockey Players - PubMed Central, accessed January 29, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC7901578/
+Sport-Related Concussion Alters Indices of Dynamic Cerebral Autoregulation - PMC, accessed January 29, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC5880892/
+Rebuilding Microbiome for Mitigating Traumatic Brain Injury: Importance of Restructuring the Gut-Microbiome-Brain Axis - PMC - PubMed Central, accessed January 29, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC8003896/
+The Gut-Brain Axis: A New Frontier in Concussion Recovery - Keystone Medical Group, accessed January 29, 2026, https://keymedgroup.com/2025/09/01/elementor-4004/
+EFFECTS OF TRAUMATIC BRAIN INJURY ON THE INTESTINAL TRACT AND GUT MICROBIOME DISSERTATI - UKnowledge, accessed January 29, 2026, https://uknowledge.uky.edu/context/physiology_etds/article/1063/viewcontent/DeSana_dissertation_Final.pdf
+Modulation of Gut Microbiota and Gut-Brain Axis as a Therapeutic approach in Traumatic brain injury: Implications for Neurological Outcomes | medRxiv, accessed January 29, 2026, https://www.medrxiv.org/content/10.1101/2025.10.15.25338135v1.full-text
+Modulation of Gut Microbiota and Gut-Brain Axis as a Therapeutic approach in Traumatic brain injury: Implications for Neurologic - medRxiv, accessed January 29, 2026, https://www.medrxiv.org/content/10.1101/2025.10.15.25338135v1.full.pdf
+Impact of traumatic brain injury on sleep: an overview | NSS - Dove Medical Press, accessed January 29, 2026, https://www.dovepress.com/impact-of-traumatic-brain-injury-on-sleep-an-overview-peer-reviewed-fulltext-article-NSS
+Circadian rhythm in the assessment of postconcussion insomnia: a cross-sectional observational study - PMC - NIH, accessed January 29, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC7065561/
+Sleep Disturbances as a Potential Mechanism of Post-Traumatic Epileptogenesis | ViP Leadership Award | Perelman School of Medicine at the University of Pennsylvania, accessed January 29, 2026, https://www.med.upenn.edu/PTERC/sleep-disturbances-as-a-potential-mechanism-of-post-traumatic-epileptogenesis
+Stress-Induced Functional Alterations in Amygdala: Implications for Neuropsychiatric Diseases - Frontiers, accessed January 29, 2026, https://www.frontiersin.org/journals/neuroscience/articles/10.3389/fnins.2018.00367/full
+(PDF) Circadian rhythm sleep disorders following mild traumatic brain injury - ResearchGate, accessed January 29, 2026, https://www.researchgate.net/publication/51385728_Circadian_rhythm_sleep_disorders_following_mild_traumatic_brain_injury
+Assessment and Management of Dizziness and Visual Disturbances Following Concussion/Mild Traumatic Brain Injury: Guidance for the - Health.mil, accessed January 29, 2026, https://health.mil/Reference-Center/Publications/2024/02/23/Assessment-and-Management-of-Dizziness-and-Visual-Disturbances-Following-Concussion-Mild-Traumatic-Brain-Injury
+Vestibular (Balance/ Dizziness) & Vision Dysfunction | Living Concussion Guidelines, accessed January 29, 2026, https://concussionsontario.org/concussion/guideline-section/vestibular-balance-dizziness-vision-dysfunction
+Traumatic brain injury and vestibulo-ocular function: current challenges and future prospects, accessed January 29, 2026, https://www.tandfonline.com/doi/pdf/10.2147/EB.S82670
+Cervico-Ocular and Vestibulo-Ocular Reflexes in Subclinical Neck ..., accessed January 29, 2026, https://www.mdpi.com/2076-3425/13/11/1603
+A Novel Approach to Integrative Concussion Rehabilitation: A Pragmatic Study - Austin Publishing Group, accessed January 29, 2026, https://austinpublishinggroup.com/physical-medicine/fulltext/pmr-v11-id1222.pdf
+Endocrine Dysfunction After Traumatic Brain Injury: An Ignored Clinical Syndrome? - PMC, accessed January 29, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC10689524/
+Traumatic Brain Injury as Frequent Cause of Hypopituitarism and Growth Hormone Deficiency: Epidemiology, Diagnosis, and Treatment - Frontiers, accessed January 29, 2026, https://www.frontiersin.org/journals/endocrinology/articles/10.3389/fendo.2021.634415/full
+High Prevalence of Chronic Pituitary and Target-Organ Hormone Abnormalities after Blast-Related Mild Traumatic Brain Injury - NIH, accessed January 29, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC3273706/
+Hypopituitarism After Multiple Concussions: A Retrospective Case Study in an Adolescent Male - PMC - PubMed Central, accessed January 29, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC1978466/
+6 Ways a Concussion Can Affect Your Cognitive Function and Mental Health - Houston Physicians Hospital, accessed January 29, 2026, https://www.houstonphysicianshospital.com/6-ways-a-concussion-can-affect-your-cognitive-function-and-mental-health/
+Personality Changes After a Brain Injury or Concussion | Cognitive FX, accessed January 29, 2026, https://www.cognitivefxusa.com/blog/personality-changes-after-a-brain-injury-or-concussion
+Amygdala functional connectivity, HPA axis genetic variation, and life stress in children and relations to anxiety and emotion regulation - PubMed Central, accessed January 29, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC4662045/
+Associations of mTBI and post-traumatic stress to amygdala ..., accessed January 29, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC10406312/
+Functional Overlay Model of Persistent Post-Concussion Syndrome ..., accessed January 29, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC10377031/
+Post-Concussion Syndrome after a Mild Traumatic Brain Injury: A Minefield for Clinical Practice - SciRP.org, accessed January 29, 2026, https://www.scirp.org/journal/paperinformation?paperid=67023
+Concussion and the Autonomic, Immune, and Endocrine Systems: An Introduction to the Field and a Treatment Framework for Persisting Symptoms - PubMed, accessed January 29, 2026, https://pubmed.ncbi.nlm.nih.gov/39852225/
+
