@@ -3235,12 +3235,28 @@ header h1 {
 }
 
 .deep-dive-btn .deep-dive-icon {
-    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.deep-dive-btn .deep-dive-icon svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--primary);
 }
 
 .deep-dive-btn .deep-dive-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: transform 0.3s ease;
-    font-size: 0.9rem;
+}
+
+.deep-dive-btn .deep-dive-arrow svg {
+    width: 18px;
+    height: 18px;
+    stroke: var(--text-secondary);
 }
 
 .deep-dive-btn.active .deep-dive-arrow {
