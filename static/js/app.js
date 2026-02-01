@@ -853,6 +853,7 @@ async function checkAuthStatus() {
                 await checkSubscriptionStatus();
                 await checkCourseAccess();
                 updateUserUI();
+                updateCoursePaywall();
             } else {
                 currentUser = null;
                 hasActiveSubscription = false;
