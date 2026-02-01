@@ -58,14 +58,15 @@ A web application that analyzes sparring/boxing footage to detect punch impacts,
    - Save analysis sessions to PostgreSQL database
    - View past injury history with full concussion screening details
    - Track cumulative exposure over time
-10. **Concussion Science Course**: Comprehensive 6-lesson educational course:
-    - Lesson 1: Physics of the Hit (linear vs rotational forces, mechanoporation)
-    - Lesson 2: The Energy Crisis (neurometabolic cascade, vulnerability window)
-    - Lesson 3: The Invisible Injury (why scans look normal, TBI classification)
-    - Lesson 4: Recovery Protocol (11 R's framework, SCAT6 symptom clusters)
-    - Lesson 5: Return-to-Sport Ladder (6-step progression)
-    - Lesson 6: Long-Term Risks (CTE, Second Impact Syndrome)
-    - Based on 2022 Amsterdam Consensus and peer-reviewed research
+10. **Concussion Science Course**: Comprehensive 7-lesson educational course:
+    - Lesson 1: What is a Concussion (physics, energy crisis, invisible injury, long-term risks)
+    - Lesson 2: Recovery Expectations (Second Impact Syndrome, active recovery, fear avoidance, 6-step ladder)
+    - Lesson 3: Aerobic Exercise (BDNF, 3-point rule, heart rate monitoring, red flags)
+    - Lesson 4: Nutrition (gut-brain axis, Omega-3, creatine, magnesium, hydration, progress killers)
+    - Lesson 5: Sleep (glymphatic clearance, sleep optimization, supplements like melatonin and magnesium L-threonate)
+    - Lesson 6: Stress & Nervous System (vagus nerve, sympathetic/parasympathetic balance, vagal tone exercises)
+    - Lesson 7: The Neck Connection (cervical spine injury relationship, cervicogenic symptoms)
+    - Based on 2022 Amsterdam Consensus, Canadian Guideline on Concussion in Sport (2024), and peer-reviewed research
 
 ## UI Theme
 Modern glassware aesthetic with:
@@ -75,14 +76,18 @@ Modern glassware aesthetic with:
 - Montserrat font throughout
 - Clean, professional design
 
-## Recent Changes (January 2026)
-- **Concussion Science Course Tab** (Latest):
-  - New tab navigation system to switch between Calculator and Course sections
-  - 6 comprehensive lessons on concussion science based on 2022 Amsterdam Consensus
-  - Interactive lesson navigation with glassmorphism UI matching main theme
-  - Educational images from Concussion Alliance with proper citations
-  - TBI classification table, Return-to-Sport ladder, symptom clusters, and more
-  - Fully responsive design for mobile devices
+## Recent Changes (February 2026)
+- **Expanded Concussion Science Course** (Latest):
+  - Restructured to 7 comprehensive lessons based on latest research
+  - Lesson 1: What is a Concussion (physics, energy crisis, invisible injury)
+  - Lesson 2: Recovery Expectations (active recovery, fear avoidance, 6-step ladder)
+  - Lesson 3: Aerobic Exercise (BDNF, 3-point rule, Buffalo Concussion Treadmill Test)
+  - Lesson 4: Nutrition (Omega-3, creatine, magnesium, hydration strategies)
+  - Lesson 5: Sleep (glymphatic clearance, sleep supplements, optimization)
+  - Lesson 6: Stress & Nervous System (vagus nerve, vagal tone exercises)
+  - Lesson 7: The Neck Connection (cervicogenic symptoms, rehabilitation)
+  - Added Canadian Guideline on Concussion in Sport (2024) references
+  - Educational images from Concussion Alliance, Complete Concussions, Cognitive FX USA
 - **Stripe Subscription Integration**:
   - Monthly subscription ($9.99/month) with 7-day free trial required for video analysis
   - Subscription banner for non-subscribers encouraging trial signup
