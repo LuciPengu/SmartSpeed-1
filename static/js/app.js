@@ -986,6 +986,7 @@ function updateUserUI() {
     const loggedInSection = document.getElementById('user-logged-in');
     const saveBtn = document.getElementById('save-session-btn');
     const subscriptionBanner = document.getElementById('subscription-banner');
+    const manageSubBtn = document.getElementById('manage-sub-btn');
     
     if (currentUser) {
         loginBtn.classList.add('hidden');
@@ -1001,11 +1002,20 @@ function updateUserUI() {
                 subscriptionBanner.classList.remove('hidden');
             }
         }
+        
+        if (manageSubBtn) {
+            if (hasActiveSubscription) {
+                manageSubBtn.classList.remove('hidden');
+            } else {
+                manageSubBtn.classList.add('hidden');
+            }
+        }
     } else {
         loginBtn.classList.remove('hidden');
         loggedInSection.classList.add('hidden');
         if (saveBtn) saveBtn.style.display = 'none';
         if (subscriptionBanner) subscriptionBanner.classList.add('hidden');
+        if (manageSubBtn) manageSubBtn.classList.add('hidden');
     }
 }
 

@@ -1089,7 +1089,7 @@ header h1 {
     color: var(--text-primary);
 }
 
-.history-btn, .logout-btn {
+.history-btn, .logout-btn, .manage-sub-btn {
     padding: 8px;
     background: transparent;
     border: 1px solid var(--border-glow);
@@ -1099,7 +1099,7 @@ header h1 {
     transition: all 0.3s ease;
 }
 
-.history-btn:hover, .logout-btn:hover {
+.history-btn:hover, .logout-btn:hover, .manage-sub-btn:hover {
     background: var(--bg-glass);
     color: var(--primary);
     border-color: var(--primary);
