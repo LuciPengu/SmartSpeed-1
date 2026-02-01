@@ -1584,20 +1584,23 @@ function initLessonNavigation() {
 }
 
 // ===== Deep Dive Toggle =====
-function toggleDeepDive(contentId) {
-    const content = document.getElementById(contentId);
-    const btn = content.previousElementSibling;
+function toggleDeepDive(btn) {
+    // Find the deep dive content - it's the next sibling of the toggle container
+    const toggleContainer = btn.closest('.deep-dive-toggle');
+    const content = toggleContainer.nextElementSibling;
     
-    if (content.classList.contains('active')) {
-        content.classList.remove('active');
-        btn.classList.remove('active');
-    } else {
-        content.classList.add('active');
-        btn.classList.add('active');
-        // Scroll to the deep dive content smoothly
-        setTimeout(() => {
-            content.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 100);
+    if (content && content.classList.contains('deep-dive')) {
+        if (content.classList.contains('hidden')) {
+            content.classList.remove('hidden');
+            btn.classList.add('active');
+            // Scroll to the deep dive content smoothly
+            setTimeout(() => {
+                content.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        } else {
+            content.classList.add('hidden');
+            btn.classList.remove('active');
+        }
     }
 }
 

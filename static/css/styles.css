@@ -3535,3 +3535,174 @@ header h1 {
         font-size: 1.25rem;
     }
 }
+
+/* Course Lesson Enhancements */
+.info-table {
+    margin: 1.5rem 0;
+    overflow-x: auto;
+}
+
+.info-table table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.info-table th,
+.info-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.info-table th {
+    background: var(--primary-faded);
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-table td {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.info-table tr:last-child td {
+    border-bottom: none;
+}
+
+.info-table tr:hover td {
+    background: rgba(52, 211, 153, 0.05);
+}
+
+.info-callout {
+    background: rgba(52, 211, 153, 0.1);
+    border-left: 4px solid var(--primary);
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 0 8px 8px 0;
+}
+
+.info-callout strong {
+    color: var(--primary);
+}
+
+.lesson-video {
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.lesson-video h6 {
+    color: var(--primary);
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.lesson-video .video-note {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+.source-citation {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    border-left: 3px solid var(--primary);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.source-citation strong {
+    color: var(--primary);
+}
+
+/* Deep Dive Toggle */
+.deep-dive-toggle {
+    margin: 1.5rem 0;
+    text-align: center;
+}
+
+.deep-dive-toggle .deep-dive-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--primary-faded);
+    border: 1px solid var(--primary-border);
+    border-radius: 8px;
+    color: var(--primary);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.deep-dive-toggle .deep-dive-btn:hover {
+    background: rgba(52, 211, 153, 0.2);
+    border-color: var(--primary);
+}
+
+.deep-dive-toggle .deep-dive-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Lesson Section Styles */
+.lesson-section.simple-explanation {
+    margin-bottom: 1.5rem;
+}
+
+.lesson-section.deep-dive {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1.5rem;
+    margin-top: 1rem;
+}
+
+.lesson-section h5 {
+    color: var(--primary);
+    font-size: 1.15rem;
+    margin: 1.5rem 0 0.75rem;
+}
+
+.lesson-section h6 {
+    color: var(--text-primary);
+    font-size: 1rem;
+    margin: 1.25rem 0 0.5rem;
+}
+
+.lesson-section p {
+    margin-bottom: 1rem;
+    line-height: 1.7;
+}
+
+.lesson-section ul,
+.lesson-section ol {
+    margin: 0.75rem 0 1.25rem 1.5rem;
+}
+
+.lesson-section li {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+}
+
+.lesson-section li strong {
+    color: var(--primary);
+}
+
+.section-title {
+    color: var(--primary);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--primary-border);
+}
