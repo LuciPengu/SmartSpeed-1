@@ -45,6 +45,18 @@ class NoCacheMiddleware(BaseHTTPMiddleware):
 
 app.add_middleware(NoCacheMiddleware)
 
+# Global exception handler to ensure all errors return JSON
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    import traceback
+    error_detail = str(exc)
+    print(f"Global error handler caught: {error_detail}")
+    print(traceback.format_exc())
+    return JSONResponse(
+        status_code=500,
+        content={"detail": f"Internal server error: {error_detail}"}
+    )
+
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 analysis_results: Dict[str, Any] = {}
