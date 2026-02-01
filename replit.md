@@ -59,13 +59,14 @@ A web application that analyzes sparring/boxing footage to detect punch impacts,
    - View past injury history with full concussion screening details
    - Track cumulative exposure over time
 10. **Concussion Science Course**: Comprehensive 7-lesson educational course:
-    - Lesson 1: What is a Concussion (physics, energy crisis, invisible injury, long-term risks)
-    - Lesson 2: Recovery Expectations (Second Impact Syndrome, active recovery, fear avoidance, 6-step ladder)
-    - Lesson 3: Aerobic Exercise (BDNF, 3-point rule, heart rate monitoring, red flags)
-    - Lesson 4: Nutrition (gut-brain axis, Omega-3, creatine, magnesium, hydration, progress killers)
-    - Lesson 5: Sleep (glymphatic clearance, sleep optimization, supplements like melatonin and magnesium L-threonate)
-    - Lesson 6: Stress & Nervous System (vagus nerve, sympathetic/parasympathetic balance, vagal tone exercises)
-    - Lesson 7: The Neck Connection (cervical spine injury relationship, cervicogenic symptoms)
+    - Lesson 1: What is a Concussion (physics, energy crisis, invisible injury, TBI classification table, long-term risks)
+    - Lesson 2: Recovery Expectations (Second Impact Syndrome, active recovery vs dark room rest, fear avoidance/nocebo effect, 6-step return-to-sport ladder)
+    - Lesson 3: Aerobic Exercise (BDNF brain fertilizer, 3-point rule, Buffalo Concussion Treadmill Test protocol with heart rate thresholds 80-90%, SCAT6 Red Flags)
+    - Lesson 4: Nutrition (Omega-3 2-4g/day, creatine 5g/day, magnesium 400mg/day, Vitamin D, B2/Riboflavin 400mg/day, NAC; Progress Killers including alcohol, caffeine, nicotine/vaping, THC, processed sugar)
+    - Lesson 5: Sleep (glymphatic clearance, 7-9 hours optimization, supplements including melatonin 0.5-3mg, magnesium L-threonate, L-theanine; Four Ps of Energy Conservation)
+    - Lesson 6: Stress & Nervous System (vagus nerve function, sympathetic/parasympathetic balance, vagal tone exercises including breathing, cold exposure, gargling, L-theanine)
+    - Lesson 7: The Neck Connection (biomechanical thresholds table 4.5g neck vs 70-120g brain, cervical spine anatomy, cervicogenic symptoms, manual therapy vs self-care, Four Ps application)
+    - Educational images from Concussion Alliance, Complete Concussions, Cognitive FX USA, Frontiers
     - Based on 2022 Amsterdam Consensus, Canadian Guideline on Concussion in Sport (2024), and peer-reviewed research
 
 ## UI Theme
