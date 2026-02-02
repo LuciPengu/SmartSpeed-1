@@ -811,13 +811,13 @@ function initializeAuth() {
         if (courseSessionId) {
             verifyCourseSession(courseSessionId);
         } else {
-            showToast('Course unlocked! Enjoy your learning journey.', 'success');
+            showToast('Guide unlocked! Enjoy your learning journey.', 'success');
             checkCourseAccess();
         }
         window.history.replaceState({}, document.title, '/');
     }
     if (urlParams.get('course_checkout') === 'cancelled') {
-        showToast('Course purchase cancelled', 'info');
+        showToast('Guide purchase cancelled', 'info');
         window.history.replaceState({}, document.title, '/');
     }
     
@@ -1146,7 +1146,7 @@ function updateCoursePaywall() {
 async function purchaseCourse() {
     if (!currentUser) {
         showAuthModal();
-        showToast('Please sign in to purchase the course', 'warning');
+        showToast('Please sign in to purchase the guide', 'warning');
         return;
     }
     
@@ -1185,7 +1185,7 @@ async function verifyCourseSession(stripeSessionId) {
         if (data.success && data.course_purchased) {
             hasCoursePurchased = true;
             updateCoursePaywall();
-            showToast('Course unlocked! Enjoy your learning journey + 1 month FREE Strike Calculator access!', 'success');
+            showToast('Guide unlocked! Enjoy your learning journey + 1 month FREE Strike Calculator access!', 'success');
             await checkAuthStatus();
             await checkSubscriptionStatus();
         } else {
@@ -1193,7 +1193,7 @@ async function verifyCourseSession(stripeSessionId) {
         }
     } catch (error) {
         console.error('Verify course session error:', error);
-        showToast('Course purchased! Please refresh if content is still locked.', 'success');
+        showToast('Guide purchased! Please refresh if content is still locked.', 'success');
         await checkAuthStatus();
     }
 }
