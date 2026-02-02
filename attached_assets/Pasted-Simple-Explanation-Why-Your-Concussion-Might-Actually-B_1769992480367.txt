@@ -1,0 +1,244 @@
+Simple Explanation: 
+Why Your "Concussion" Might Actually Be a Neck Injury
+In boxing, we talk about "the chin" and "the brain," but we often ignore the bridge between them: the neck. Modern research shows that you cannot rattle the brain without also damaging the neck.
+If you are struggling with "post-concussion symptoms," there is a high chance your neck—not your brain—is the primary reason you still feel like garbage.
+1. Your Neck is the Weakest Link
+The force required to give you a concussion is much higher than the force needed to injure your neck.
+Neck Injury Threshold: 4.5g of force [3].
+Adult Concussion Threshold: 70g to 120g of force [1].
+The Takeaway: If you took a shot hard enough to cause a concussion, you subjected your neck to 15 to 26 times the force it can handle. It is almost physically impossible to get a concussion without also getting a "whiplash" style neck injury [6].
+
+https://med.stanford.edu/content/sm/news/all-news/2018/09/study-shows-how-head-neck-positioning-affects-concussion-risk/jcr%3acontent/cq%3afeaturedimage.coreimg.jpg/1736929101901/lksc.jpg 
+2. The Symptom Trap
+The brain and the neck share the same "wiring" in your upper spine. Because of this, a neck injury can perfectly mimic a brain injury. This leads many fighters to think their brain hasn't healed when, in reality, their neck is just still jammed up.
+Symptom
+Could be Brain?
+Could be Neck?
+Headaches
+Yes
+Yes (Cervicogenic) [8]
+Dizziness
+Yes
+Yes (Sensory Mismatch) [7]
+Brain Fog
+Yes
+Yes (Proprioceptive Conflict) [8]
+Balance Issues
+Yes
+Yes [8]
+
+Why this happens: Your neck is a massive sensor for your brain. When the joints or muscles in your upper neck (C1-C3) are injured, they send "glitchy" data to the brain. Your brain gets confused by the conflicting signals from your eyes, ears, and neck, resulting in dizziness and that "spaced out" feeling [7, 8].
+
+https://i0.wp.com/mollandspinalcare.com/wp-content/uploads/2018/04/never-fade.png?resize=546%2C457&ssl=1 
+3. "Resting in a Dark Room" Doesn't Fix a Neck
+For years, the advice was to sit in a dark room and wait. While 24–48 hours of rest is good after a hard hit, "cocooning" for weeks won't fix a mechanical neck issue.
+Muscle Guarding: After a hit, your neck muscles go into a protective spasm (guarding). This reduces blood flow and creates "trigger points" that refer pain behind your eyes and across your forehead [7].
+Joint Locking: The small joints in your spine (facet joints) can become inflamed or "locked," causing sharp pain and limited movement [17].
+4. Recovery: Pro Help vs. Self-Care
+If your neck is the issue, you need to treat it like any other sports injury.
+Manual Therapy (The Gold Standard): Research shows that hands-on treatment from a professional (Physio or Chiropractor) is significantly more effective than just stretching [30]. They use techniques like Joint Mobilization and Post-Isometric Relaxation to reset the muscles and joints [8, 31].
+Active Recovery: After the first 48 hours, move into "relative rest." Use the Four P’s: Plan your day, Prioritize the big tasks, Pace yourself with breaks, and watch your Position (don't slouch over your phone) [43].
+Summary for the Gym
+If you have persistent headaches, dizziness, or fog after a fight or a hard sparring session, get your neck checked by a specialist. Addressing the neck is often the "missing piece" that gets fighters back to 100% and back in the ring [6, 22].
+
+DEEP DIVE:
+The Cervical-Cerebral Interface: A Comprehensive Analysis of Biomechanical Thresholds, Pathophysiological Convergence, and Multimodal Rehabilitation in Concussion and Cervical Spine Trauma
+The clinical management of mild traumatic brain injury (mTBI), colloquially known as concussion, has historically been centered on the intracranial environment. However, evolving medical research and biomechanical analysis have increasingly illuminated the inseparable link between the brain and the cervical spine. The head does not exist in isolation; it is supported by a complex architecture of joints, ligaments, and muscles that must absorb and dissipate the same kinetic energy that affects the brain during a traumatic event. A foundational realization in modern sports medicine and neurotrauma is that the thresholds for injury to the cervical spine are significantly lower than those required to induce a concussion, leading to a high prevalence of comorbid neck injuries in concussed populations.
+Biomechanical Thresholds and the Vulnerability of the Cervical Spine
+The human brain is protected by the skull and cushioned by cerebrospinal fluid, but it remains susceptible to the effects of rapid acceleration and deceleration. In adults, the linear acceleration required to cause a concussive injury is generally cited between 70g and 120g.1 Rotational forces are equally, if not more, significant, with concussive thresholds estimated between 5,582 and 9,515 radians per second squared ().1 These forces cause microstructural damage, specifically axonal shearing and metabolic cascades, which manifest as neurological dysfunction.1
+In stark contrast, the cervical spine is far more fragile when subjected to inertial loading. Biomechanical studies focusing on whiplash-associated disorders (WAD) have demonstrated that the tissues of the cervical spine, including the facet joint capsules and the paraspinal musculature, can reach their injury threshold at accelerations as low as 4.5g.3 This creates a massive disparity in injury potential: the force required to shake the brain enough to cause a concussion is approximately fifteen to twenty-six times greater than the force required to damage the neck.
+Comparative Acceleration Thresholds for Cranial and Cervical Injury
+Injury Classification
+Linear Acceleration Threshold (g)
+Angular/Rotational Threshold (rad/s2)
+Primary Target Tissue
+Cervical Strain (Whiplash)
+4.5g
+N/A
+Ligaments, Facet Joints, Muscles
+Concussion (Adolescent)
+32g - 92g
+1,018 - 4,200
+Developing Axons
+Concussion (Adult)
+70g - 120g
+5,582 - 9,515
+Mature Axonal Structures
+Static Load Fracture (C1-T2)
+80g - 125g
+N/A
+Bone/Structural Integrity
+Subdural Hematoma
+>316g
+N/A
+Bridging Veins, Dura Mater
+
+1
+The logical implication of these mathematical thresholds is that if an individual sustains a force of 70g or higher to the head—sufficient to cause a concussion—the cervical spine has already been subjected to a force nearly sixteen times its own injury threshold.3 Consequently, it is an anatomical and mechanical rarity for a concussion to occur without a concomitant cervical injury. Clinical evidence supports this biomechanical reality, with certain studies finding that up to 100% of concussed subjects demonstrate whiplash-associated findings upon physical examination.6
+Mechanical Energy and the Pathomechanical Sequence
+The physics of these injuries can be understood through the transmission of momentum. The head, weighing approximately 4.5 to 5 kilograms, acts as a mass on a flexible lever (the neck).5 When a force () is applied to the skull, the resulting kinetic energy () must be managed by the cervical structures.
+The pathomechanical sequence of a cervical injury during a concussive event typically follows four distinct phases:
+Retraction Phase: As the body is accelerated forward or the head is struck, the lower cervical vertebrae are forced into extension while the upper cervical vertebrae are forced into flexion. This creates an unnatural S-shaped curve in the spine, placing immense strain on the anterior ligaments and posterior joints.8
+Extension Phase: The entire neck moves into full extension, compressing the facet joints and stretching the sternocleidomastoid and scalene muscles beyond their physiological limits.8
+Rebound Phase: The head then snaps forward into flexion, often overcompensating for the extension, which strains the posterior musculature and the capsular ligaments.8
+Deceleration: The muscles and joints attempt to stabilize the mass of the head, often leading to secondary spasms and protective guarding.7
+Symptomatological Homogeneity: The Diagnostic Trap
+One of the most complex aspects of managing concussions is the profound overlap between the symptoms of brain injury and cervical spine injury. Because the neck and the brain are part of a unified sensory-motor system, dysfunction in one often mimics or exacerbates dysfunction in the other. This homogeneity can lead to a diagnostic bias where clinical providers attribute all symptoms to the brain, overlooking a treatable neck component that may be the primary driver of persistent suffering.8
+The Trigeminocervical Nucleus and Referred Pain
+The physiological nexus for this overlap is the trigeminocervical nucleus. This is a region of the gray matter in the upper cervical spinal cord where sensory information from the first three cervical nerves (C1, C2, and C3) converges with sensory fibers from the trigeminal nerve (the primary nerve for sensation in the head and face).10 When the joints or muscles of the upper neck are irritated or inflamed, the brain often misinterprets these signals as originating from the head, resulting in what is known as a cervicogenic headache.8 These headaches are virtually indistinguishable from post-traumatic headaches caused by a concussion.
+Sensory Mismatch and Dizziness
+The cervical spine is arguably the most important proprioceptive organ in the body. It contains a higher density of muscle spindles and mechanoreceptors than almost any other region, providing the brain with constant data about the position of the head relative to the torso.7 When these receptors are damaged or their signals are disrupted by muscle tension or joint dysfunction, a "sensory mismatch" occurs.8 The brain receives conflicting information from the eyes, the inner ears (vestibular system), and the neck. This conflict manifests as dizziness, balance problems, and a general sense of being "off" or "foggy," all of which are classic concussion symptoms.7
+Overlapping Clinical Presentations
+
+Symptom Category
+Concussion (Cerebrogenic)
+Neck Injury (Cervicogenic)
+Common Mechanistic Link
+Neurological
+Headache, Dizziness, Tinnitus
+Headache, Dizziness, Tinnitus
+Trigeminocervical convergence 8
+Sensory
+Blurred Vision, Sensitivity to Light
+Blurred Vision, Eye Strain
+Disrupted Cervico-ocular reflex 10
+Cognitive
+Difficulty Concentrating, Brain Fog
+"Spaced out" feeling, Brain Fog
+Proprioceptive/Vestibular conflict 8
+Physical
+Nausea, Fatigue, Sleep Problems
+Nausea, Fatigue, Sleep Problems
+Chronic pain and autonomic stress 7
+Stability
+Balance Problems, Clumsiness
+Unsteadiness, Poor Balance
+Impaired Cervicocollic reflex 8
+
+7
+Because of this overlap, the Sport Concussion Assessment Tool (SCAT) contains 22 symptoms, 19 of which fail to accurately differentiate between a concussion and a cervical/vestibular injury.14 This suggests that many patients diagnosed with "Post-Concussion Syndrome" (PCS) may actually be suffering from unresolved cervical dysfunction.4
+Anatomical Drivers: Joint-Related vs. Muscle-Related Dysfunction
+Cervical injuries in the context of concussion are rarely isolated to a single tissue. Instead, they involve a complex interplay between the articular (joint) and myofascial (muscle) systems.
+Joint-Related Dysfunction: Facet and Ligamentous Irritation
+The facet joints, or zygapophyseal joints, are the synovial joints of the spine that facilitate movement and provide stability. During a high-velocity impact, these joints can be compressed or distracted, leading to several issues:
+Facet Joint Syndrome: Impact can cause the joint capsules to become inflamed, sending severe and diffuse pain signals to the brain. This pain is often described as a "locking" sensation and is exacerbated by movement.17
+Capsular Ligament Laxity: The ligaments surrounding the facet joints are the primary stabilizers of the cervical spine. If they are stretched (laxity) during an injury, the resulting instability can irritate nearby nerves and even the vertebral arteries, leading to vertigo and tinnitus.19
+Upper Cervical Instability (C1-C3): Dysfunction in the top three vertebrae is particularly significant because these joints have the most direct influence on the balance and vision centers of the brain.8
+Muscle-Related Dysfunction: Myofascial Guarding and Tension
+The muscular response to a concussive force is often one of protective guarding. Myofascial issues are identified in approximately 98% of patients presenting with neck pain post-concussion.20
+Trigger Points: The suboccipital muscles, located at the base of the skull, often develop myofascial trigger points. These points refer pain behind the eyes and across the forehead, mimicking the pain patterns of a concussion.7
+Spasm and Ischemia: Protective spasms can reduce local blood flow (ischemia) and further irritate the nerves, creating a cycle of pain and tension that prevents the underlying joints from moving normally.7
+Postural Compensation: Patients often adopt a "forward head posture" to mitigate pain, which places even more strain on the posterior neck muscles, prolonging the recovery process.7
+The Prevalence and Influence of Neck Pain on Recovery
+Data from clinical settings underscore the scale of the issue. In a study of patients presenting to Level I trauma centers with mTBI, 68.4% reported neck pain within the first 72 hours.6 This pain is not merely a transient nuisance; it is a persistent factor that often outlasts the neurological symptoms of the concussion itself.
+Persistence of Neck Pain Following mTBI
+Days Post-Injury
+Frequency of Endorsed Neck Pain
+Rank Among All Symptoms
+0 - 3 Days
+68.4%
+5th Most Common
+8 Days
+50.6%
+4th Most Common
+45 Days
+41.9%
+3rd Most Common
+
+6
+Furthermore, the presence of neck pain is a significant predictor of a complicated and delayed recovery. Research on collegiate athletes shows that those with new or worsened neck pain following a concussion experienced symptoms for an average of 11.1 days, compared to 8.8 days for those without neck pain.22 They were also significantly less likely to achieve symptom resolution within the first seven days post-injury.22 This suggests that addressing the neck is not just an elective part of therapy—it is a critical requirement for a timely return to play or work.
+Rehabilitation Strategies: Self-Care vs. Professional Intervention
+While the recognition of neck involvement is a critical first step, the method of rehabilitation is equally important. Patients often attempt self-directed care, such as stretching or self-massage, which can provide symptomatic relief but may fail to address the underlying biomechanical dysfunction.
+The Role of Self-Stretching and Self-Massage
+Self-management is a valuable component of a comprehensive recovery plan, particularly for reducing muscle tension and maintaining range of motion.
+Self-SNAGs (Sustained Natural Apophyseal Glides): These are specialized stretches using a towel or strap to facilitate joint movement. They have been shown to provide immediate relief for cervicogenic headaches.23
+Static Stretching: Stretching the upper trapezius and levator scapulae can help reduce the "guarding" response of the muscles.24
+Benefits: Low-cost, convenient, and effective for short-term pain relief.26
+Limitations: Self-care is often insufficient for chronic or severe dysfunction. It cannot address specific joint "locking" or segmental instability, and incorrect execution can lead to lightheadedness or increased pain.23
+The Superiority of Professional Manual Therapy
+Clinical research consistently points toward hands-on assessment and treatment from a chiropractor or physiotherapist as the "gold standard" for neck-related concussion recovery. These professionals use targeted techniques that are difficult or impossible for a patient to perform on themselves.
+Efficacy Comparison: Manual Therapy vs. Self-Stretching
+
+Outcome Measure
+Professional Manual Therapy (PIR/Mobilization)
+Self-Stretching (SS)
+Pain Intensity
+Significantly lower after 4 weeks ()
+Improved, but less than professional care
+Disability (NDI)
+Significantly greater reduction ()
+Moderate reduction
+Range of Motion
+Superior increase in extension ()
+Improved mobility
+Function
+66% decrease in pain; 60% functional gain
+37-58% improvement 30
+
+30
+Key professional interventions include:
+Post-Isometric Relaxation (PIR): A manual therapy technique where the therapist guides the patient through a light isometric contraction followed by a relaxation phase. PIR has been shown to be superior to self-stretching in reducing pain and disability.31
+Joint Mobilization and Manipulation: These techniques involve the skilled application of force to specific spinal segments to restore normal "glide" and reduce nerve irritation. Mobilization of the upper cervical spine (C1-C2) is particularly effective for resolving dizziness and headaches.8
+Neuromotor Retraining: Therapists use specialized exercises, such as balance training with a fixed gaze or cervical joint-position error testing, to "re-train" the neck's sensors to talk to the brain correctly.15
+Integrative Care: Professional treatment often combines manual therapy with vestibular and vision exercises, which has been shown in Randomized Controlled Trials (RCTs) to decrease the time for medical clearance and return to activity.6
+Professional Standards and the Clinical Pathway
+In regions like Ontario, Canada, the management of these injuries is guided by standardized protocols and legislation like Rowan's Law, which ensures that concussions are treated with appropriate seriousness.35
+The Role of the Chiropractor and Physiotherapist
+Chiropractors and physiotherapists are recognized as primary care experts in the assessment and diagnosis of the musculoskeletal components of a concussion.36
+Assessment: A professional assessment involves a detailed history, neurological screening, and a physical exam of the spine, balance, and vision systems.8
+Diagnosis: While medical doctors often provide the initial concussion diagnosis, chiropractors and physiotherapists diagnose the accompanying whiplash, neck strain, or vestibular dysfunction that may be the true cause of lingering symptoms.36
+Interprofessional Collaboration: The best results are achieved when a multidisciplinary team—including a physician, chiropractor, and physiotherapist—works together to monitor the patient's progress and guide their return to sport, school, or work.34
+Energy Conservation and Active Recovery
+Modern guidelines have moved away from the "rest in a dark room" (cocooning) approach.34 Instead, they recommend a brief rest period (24-48 hours) followed by "relative rest" and active rehabilitation. To manage symptoms during this period, clinicians often use the "Four P's of Energy Conservation" 43:
+Plan: Schedule demanding tasks for when energy levels are highest.
+Prioritize: Focus on the most important tasks and delegate others.
+Pace: Break tasks into smaller steps and take frequent breaks.
+Position: Use ergonomically sound postures and avoid bending the head below the chest.
+Conclusions and Clinical Recommendations
+The research presented here establishes that the neck is not merely a bystander in concussive injuries; it is a primary participant that is significantly more vulnerable than the brain itself. With an injury threshold of 4.5g compared to the brain's 70g, the cervical spine is effectively the "weakest link" in the head-neck complex during an impact. This disparity ensures that a concussion is almost always accompanied by a cervical injury.
+Because of the high degree of symptom overlap, it is imperative that clinical evaluations of concussion include a rigorous examination of the cervical spine. Symptoms such as headaches, dizziness, and "brain fog" should be assessed for a cervicogenic origin, as these issues are highly treatable through manual therapy but will not resolve with cognitive rest alone.
+The evidence is clear that while self-care measures like stretching can offer temporary relief, the best clinical outcomes are achieved through professional, hands-on intervention. Chiropractors and physiotherapists provide the specific mobilizations, muscle energy techniques, and neuromotor retraining necessary to resolve the biomechanical and proprioceptive dysfunction that characterizes post-concussion neck injury. For the patient, this means a faster reduction in pain, a quicker return to functional activities, and a lower risk of symptoms becoming chronic. Integrating cervical rehabilitation into the standard of care for concussion is not just a recommendation—it is a physiological necessity for complete recovery.
+Works cited
+How Hard is Too Hard? Examining the Forces Behind Concussive ..., accessed January 30, 2026, https://completeconcussions.com/concussion-tips-information/how-hard-is-too-hard-examining-the-forces-behind-concussive-impacts/
+Analysis of head impacts during sub-elite hurling practice sessions - ResearchGate, accessed January 30, 2026, https://www.researchgate.net/publication/319499852_Analysis_of_head_impacts_during_sub-elite_hurling_practice_sessions
+Concussion Management Physiotherapy: What is Vestibular Rehabilitation?, accessed January 30, 2026, https://foundationphysio.com/concussion-management-physiotherapy-vestibular-rehabilitation/
+The role of the cervical spine in post-concussion syndrome, accessed January 30, 2026, http://www.concussionalliance.org/s/MarshallCervicalspineinpost-concussionsyndrome.pdf
+Impact Injury Caused by Linear Acceleration: Mechanisms, Prevention and Cost - DTIC, accessed January 30, 2026, https://apps.dtic.mil/sti/tr/pdf/ADA123814.pdf
+Frequency of primary neck pain in mild traumatic brain injury ... - NIH, accessed January 30, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC6930963/
+Why Your Concussion Symptoms Feel Worse When Your Neck Hurts: Understanding Cervical Strain After Head Injury - UCC Near Me, accessed January 30, 2026, https://www.uccnearme.com/articles/concussion/why-your-concussion-symptoms-feel-worse-when-your-neck-hurts-understanding-cervical-strain-after-head-injury/
+Cervical Injury Assessments for Concussion Evaluation: A Review ..., accessed January 30, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC5264559/
+Overlap of Cervical Spine and Concussion Symptoms | HNJ Clinic, accessed January 30, 2026, https://hnjclinic.com.au/the-overlap-of-cervical-spine-neck-and-concussion-symptoms/
+The neck-concussion connection: When a 'brain problem' is actually cervical | Healthing.ca, accessed January 30, 2026, https://www.healthing.ca/brain-health/the-neck-concussion-connection-when-a-brain-problem-is-actually-cervical
+The effectiveness of manual and exercise therapy on headache intensity and frequency among patients with cervicogenic headache: a systematic review and meta-analysis - PMC - PubMed Central, accessed January 30, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC9682850/
+Concussion and Vestibular Treatment in Toronto, Ontario - Sonia Vovan Physiotherapy, accessed January 30, 2026, https://soniavovan.com/concussion-and-vestibular-treatment
+Neck Pain or Concussion: Differentiate Between Overlapping Symptoms - Houston Neurosurgery & Spine, accessed January 30, 2026, https://www.houstonneurosurgeryandspine.com/neck-pain-or-concussion-differentiate-between-overlapping-symptoms/
+EPIDEMIOLOGY of NECK INJURIES ACCOMPANYING SPORT CONCUSSIONS in YOUTH OVER a 13-YEAR PERIOD IN a COMMUNITY-BASED HEALTHCARE SYSTEM - PMC - PubMed Central, accessed January 30, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC6816290/
+Sequencing and Integration of Cervical Manual Therapy and Vestibulo-oculomotor Therapy for Concussion Symptoms: Retrospective Analysis - PubMed Central, accessed January 30, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC7872443/
+POST-CONCUSSION SYNDROME MANAGEMENT GUIDELINES - Fowler Kennedy Sport Medicine Clinic, accessed January 30, 2026, https://www.fowlerkennedy.com/wp-content/uploads/2023/03/Post-Concussion-Treatment-Guidelines.pdf
+Facet Joint Syndrome - Neurosurgery - UCLA Health, accessed January 30, 2026, https://www.uclahealth.org/medical-services/neurosurgery/conditions-treated/facet-joint-syndrome
+What Are Facet Joints and How do You Treat Them? - Western Slope Rehab, accessed January 30, 2026, https://wsrehabandperformance.com/what-are-facet-joints-and-how-do-you-treat-them/
+Chronic Neck Pain: Making the Connection Between Capsular Ligament Laxity and Cervical Instability - PMC - PubMed Central, accessed January 30, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC4200875/
+Cervical Rehabilitation for Concussion Symptoms and Neck Pain · Recruiting Participants for Clinical Trial 2026 - withpower.com, accessed January 30, 2026, https://www.withpower.com/trial/phase-neck-pain-9-2024-dc0b9
+Effectiveness of Manual Therapy Versus Electrotherapy in Patients with Neck Pain due to Poor Posture –A Non-Randomized trial - Semantic Scholar, accessed January 30, 2026, https://pdfs.semanticscholar.org/fef1/77d34a7c51751fc1aa603e1eaecef8997f9b.pdf
+The Prevalence and Influence of New or Worsened Neck Pain After a Sport-Related Concussion in Collegiate Athletes: A Study From the CARE Consortium, accessed January 30, 2026, https://scholar.usuhs.edu/en/publications/the-prevalence-and-influence-of-new-or-worsened-neck-pain-after-a/
+The Best Home Exercise for Headaches and Neck Pain, accessed January 30, 2026, https://www.bsrphysicaltherapy.com/2024/01/24/exercise-for-headaches/
+Therapeutic Exercise for Athletes With Nonspecific Neck Pain: A Current Concepts Review, accessed January 30, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC3435917/
+Managing Neck Pain Following Concussion/Mild Traumatic Brain Injury Fact Sheet - Health.mil, accessed January 30, 2026, https://health.mil/Reference-Center/Fact-Sheets/2020/07/30/Neck-Pain-Following-ConcussionmTBI-Fact-Sheet
+Stretching exercises vs manual therapy in treatment of chronic neck pain: a randomized, controlled cross-over trial - HTML, accessed January 30, 2026, https://medicaljournals.se/jrm/content/html/10.2340/16501977-0015
+Stretching exercises vs manual therapy in treatment of chronic neck pain: a randomized, controlled cross-over trial - PubMed, accessed January 30, 2026, https://pubmed.ncbi.nlm.nih.gov/17351694/
+(PDF) Stretching exercises vs manual therapy in treatment of chronic neck pain: A randomized, controlled cross-over trial - ResearchGate, accessed January 30, 2026, https://www.researchgate.net/publication/6454761_Stretching_exercises_vs_manual_therapy_in_treatment_of_chronic_neck_pain_A_randomized_controlled_cross-over_trial
+Concussion aftercare: Neck strength information sheet - The Sydney Children's Hospitals Network, accessed January 30, 2026, https://www.schn.health.nsw.gov.au/concussion-aftercare-neck-strength-information-sheet
+Effect of neck exercises on cervicogenic headache: a randomized controlled trial., accessed January 30, 2026, https://medicaljournalssweden.se/jrm/article/view/17826
+Post-Isometric Relaxation versus Self-Stretching for Non-Specific Neck Pain in Working-Age Individuals - MDPI, accessed January 30, 2026, https://www.mdpi.com/2076-3417/14/16/7000?
+The combined effects of manual therapy and exercise on pain and related disability for individuals with nonspecific neck pain: A systematic review with meta-analysis - PubMed Central, accessed January 30, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC10642331/
+The Utility of Neuromotor Retraining to Augment Manual Therapy and Vestibular Rehabilitation in a Patient with Post-Concussion Syndrome: A Case Report - PMC - PubMed Central, accessed January 30, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC7872469/
+Physiotherapy Treatment for Post-Concussion Syndrome (PCS), accessed January 30, 2026, https://torontophysiotherapy.ca/physiotherapy-treatment-for-post-concussion-syndrome-pcs/
+How Do You Identify and Manage a Concussion? - Ontario Chiropractic Association, accessed January 30, 2026, https://chiropractic.on.ca/self-management/the-concussion-playbook/
+Care for Concussions - Ontario Chiropractic Association, accessed January 30, 2026, https://chiropractic.on.ca/helping-ontarians/programs-initiatives/care-for-concussions/
+An Act to establish a national strategy on brain injuries - Canadian Chiropractic Association (CCA), accessed January 30, 2026, https://chiropractic.ca/wp-content/uploads/2024/11/Submission-Bill-C-277.pdf
+Position Statements - Canadian Chiropractic Association (CCA), accessed January 30, 2026, https://chiropractic.ca/position-statements/
+Physical Therapy Evaluation and Treatment After Concussion/Mild Traumatic Brain Injury, accessed January 30, 2026, https://www.jospt.org/doi/10.2519/jospt.2020.0301
+Chiropractor in Kitchener & Cambridge | GRSM - Grand River Sports Medicine Centre, accessed January 30, 2026, https://www.grsm.ca/services/chiropractic-care/
+Concussion – Common and Resolvable With Reliable Care - Bellefleur Physiotherapy, accessed January 30, 2026, https://bellefleurphysio.com/concussion-physiotherapy/
+Guidelines for Recovery - Concussion Alliance, accessed January 30, 2026, https://www.concussionalliance.org/recovery-guide
+Managing Persistent Post-Concussion Symptoms - University Health Network, accessed January 30, 2026, https://www.uhn.ca/Krembil/Canadian-Concussion-Centre/Education/Documents/Managing-Persistent-Concussion-Symptoms.pdf
