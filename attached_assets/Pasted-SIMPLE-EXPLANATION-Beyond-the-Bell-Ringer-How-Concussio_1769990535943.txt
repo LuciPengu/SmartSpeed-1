@@ -1,0 +1,222 @@
+SIMPLE EXPLANATION:
+Beyond the "Bell Ringer": How Concussion Short-Circuits Your Body & Mind
+A concussion isn’t a bruise on your brain; it is an electrical and chemical short circuit.
+While the hit happens to your head, the damage spreads to your entire body through your Autonomic Nervous System (ANS)—the "auto-pilot" that controls your heart, breathing, and energy levels [1].
+When this system breaks, you get "post-concussion syndrome": brain fog, fatigue, and feeling like you can't get your heart rate up without getting a headache [3].
+1. The Fight-or-Flight Trap
+Your nervous system has two modes:
+Sympathetic: "Fight or Flight" (Gas pedal).
+Parasympathetic: "Rest and Digest" (Brake pedal) [1].
+
+https://images.squarespace-cdn.com/content/v1/63813f208be08634a208db60/dc5b4bfc-717d-4f7c-825a-be1074f4c935/Autonomic.nervous.system.function.and.dysfunction%40concussion.alliance.2021.web.jpg?format=2500w 
+After a concussion, your "brake pedal" fails. You stay stuck in "Fight or Flight" mode [1]. This is why your Heart Rate Variability (HRV) drops. A low HRV means your nervous system is stressed and can't recover [6]. Research shows this imbalance lasts much longer than your actual symptoms [12].
+https://static1.squarespace.com/static/63813f208be08634a208db60/t/641a3bd53582a5720c96341a/1679440853883/Autonomic%2BNervous%2BSystem.pdf 
+2. Blood Flow Problems
+Your brain usually keeps its own blood pressure steady. A concussion breaks this thermostat. Your brain can't buffer blood pressure changes anymore, which is why your head throbs when you stand up or train [2, 8]. This "plumbing" issue can last for over a month, even if you feel "fine" [6, 8].
+
+https://www.cognitivefxusa.com/hubfs/symptoms-of-post-concussion-jpeg.jpeg 
+
+3. The Vagus Nerve: Your Manual Override
+The Vagus Nerve is the main "cable" for your rest-and-digest system [10]. It acts like a natural fire extinguisher for brain inflammation [20]. You can manually activate it to speed up recovery:
+Water Gargling: Gargle water twice a day. This stimulates the nerves in your throat connected to the Vagus [27].
+Cold Exposure: Splash ice water on your face or turn your shower cold for a few seconds. This can trigger the "dive reflex," which instantly slows your heart rate and calms the system [32, 33].
+Controlled Breathing: Use "Box Breathing" (4s inhale, 4s hold, 4s exhale, 4s hold). This signals to your brain that you are safe [28, 30].
+4. Training Your Way Back
+The old advice of "sit in a dark room" is obsolete. Total rest can actually make you more depressed and sluggish [13].
+The new rule: Sub-threshold exercise. Walk or light cycle at a pace where you can still hold a conversation. If your symptoms spike, back off. Light movement increases brain blood flow and helps reset your "auto-pilot" [3, 16].
+We get deeper into how to exercise effectively for concussion recovery in the next lesson.
+5. Environmental Fixes
+Nature: 15 minutes in a forest or park reduces cortisol (stress hormone) by 12% [37].
+Earthing: Walking barefoot on grass or sand can help lower inflammation and improve sleep [40, 41].
+Tracking: Keep a daily log of sleep, hydration, and symptoms. This helps you find your "triggers" so you can avoid them while you heal [43].
+
+
+
+
+DEEP DIVE: 
+The Impact of Concussive Injury on the Autonomic Nervous System: Pathophysiological Mechanisms, Hemodynamic Consequences, and Integrative Recovery Strategies
+The clinical paradigm regarding concussion, or mild traumatic brain injury (mTBI), has evolved significantly from the historical view of a transient, purely functional disturbance to a complex, multi-systemic physiological disruption involving profound metabolic and autonomic alterations. While the mechanical insult occurs at the level of the cranium, the physiological ramifications extend throughout the entire human organism, mediated largely by the autonomic nervous system (ANS). This intricate network, which governs involuntary functions such as heart rate, blood pressure, respiration, and digestion, is frequently destabilized following a concussive event.1 The resulting state of dysautonomia is not merely a secondary symptom but a central feature of the post-concussion profile, contributing to exercise intolerance, cognitive fatigue, and persistent somatic complaints.3
+The Neurometabolic Cascade and Cellular Vulnerability
+The onset of autonomic symptoms is rooted in a functional neurometabolic cascade triggered by kinetic forces applied to the head or body. When sudden acceleration or deceleration occurs, the brain undergoes a mechanical stretching and shearing of axons, a process known as diffuse axonal injury.2 This mechanical strain initiates a rapid shift in ionic concentrations. Specifically, there is an immediate efflux of potassium () from the neuronal cells into the extracellular space, accompanied by a massive influx of calcium () and sodium ().2 This ionic flux triggers the indiscriminate release of glutamate, the primary excitatory neurotransmitter of the central nervous system, which further depolarizes neighboring neurons and exacerbates the ionic imbalance.4
+To restore homeostasis and maintain the resting membrane potential, the brain’s ion pumps, particularly the sodium-potassium ATPase pump, must operate at an accelerated rate. This process requires significant amounts of adenosine triphosphate (), the body’s primary energy molecule.2 Under normal physiological conditions, approximately two-thirds of the brain's  is dedicated to maintaining these ion gradients; in the immediate aftermath of an injury, this demand increases exponentially.2 However, this hypermetabolic state is followed by a period of metabolic depression. The influx of calcium into the mitochondria impairs their oxidative phosphorylation capacity, leading to a cerebral energy crisis secondary to impaired mitochondrial function.2 This energy mismatch—where metabolic demand is high but energy production and delivery are low—creates a window of increased cerebral vulnerability, making the brain hypersensitive to further stress or secondary trauma.8
+Metabolic Event
+Mechanism
+Consequence
+Ionic Flux
+ efflux,  influx
+Massive depolarization, glutamate release
+ Crisis
+Overactive ion pumps
+Cellular energy exhaustion
+Mitochondrial Dysfunction
+Calcium overload
+Reduced energy production (metabolic depression)
+Cerebral Vulnerability
+Energy supply/demand mismatch
+Hypersensitivity to stress and physical exertion
+
+Autonomic Architecture and the Mechanisms of Dysregulation
+The autonomic nervous system is bifurcated into the sympathetic nervous system (SNS) and the parasympathetic nervous system (PNS), which typically function in a state of dynamic antagonism to maintain internal equilibrium.1 The SNS is responsible for the "fight or flight" response, characterized by increased heart rate, vasoconstriction, and the release of catecholamines like epinephrine and norepinephrine from the adrenal medulla.1 Conversely, the PNS, primarily mediated by the vagus nerve (cranial nerve X), facilitates "rest and digest" functions, promoting cardiovagal tone, digestion, and systemic anti-inflammatory responses.9
+Following a concussion, this balance is frequently disrupted, leading to sympathetic hyperactivity and a concomitant withdrawal of parasympathetic influence.1 This uncoupling of the central autonomic network (CAN) from the peripheral organs is believed to be proportional to the severity of the traumatic neurological insult.12 The brainstem, which houses the nucleus tractus solitarii (NTS) and the ventrolateral medullae—crucial hubs for cardiovascular control—is particularly susceptible to the shearing forces of injury.4 Damage to these regions can lead to an inability to modulate heart rate and blood pressure effectively, manifesting as cardiovascular autonomic dysfunction (CVAD).4
+Sympathovagal Imbalance and Heart Rate Variability
+The gold standard for assessing this autonomic imbalance is heart rate variability (HRV), which measures the variation in time intervals between consecutive heartbeats.14 HRV is a sensitive indicator of the physiological capacity for self-regulation. A high HRV signifies a resilient, adaptable nervous system, while a low HRV indicates a system locked in a sympathetic-dominant, stress-reactive state.6 In concussed populations, research consistently demonstrates a significant reduction in HRV metrics, particularly those reflecting parasympathetic activity, such as the root mean square of successive differences (RMSSD) and high-frequency (HF) spectral power.12
+Research indicates that these autonomic perturbations are not uniform across all demographics. For instance, in adolescent athletes, concussion appears to impair cardiovagal function in a sex-dependent manner.12 Concussed female adolescents have shown significantly lower seated RMSSD values (42 ± 4 ms) compared to healthy controls (61 ± 7 ms), an effect not always observed in their male counterparts.12 Furthermore, while clinical symptoms and blood pressure metrics often return to baseline within weeks, the cardiovagal impairment as measured by HRV can persist well beyond the typical return-to-play timeline, suggesting that physiological recovery lags behind clinical recovery.6
+Hemodynamic Disturbances and Cerebral Autoregulation
+One of the most critical autonomic functions affected by concussion is the regulation of cerebral blood flow (CBF). The brain requires a constant, precise supply of oxygenated blood to support its metabolic needs. This is achieved through cerebral autoregulation (CA), a complex process where the cerebral vasculature dilates or constricts to buffer changes in systemic blood pressure.2 Concussion-induced autonomic dysregulation frequently impairs CA, leaving the brain vulnerable to surges in blood pressure that can exacerbate headaches or ischemic events.2
+Dynamic Pressure Buffering and Phase Offsets
+Recent studies utilizing transfer function analysis have identified specific impairments in dynamic cerebral autoregulation following sport-related concussions.8 Researchers have noted a significant reduction in the 0.10 Hz Phase, which represents the timing or latency of the cerebrovascular response to blood pressure oscillations.8 A reduction in Phase implies that the brain's compensatory vascular resistance changes are delayed, making the system less efficient at dampening lower-frequency pressure surges.8
+Data from concussed athletes shows a 23% reduction in 0.10 Hz Phase at 72 hours post-injury, with an 18% reduction persisting at the two-week mark.8 Crucially, these athletes were often cleared for return-to-play at a median of 14 days based on symptom resolution, despite their Phase values remaining significantly impaired.8 This suggests that the autonomic control over the large proximal cerebral arteries and arterioles via -adrenergic and -adrenergic receptors is compromised for at least one month following the injury.6
+Cerebrovascular Reactivity and Metabolic Demands
+In addition to pressure-based autoregulation, concussion impacts cerebrovascular reactivity to carbon dioxide () and neurovascular coupling—the localized increase in blood flow that supports cognitive activity.2 If blood  levels rise (hypercapnia), cerebral vessels normally dilate; however, after a concussion, this response is often blunted or erratic.2 This impairment contributes to exercise intolerance, as the autonomic system cannot properly adjust cerebral perfusion to meet the increased metabolic demands of physical activity.3 This "physiological intolerance" explains why symptoms often reappear or worsen when a patient attempts to return to school, work, or sports.13
+Hemodynamic Metric
+Normative Function
+Post-Concussion Change
+Cerebral Blood Flow (CBF)
+Stable supply of  and glucose
+Global and local reductions (30+ days)
+Dynamic CA (Phase)
+Rapid pressure buffering
+18-23% reduction (delayed response)
+ Reactivity
+Dilation/constriction via 
+Blunted or hypersensitive response
+Neurovascular Coupling
+Targeted flow for cognition
+Impaired localized perfusion
+
+The Vagus Nerve: A Nexus for Autonomic Recovery
+The vagus nerve (CN X) is the primary highway of the parasympathetic nervous system, innervating every major organ from the brainstem to the abdomen.10 Its role in concussion recovery is paramount because it serves as the "brake" on the sympathetic stress response and a regulator of systemic inflammation.10 The vagus nerve is composed of approximately 80% sensory afferent fibers, which carry information from the body to the brain, and 20% motor efferent fibers, which send signals from the brain to the organs.17
+The Cholinergic Anti-Inflammatory Pathway (CAP)
+One of the most significant discoveries in autonomic medicine is the cholinergic anti-inflammatory pathway, through which the vagus nerve regulates the immune system.10 Efferent vagal signals release acetylcholine (ACh), which binds to  nicotinic acetylcholine receptors () on immune cells like macrophages and microglia.20 This binding inhibits the release of pro-inflammatory cytokines, such as  and , effectively reducing neuroinflammation following brain injury.20 Vagus nerve stimulation (VNS) has been shown to modulate these injury cascades, reduce lesion volume, and improve behavioral performance in preclinical TBI models.21
+Non-Invasive Vagus Nerve Stimulation (nVNS) in Clinical Practice
+Advances in transcutaneous electrical nerve stimulation (TENS) have led to the development of non-invasive vagus nerve stimulation (nVNS), which targets the cervical branch of the vagus nerve in the neck.18 Clinical trials of nVNS, particularly using the gammaCore device, have shown remarkable efficacy in reducing persistent post-concussion symptoms (PPCS).21 In an observational study of 102 mTBI patients, adjunctive nVNS treatment significantly improved 16 of 22 symptom domains over three months.21
+Symptom Domain
+Pre-Treatment (NSI Score)
+Post-Treatment Change
+Statistical Significance
+Post-traumatic Headache
+High Burden
+-0.79 ± 1.19
+
+Difficulty Concentrating
+High Burden
+-0.59 ± 1.25
+
+Dizziness
+Moderate Burden
+-0.47 ± 1.14
+
+Depression/Sadness
+Moderate Burden
+-0.47 ± 1.12
+
+
+These findings suggest that nVNS can stabilize dysregulated pathways in the brain by activating the NTS and the locus coeruleus, which then project to areas governing mood, attention, and executive function.19
+Vocal and Pharyngeal Activation Strategies
+The vagus nerve provides motor innervation to the striated muscles of the larynx and pharynx through its pharyngeal and recurrent laryngeal branches.26 This anatomical connection provides a "backdoor" for stimulating the autonomic nervous system through vocal and physical practices.27
+Gargling and the Parasympathetic Shift
+Vigorous gargling with water—preferably twice daily for 30 to 60 seconds—stimulates the pharyngeal branch of the vagus nerve.27 The mechanical vibrations in the throat activate the deep muscles that are partly innervated by the recurrent laryngeal branch.27 This intense stimulation can trigger a parasympathetic response, often marked by the sudden tearing of the eyes, which indicates the nervous system is shifting gears into a "rest and digest" state.27
+Humming, Singing, and Chanting
+Humming and singing are powerful neuroregulatory tools because they facilitate prolonged exhalation, which is a physiological signal of safety to the brainstem.27 Research has shown that chanting, particularly the sound "Om," can deactivate the limbic center of the brain—the region responsible for threat detection and emotional reactivity.27 These practices increase HRV and activate baroreceptors in the chest, feeding positive feedback into the vagal loops that regulate stress resilience.27 Slow, controlled singing has been found to be more effective than rapid or discordant vocalization in building vagal tone.28
+Cold Exposure and the Mammalian Dive Reflex
+Brief exposure to cold temperatures is a potent method for resetting the autonomic nervous system. When the face or neck is exposed to cold water, it triggers the mammalian dive reflex, a primitive survival mechanism that results in immediate bradycardia (slowing of the heart rate) and a redirection of blood flow to the brain and vital organs.32
+Practical applications include splashing ice water on the face, holding an ice pack to the side of the neck for five minutes, or ending a shower with 30 to 60 seconds of cold water.31 These techniques stimulate the vagal afferents in the neck and chest, sending calming signals to the NTS and reducing the sympathetic "fight or flight" response.33 Cold exposure has been linked to increased vagal tone and a reduction in systemic inflammation, making it a valuable tool for individuals feeling overwhelmed or "off".29
+Regulating Practices: Breathwork and Meditation
+Breathwork is the most direct way to interface with the autonomic nervous system. The lungs and diaphragm are densely innervated by the vagus nerve, and conscious breathing allows an individual to modulate their physiological state in real-time.10
+Diaphragmatic Breathing and Resonant Rhythms
+In stressful or concussed states, individuals often resort to shallow chest breathing, which perpetuates sympathetic activation.30 Shifting to diaphragmatic (belly) breathing—where the abdomen expands on the inhale and contracts on the exhale—stimulates the vagus nerve at the level of the diaphragm.17 Several evidence-based patterns have been identified for autonomic regulation:
+Box Breathing: Inhaling for 4 seconds, holding for 4, exhaling for 4, and holding for 4. This pattern is highly effective for immediate grounding during episodes of anxiety or sensory overwhelm.28
+4-7-8 Breathing: Inhaling for 4 seconds, holding for 7, and exhaling for 8. This technique, developed to promote sleep and deep relaxation, significantly increases cardiovagal tone by prioritizing a long exhalation.10
+6-Breath-per-Minute Cycle: Inhaling for 4 seconds and exhaling for 6. This rhythm, often referred to as resonant breathing, optimizes the synchronization between heart rate and respiration, maximizing HRV and baroreflex sensitivity.30
+Mindfulness and Progressive Muscle Relaxation (PMR)
+Mindfulness and meditation practices have been shown to increase gray matter in regions like the hippocampus and prefrontal cortex, which are often vulnerable to mTBI.35 These practices encourage present-moment awareness, which reduces the "stress chatter" that can exacerbate autonomic dysregulation.10 Progressive Muscle Relaxation (PMR), which involves the systematic tension and release of muscle groups, helps patients develop an "intimacy" with their own physiology.36 By learning to identify and release muscle tension, patients can lower their baseline sympathetic tone and improve their capacity for restorative sleep.16
+Environmental Interventions: Nature and Grounding
+The physical environment exerts a profound influence on autonomic health. Post-concussion recovery is often hindered by the "digital lifestyle" of built environments, which can be sensory-heavy and stress-inducing.37
+Nature Therapy and Forest Bathing
+Nature therapy, or Shinrin-yoku (forest bathing), is a mindful sensory immersion in natural environments.37 Studies have established that as little as 10 to 15 minutes in a forest setting can lead to a 12% reduction in cortisol levels and a significant decrease in blood pressure and heart rate compared to walking in an urban setting.37 The scents of the forest (phytoncides) and the sounds of nature (rustling leaves, birdsong) have been shown to boost immune function, enhance creativity, and improve cognitive performance in memory and attention tasks.37 For a brain recovering from trauma, the "soft fascination" of nature provides a restorative environment that does not deplete cognitive resources.38
+Grounding and Earth's Electrical Circuit
+Grounding, also known as earthing, involves direct physical contact with the Earth's surface, such as walking barefoot on grass, soil, or sand.40 The Earth carries a subtle direct current (DC) energy, and medical studies suggest that by conductively connecting to this circuit, the human body enters a healing state.41 Grounding has been shown to neutralize free radicals, improve blood circulation by decreasing blood viscosity, and normalize cortisol rhythms.40 For concussion patients, this may help reduce whole-body inflammation and improve the quality of restorative sleep.41 Weighted blankets or lap pads can provide a similar sensory "grounding" effect for those experiencing dizziness or proprioceptive disturbances.42
+Cognitive and Emotional Processing: Writing and Art Therapy
+The psychological impact of a concussion—anxiety, depression, and memory loss—is often inextricably linked to the underlying physiological damage in the prefrontal cortex and limbic system.7 Recovery must therefore address the "invisible" neurological consequences through expressive and organizational strategies.
+Symptom Tracking and Metacognition
+Speech-language pathologists (SLPs) utilize symptom tracking as a foundational tool for cognitive rehabilitation.43 By journaling daily variables—such as weather, sleep duration, hydration, and nutritional intake—alongside symptom intensity, patients develop the metacognitive skill to analyze their reaction to their environment.43 This objective data helps patients "step outside" of their emotional distress and identify specific stimuli that aggravate or relieve their condition.43 One effective framework is the MIME acronym, which helps patients pre-simulate a plan:
+M: Make an image of the future space.
+I: Imagine oneself in that space.
+M: Mentally time travel through the tasks.
+E: Anticipate the future emotion in that space.43
+Expressive Writing and Art Therapy
+Expressive writing, or journaling about one's deepest thoughts and feelings, has been shown to reduce psychological distress and assist in the reintegration of veterans and civilians after brain injury.44 Writing about three things one is grateful for daily can shift the mindset toward "small victories," which is crucial for long-term recovery.46 Similarly, art therapy allows patients to communicate experiences of confusion, fear, and pain that may be difficult to verbalize.45 Creating a visual narrative through pictures or symbolism can reduce physiological arousal and improve emotional self-efficacy in trauma survivors.45
+Writing Strategy
+Therapeutic Purpose
+Primary Outcome
+Symptom Log
+Data collection
+Identifying triggers and pacing activity
+Gratitude Journal
+Positive psychology
+Activating PNS and boosting mood
+Expressive Writing
+Trauma processing
+Emotional regulation and stress release
+MIME Journaling
+Executive planning
+Reducing cognitive load during tasks
+
+Physical Activity and the Path to Recovery
+Historically, the standard treatment for concussion was prolonged rest; however, recent evidence indicates that "rest is not the best" and can actually lead to deconditioning and depressive symptoms.13 The current evidence supports a shift toward individualized, controlled, sub-symptom threshold aerobic exercise.3
+Graded Aerobic Exercise and Walking
+Light exercise, such as walking, increases blood flow to the brain and may lessen post-concussion symptoms by restoring autonomic balance.16 The key is to exercise at a level where symptoms are not exacerbated during or after the activity—often defined as a level where the patient can still hold a conversation without gasping.42 Studies have found that aerobic exercise at sub-symptom levels promotes faster recovery and better sleep regulation.16 Conversely, pushing through pain or "toughing it out" can slow recovery and exacerbate the underlying autonomic dysfunction.43
+Postural Considerations and Orthostatic Tolerance
+Because concussions often induce orthostatic intolerance (dizziness when standing), recovery protocols must account for posture.4 Monitoring heart rate and blood pressure responses to standing or tilt-table challenges can help clinicians tailor rehabilitation.4 For patients experiencing significant postural tachycardia, beginning with seated or recumbent exercises may be necessary before progressing to upright walking.12
+Synthesis and Conclusion
+The autonomic nervous system is the primary mediator of the physiological disruptions following a concussive injury. The initial neurometabolic cascade triggers a cascade of events—ionic flux,  depletion, and mitochondrial dysfunction—that result in a systemic sympathovagal imbalance.1 This imbalance manifests as reduced HRV, impaired cerebral autoregulation, and global reductions in cerebral blood flow that can persist for weeks or months.8
+The path to recovery lies in the intentional regulation of this autonomic architecture. High-tech interventions like non-invasive vagus nerve stimulation (nVNS) offer a targeted way to reduce neuroinflammation and stabilize cognitive-affective pathways.20 Meanwhile, low-tech, high-yield practices—such as diaphragmatic breathing, gargling, humming, and cold exposure—leverage the anatomical pathways of the vagus nerve to trick the brain into a parasympathetic state.27 Environmental shifts toward nature and grounding, combined with cognitive-behavioral tools like symptom tracking and expressive writing, provide a holistic framework for the brain to recharge and repair.37
+By viewing concussion as a systemic autonomic disorder rather than a localized brain injury, clinicians and patients can move beyond passive rest toward active, evidence-based physiological regulation. This approach not only addresses the immediate symptoms but also builds long-term resilience, facilitating a more complete and efficient return to the demands of daily life. Continuing research into the sex-specific trajectories of HRV and the long-term impacts of nVNS will further refine these therapeutic protocols, ensuring that the "invisible" consequences of concussion are made visible and treatable.
+Works cited
+Autonomic Dysfunction after Mild Traumatic Brain Injury - PMC, accessed January 30, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC5575620/
+Pathophysiology of Concussion, accessed January 30, 2026, https://completeconcussions.com/concussion/pathophysiology-of-concussion/
+Autonomic Dysfunction and Exercise Intolerance in Concussion – A Scoping Review - PMC, accessed January 30, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC10812884/
+Sport-related concussion induces transient cardiovascular autonomic dysfunction, accessed January 30, 2026, https://journals.physiology.org/doi/full/10.1152/ajpregu.00499.2016
+Concussion and the autonomic nervous system: An introduction to ..., accessed January 30, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC6027940/
+TBICoE Information Paper on the Impact of Mild Traumatic Brain Injury on the Autonomic Nervous System - Health.mil, accessed January 30, 2026, https://health.mil/Reference-Center/Publications/2023/03/15/TBICoE-Information-Paper-The-Impact-of-Mild-Traumatic-Brain-Injury-on-the-Autonomic-Nervous-System
+Healing The Mind: Concussion Recovery in Athletes – Psychology in Sport - Connecticut College Pressbooks, accessed January 30, 2026, https://openpress.digital.conncoll.edu/psychologyinsport/chapter/healing-the-mind-concussion-recovery-in-athletes/
+Sport-Related Concussion Alters Indices of Dynamic Cerebral ..., accessed January 30, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC5880892/
+Concussion and the Autonomic, Immune, and Endocrine Systems: An Introduction to the Field and a Treatment Framework for Persisting Symptoms - MDPI, accessed January 30, 2026, https://www.mdpi.com/2075-4426/15/1/33
+The Vagus Nerve: A Key Player in Your Health and Well-Being - Mass General Hospital, accessed January 30, 2026, https://www.massgeneral.org/news/article/vagus-nerve
+Vagus Nerve as Modulator of the Brain–Gut Axis in Psychiatric and Inflammatory Disorders, accessed January 30, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC5859128/
+Autonomic Dysregulation in Adolescent Concussion Is Sex- and ..., accessed January 30, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC8061339/
+Regulatory and autoregulatory physiological dysfunction as a primary characteristic of post concussion syndrome: Implications for treatment - ResearchGate, accessed January 30, 2026, https://www.researchgate.net/publication/5928182_Regulatory_and_autoregulatory_physiological_dysfunction_as_a_primary_characteristic_of_post_concussion_syndrome_Implications_for_treatment
+The Predictive Value of Heart Rate Variability for the Prognosis of Patients with Mild to Moderate Traumatic Brain Injury - PMC - PubMed Central, accessed January 30, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC12450187/
+Heart rate variability and the central autonomic network in the severe disorder of consciousness - HTML, accessed January 30, 2026, https://www.medicaljournals.se/jrm/content/html/10.2340/16501977-0975
+Brain Fog and Poor Sleep Post Concussion: Causes, Connection & Recovery Tips, accessed January 30, 2026, https://www.happybrainpt.com/concussion-physicaltherapy-blog/brain-fog-and-poor-sleep-post-concussion
+Vagus Nerve Stimulation - PMC - PubMed Central, accessed January 30, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC4017164/
+Vagus nerve stimulation: How it works, approved uses | Northwell Health, accessed January 30, 2026, https://feinstein.northwell.edu/news/insights/vagus-nerve-stimulation
+Vagus nerve stimulation: mechanisms and factors involved in memory enhancement, accessed January 30, 2026, https://www.frontiersin.org/journals/human-neuroscience/articles/10.3389/fnhum.2023.1152064/full
+Mechanism and Applications of Vagus Nerve Stimulation - MDPI, accessed January 30, 2026, https://www.mdpi.com/1467-3045/47/2/122
+Non-invasive vagus nerve stimulation is associated with the reduction in persistent post-concussion symptoms: an observational study - Frontiers, accessed January 30, 2026, https://www.frontiersin.org/journals/neurology/articles/10.3389/fneur.2025.1642034/full
+Non-invasive vagus nerve stimulation (nVNS) is associated with improvements in persisting concussion symptoms, accessed January 30, 2026, https://www.concussionalliance.org/blog/vagus-nerve-stimulation-may-reduce-persisting-concussion-symptoms
+Non-invasive vagus nerve stimulation is associated with the reduction in persistent post-concussion symptoms: an observational study - PubMed, accessed January 30, 2026, https://pubmed.ncbi.nlm.nih.gov/40937177/?utm_source=FeedFetcher&utm_medium=rss&utm_campaign=None&utm_content=1-3FRwfkWFsB5dXRNo2EfLMByMU5eA_v2nNpBHbenXtD8la56&fc=None&ff=20251016104919&v=2.18.0.post9+e462414
+(PDF) Non-invasive vagus nerve stimulation is associated with the reduction in persistent post-concussion symptoms: an observational study - ResearchGate, accessed January 30, 2026, https://www.researchgate.net/publication/395002165_Non-invasive_vagus_nerve_stimulation_is_associated_with_the_reduction_in_persistent_post-concussion_symptoms_an_observational_study
+Non-invasive vagus nerve stimulation (nVNS) is associated with improvements in persisting concussion symptoms (12/18/25 Newsletter), accessed January 30, 2026, https://www.concussionalliance.org/newsletter/2025/12/11/non-invasive-vagus-nerve-stimulation-is-associated-with-improvements-in-persisting-concussion-symptoms
+Neuroanatomy, Cranial Nerve 10 (Vagus Nerve) - StatPearls - NCBI Bookshelf - NIH, accessed January 30, 2026, https://www.ncbi.nlm.nih.gov/books/NBK537171/
+When Humming Heals - Next Level Neuro, accessed January 30, 2026, https://www.nextlevelneuro.com/blog/when-humming-heals-2
+Vagus Nerve Stimulation: 8 Vagus Nerve Exercises To Help You Relax - Parsley Health, accessed January 30, 2026, https://www.parsleyhealth.com/blog/how-to-stimulate-vagus-nerve-exercises
+Activating Your Vagus Nerve: Five Effective Tips - Thriven Functional Medicine Clinic, accessed January 30, 2026, https://thrivenfunctionalmedicine.com/activating-your-vagus-nerve-five-effective-tips/
+Stimulate the vagus nerve & reduce stress with simple exercises - CSS, accessed January 30, 2026, https://www.css.ch/en/private-customers/my-health/physical-health/stomach-digestion/stimulate-vagus-nerve.html
+How to Improve Vagal Tone - Neurodivergent Insights, accessed January 30, 2026, https://neurodivergentinsights.com/how-to-improve-vagal-tone/
+Bolster Your Brain by Stimulating the Vagus Nerve - Cedars-Sinai, accessed January 30, 2026, https://www.cedars-sinai.org/stories-and-insights/healthy-living/stimulating-the-vagus-nerve
+5 Ways To Reset Your Vagus Nerve - Cleveland Clinic Health Essentials, accessed January 30, 2026, https://health.clevelandclinic.org/vagus-nerve-reset
+7 Natural Ways to Stimulate Your Vagus Nerve and Improve Wellness, accessed January 30, 2026, https://www.ozarkfunctionalwellness.com/post/7-natural-ways-to-stimulate-your-vagus-nerve-and-improve-wellness
+Mild Traumatic Brain Injury and Mindfulness-Based Stress Reduction: A Review - NSUWorks, accessed January 30, 2026, https://nsuworks.nova.edu/cgi/viewcontent.cgi?article=1020&context=psyassessment
+Relaxation Training | Institute for Behavioural and Functional Medicine - IBFM, accessed January 30, 2026, https://ibfmed.ca/relaxation-training/
+Neurological Benefits of Nature Exposure: Forest Bathing and the Brain, accessed January 30, 2026, https://lonestarneurology.net/others/neurological-benefits-of-nature-exposure-forest-bathing-and-the-brain/
+The Benefits of Being in Nature for the Healing Brain - Victoria Brain Injury Society, accessed January 30, 2026, https://vbis.ca/the-benefits-of-being-in-nature-for-the-healing-brain/
+What Is Forest Bathing and How Does it Benefit Mental and Physical Health?, accessed January 30, 2026, https://www.psychiatry.org/news-room/apa-blogs/forest-bathing-benefits-mental-physical
+How the Planet Can Heal Us: Four Wellness Benefits of Nature - Propel Physiotherapy, accessed January 30, 2026, https://propelphysiotherapy.com/exercise/nature-wellness-benefits/
+Practical applications of grounding to support health - PMC, accessed January 30, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC10105020/
+Concussion Recovery - Denver Vision Therapy, accessed January 30, 2026, https://denvervt.com/concussion-recovery/
+Tracking Their Way Back to Health: Monitoring somatic symptoms can help patients with traumatic brain injury identify triggers and find ways to improve their functioning. - The ASHA Leader, accessed January 30, 2026, https://leader.pubs.asha.org/doi/10.1044/leader.FTR1.23062018.42
+Iraq and Afghanistan War Veterans with Reintegration Problems: Differences by Veterans Affairs Healthcare User Status - NIH, accessed January 30, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC4452614/
+Long-term art therapy clinical interventions with military service members with traumatic brain injury and post-traumatic stress: Findings from a mixed methods program evaluation study - NIH, accessed January 30, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC10013461/
+How Writing Can Help You During Concussion Recovery - Cognitive FX, accessed January 30, 2026, https://www.cognitivefxusa.com/blog/how-writing-can-help-you-during-concussion-recovery
+Art therapy and brain injury: making the invisible visible - PMC - NIH, accessed January 30, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC11654589/
