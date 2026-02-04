@@ -123,7 +123,6 @@ async def favicon():
 
 MAX_FILE_SIZE_MB = 50
 MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
-MAX_VIDEO_DURATION_SECONDS = 10
 
 @app.post("/api/upload")
 async def upload_video(
@@ -183,10 +182,6 @@ async def upload_video(
     
     try:
         result = analyze_video(filepath)
-        
-        if result.get('duration', 0) > MAX_VIDEO_DURATION_SECONDS:
-            os.remove(filepath)
-            raise HTTPException(status_code=400, detail=f"Video too long. Maximum duration is {MAX_VIDEO_DURATION_SECONDS} seconds. Your video is {result['duration']:.1f} seconds.")
         
         result['fighter_settings'] = settings
         analysis_results[result['session_id']] = result

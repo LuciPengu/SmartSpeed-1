@@ -171,17 +171,26 @@ def analyze_video(video_path: str, output_folder: str = "static/frames",
     landmarker = vision.PoseLandmarker.create_from_options(options)
 
     cap = cv2.VideoCapture(video_path)
-    fps = cap.get(cv2.CAP_PROP_FPS)
+    original_fps = cap.get(cv2.CAP_PROP_FPS)
     
     frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     total_frames_in_video = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    print(f"Video info: {frame_width}x{frame_height}, {fps} fps, {total_frames_in_video} total frames")
-
-    if fps <= 0 or fps > 1000:
-        fps = 30.0
+    
+    if original_fps <= 0 or original_fps > 1000:
+        original_fps = 30.0
+    
+    TARGET_FPS = 30.0
+    MAX_FRAMES = 300
+    
+    frame_interval = original_fps / TARGET_FPS
+    fps = TARGET_FPS
+    
+    print(f"Video info: {frame_width}x{frame_height}, {original_fps} fps, {total_frames_in_video} total frames")
+    print(f"Processing at {TARGET_FPS} fps, frame interval: {frame_interval:.2f}, max frames: {MAX_FRAMES}")
 
     frame_count = 0
+    raw_frame_index = 0
     impact_count = 0
     velocity_trackers = {0: VelocityTracker(velocity_window, fps), 
                          1: VelocityTracker(velocity_window, fps)}
@@ -191,6 +200,17 @@ def analyze_video(video_path: str, output_folder: str = "static/frames",
         success, frame = cap.read()
         if not success: 
             break
+        
+        target_frame = int(frame_count * frame_interval)
+        if raw_frame_index < target_frame:
+            raw_frame_index += 1
+            continue
+        
+        if frame_count >= MAX_FRAMES:
+            print(f"Reached max frame limit ({MAX_FRAMES} frames)")
+            break
+        
+        raw_frame_index += 1
 
         timestamp_ms = int(frame_count * (1000 / fps))
         frame_count += 1
