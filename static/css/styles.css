@@ -513,9 +513,61 @@ header h1 {
     align-items: center;
 }
 
-.fist-icon {
-    animation: punchMove 1s ease-in-out infinite;
-    filter: drop-shadow(0 0 15px rgba(52, 211, 153, 0.6));
+.brain-icon {
+    animation: brainPulse 1.5s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px rgba(52, 211, 153, 0.6));
+}
+
+@keyframes brainPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.15);
+    }
+}
+
+.video-info-display {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 12px;
+    padding: 12px 20px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.video-info-display .info-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.video-info-display .info-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.video-info-display .info-label {
+    color: var(--text-muted);
+}
+
+.video-info-display .info-value {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.video-info-display .crop-warning {
+    color: #f59e0b;
+    margin-top: 8px;
+    font-size: 0.8rem;
+}
+
+.video-info-display.hidden {
+    display: none;
 }
 
 .impact-rings {

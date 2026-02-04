@@ -174,6 +174,64 @@ function validateFighterSettings() {
     return true;
 }
 
+function getVideoMetadata(file) {
+    return new Promise((resolve) => {
+        const video = document.createElement('video');
+        video.preload = 'metadata';
+        
+        video.onloadedmetadata = function() {
+            const metadata = {
+                duration: video.duration,
+                width: video.videoWidth,
+                height: video.videoHeight,
+                fps: 30
+            };
+            
+            if ('requestVideoFrameCallback' in HTMLVideoElement.prototype) {
+                let frameCount = 0;
+                let startTime = null;
+                
+                const countFrames = (now, metadata) => {
+                    if (startTime === null) {
+                        startTime = now;
+                        frameCount = 1;
+                    } else {
+                        frameCount++;
+                    }
+                    
+                    if (now - startTime < 500 && video.currentTime < video.duration) {
+                        video.requestVideoFrameCallback(countFrames);
+                    } else {
+                        const elapsed = (now - startTime) / 1000;
+                        if (elapsed > 0 && frameCount > 1) {
+                            metadata.fps = Math.round(frameCount / elapsed);
+                        }
+                        URL.revokeObjectURL(video.src);
+                        resolve(metadata);
+                    }
+                };
+                
+                video.play().then(() => {
+                    video.requestVideoFrameCallback(countFrames);
+                }).catch(() => {
+                    URL.revokeObjectURL(video.src);
+                    resolve(metadata);
+                });
+            } else {
+                URL.revokeObjectURL(video.src);
+                resolve(metadata);
+            }
+        };
+        
+        video.onerror = function() {
+            URL.revokeObjectURL(video.src);
+            resolve(null);
+        };
+        
+        video.src = URL.createObjectURL(file);
+    });
+}
+
 async function handleFileUpload(file) {
     // Wait for auth check to complete before checking user status
     if (authCheckPromise) {
@@ -212,9 +270,48 @@ async function handleFileUpload(file) {
     const progressContainer = document.getElementById('upload-progress');
     const progressFill = document.getElementById('progress-fill');
     const progressText = document.getElementById('progress-text');
+    const videoInfoDisplay = document.getElementById('video-info-display');
 
     uploadArea.classList.add('hidden');
     progressContainer.classList.remove('hidden');
+    
+    const videoMetadata = await getVideoMetadata(file);
+    if (videoMetadata) {
+        const TARGET_FPS = 30;
+        const MAX_FRAMES = 300;
+        const estimatedFrames = Math.round(videoMetadata.duration * videoMetadata.fps);
+        const processedFrames = Math.min(estimatedFrames, MAX_FRAMES);
+        const willBeCropped = estimatedFrames > MAX_FRAMES;
+        
+        let infoHtml = `
+            <div class="info-row">
+                <div class="info-item">
+                    <span class="info-label">Resolution:</span>
+                    <span class="info-value">${videoMetadata.width}x${videoMetadata.height}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">FPS:</span>
+                    <span class="info-value">${videoMetadata.fps.toFixed(1)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Duration:</span>
+                    <span class="info-value">${videoMetadata.duration.toFixed(1)}s</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Frames:</span>
+                    <span class="info-value">${estimatedFrames}</span>
+                </div>
+            </div>`;
+        
+        if (willBeCropped) {
+            infoHtml += `<div class="crop-warning">Video exceeds ${MAX_FRAMES} frames - will be trimmed to first ${(MAX_FRAMES / TARGET_FPS).toFixed(0)} seconds</div>`;
+        }
+        
+        videoInfoDisplay.innerHTML = infoHtml;
+        videoInfoDisplay.classList.remove('hidden');
+    } else {
+        videoInfoDisplay.classList.add('hidden');
+    }
 
     progressFill.style.width = '30%';
     progressText.textContent = 'Uploading video...';
@@ -249,6 +346,7 @@ async function handleFileUpload(file) {
         showToast('Error: ' + error.message, 'error');
         uploadArea.classList.remove('hidden');
         progressContainer.classList.add('hidden');
+        videoInfoDisplay.classList.add('hidden');
     }
 }
 
