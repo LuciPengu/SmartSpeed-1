@@ -497,6 +497,110 @@ header h1 {
     font-size: 0.9rem;
 }
 
+.analyzing-animation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.punch-loader {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.fist {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+    border-radius: 8px 8px 12px 12px;
+    position: relative;
+    animation: punchMove 1s ease-in-out infinite;
+    box-shadow: 0 0 20px rgba(52, 211, 153, 0.5);
+}
+
+.fist::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 5px;
+    right: 5px;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+}
+
+.fist::after {
+    content: '';
+    position: absolute;
+    top: 16px;
+    left: 5px;
+    right: 5px;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+}
+
+.impact-rings {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid #34d399;
+    border-radius: 50%;
+    opacity: 0;
+}
+
+.ring-1 {
+    width: 60px;
+    height: 60px;
+    animation: ringPulse 1s ease-out infinite 0.2s;
+}
+
+.ring-2 {
+    width: 80px;
+    height: 80px;
+    animation: ringPulse 1s ease-out infinite 0.4s;
+}
+
+.ring-3 {
+    width: 100px;
+    height: 100px;
+    animation: ringPulse 1s ease-out infinite 0.6s;
+}
+
+@keyframes punchMove {
+    0%, 100% {
+        transform: translateX(0) scale(1);
+    }
+    50% {
+        transform: translateX(10px) scale(1.1);
+    }
+}
+
+@keyframes ringPulse {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.5);
+        opacity: 0;
+    }
+}
+
 .results-summary {
     background: linear-gradient(135deg, rgba(0, 60, 45, 0.3) 0%, rgba(0, 35, 28, 0.2) 100%);
     padding: 25px;
