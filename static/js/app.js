@@ -829,6 +829,37 @@ function initializeAuth() {
             }
         });
     }
+    
+    const welcomeModal = document.getElementById('welcome-modal');
+    if (welcomeModal) {
+        welcomeModal.addEventListener('click', (e) => {
+            if (e.target === welcomeModal) {
+                closeWelcomeModal();
+            }
+        });
+    }
+    
+    showWelcomeModalIfFirstVisit();
+}
+
+function showWelcomeModalIfFirstVisit() {
+    const hasSeenWelcome = localStorage.getItem('hitsmart_welcome_seen');
+    if (!hasSeenWelcome) {
+        setTimeout(() => {
+            const welcomeModal = document.getElementById('welcome-modal');
+            if (welcomeModal) {
+                welcomeModal.classList.remove('hidden');
+            }
+        }, 500);
+    }
+}
+
+function closeWelcomeModal() {
+    const welcomeModal = document.getElementById('welcome-modal');
+    if (welcomeModal) {
+        welcomeModal.classList.add('hidden');
+    }
+    localStorage.setItem('hitsmart_welcome_seen', 'true');
 }
 
 function loadUserFromStorage() {
