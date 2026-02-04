@@ -182,12 +182,19 @@ def analyze_video(video_path: str, output_folder: str = "static/frames",
     
     TARGET_FPS = 30.0
     MAX_FRAMES = 300
+    TARGET_WIDTH = 640
     
     frame_interval = original_fps / TARGET_FPS
     fps = TARGET_FPS
     
+    scale_factor = TARGET_WIDTH / frame_width if frame_width > TARGET_WIDTH else 1.0
+    scaled_height = int(frame_height * scale_factor)
+    scaled_width = int(frame_width * scale_factor)
+    
     print(f"Video info: {frame_width}x{frame_height}, {original_fps} fps, {total_frames_in_video} total frames")
     print(f"Processing at {TARGET_FPS} fps, frame interval: {frame_interval:.2f}, max frames: {MAX_FRAMES}")
+    if scale_factor < 1.0:
+        print(f"Resizing frames to {scaled_width}x{scaled_height} for faster processing")
 
     frame_count = 0
     raw_frame_index = 0
@@ -211,6 +218,9 @@ def analyze_video(video_path: str, output_folder: str = "static/frames",
             break
         
         raw_frame_index += 1
+        
+        if scale_factor < 1.0:
+            frame = cv2.resize(frame, (scaled_width, scaled_height), interpolation=cv2.INTER_AREA)
 
         timestamp_ms = int(frame_count * (1000 / fps))
         frame_count += 1
