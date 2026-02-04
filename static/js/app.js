@@ -178,52 +178,27 @@ function getVideoMetadata(file) {
     return new Promise((resolve) => {
         const video = document.createElement('video');
         video.preload = 'metadata';
+        video.muted = true;
+        
+        const timeout = setTimeout(() => {
+            URL.revokeObjectURL(video.src);
+            resolve(null);
+        }, 3000);
         
         video.onloadedmetadata = function() {
+            clearTimeout(timeout);
             const metadata = {
                 duration: video.duration,
                 width: video.videoWidth,
                 height: video.videoHeight,
                 fps: 30
             };
-            
-            if ('requestVideoFrameCallback' in HTMLVideoElement.prototype) {
-                let frameCount = 0;
-                let startTime = null;
-                
-                const countFrames = (now, metadata) => {
-                    if (startTime === null) {
-                        startTime = now;
-                        frameCount = 1;
-                    } else {
-                        frameCount++;
-                    }
-                    
-                    if (now - startTime < 500 && video.currentTime < video.duration) {
-                        video.requestVideoFrameCallback(countFrames);
-                    } else {
-                        const elapsed = (now - startTime) / 1000;
-                        if (elapsed > 0 && frameCount > 1) {
-                            metadata.fps = Math.round(frameCount / elapsed);
-                        }
-                        URL.revokeObjectURL(video.src);
-                        resolve(metadata);
-                    }
-                };
-                
-                video.play().then(() => {
-                    video.requestVideoFrameCallback(countFrames);
-                }).catch(() => {
-                    URL.revokeObjectURL(video.src);
-                    resolve(metadata);
-                });
-            } else {
-                URL.revokeObjectURL(video.src);
-                resolve(metadata);
-            }
+            URL.revokeObjectURL(video.src);
+            resolve(metadata);
         };
         
         video.onerror = function() {
+            clearTimeout(timeout);
             URL.revokeObjectURL(video.src);
             resolve(null);
         };
