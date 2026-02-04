@@ -513,36 +513,9 @@ header h1 {
     align-items: center;
 }
 
-.fist {
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
-    border-radius: 8px 8px 12px 12px;
-    position: relative;
+.fist-icon {
     animation: punchMove 1s ease-in-out infinite;
-    box-shadow: 0 0 20px rgba(52, 211, 153, 0.5);
-}
-
-.fist::before {
-    content: '';
-    position: absolute;
-    top: 8px;
-    left: 5px;
-    right: 5px;
-    height: 4px;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 2px;
-}
-
-.fist::after {
-    content: '';
-    position: absolute;
-    top: 16px;
-    left: 5px;
-    right: 5px;
-    height: 4px;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 2px;
+    filter: drop-shadow(0 0 15px rgba(52, 211, 153, 0.6));
 }
 
 .impact-rings {

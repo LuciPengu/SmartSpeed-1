@@ -123,7 +123,7 @@ async def favicon():
 
 MAX_FILE_SIZE_MB = 50
 MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
-MAX_VIDEO_DURATION_SECONDS = 30
+MAX_VIDEO_DURATION_SECONDS = 10
 
 @app.post("/api/upload")
 async def upload_video(
