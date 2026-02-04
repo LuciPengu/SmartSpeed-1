@@ -250,23 +250,21 @@ async function handleFileUpload(file) {
     uploadArea.classList.add('hidden');
     progressContainer.classList.remove('hidden');
     
+    let videoInfoText = '';
     const videoMetadata = await getVideoMetadata(file);
     if (videoMetadata) {
         const TARGET_FPS = 30;
         const MAX_FRAMES = 300;
         const estimatedFrames = Math.round(videoMetadata.duration * videoMetadata.fps);
-        const processedFrames = Math.min(estimatedFrames, MAX_FRAMES);
         const willBeCropped = estimatedFrames > MAX_FRAMES;
+        
+        videoInfoText = `${videoMetadata.width}x${videoMetadata.height} | ${videoMetadata.duration.toFixed(1)}s | ${estimatedFrames} frames`;
         
         let infoHtml = `
             <div class="info-row">
                 <div class="info-item">
                     <span class="info-label">Resolution:</span>
                     <span class="info-value">${videoMetadata.width}x${videoMetadata.height}</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">FPS:</span>
-                    <span class="info-value">${videoMetadata.fps.toFixed(1)}</span>
                 </div>
                 <div class="info-item">
                     <span class="info-label">Duration:</span>
@@ -289,7 +287,7 @@ async function handleFileUpload(file) {
     }
 
     progressFill.style.width = '30%';
-    progressText.textContent = 'Uploading video...';
+    progressText.innerHTML = videoInfoText ? `Uploading video...<br><small style="color: var(--text-muted);">${videoInfoText}</small>` : 'Uploading video...';
 
     const formData = new FormData();
     formData.append('file', file);
@@ -297,7 +295,7 @@ async function handleFileUpload(file) {
 
     try {
         progressFill.style.width = '50%';
-        progressText.textContent = 'Analyzing video for punch impacts...';
+        progressText.innerHTML = videoInfoText ? `Analyzing video for punch impacts...<br><small style="color: var(--text-muted);">${videoInfoText}</small>` : 'Analyzing video for punch impacts...';
 
         const response = await fetch('/api/upload', {
             method: 'POST',
