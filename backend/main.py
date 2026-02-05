@@ -145,7 +145,7 @@ async def upload_video(
         if not user:
             raise HTTPException(status_code=401, detail="User not found.")
         
-        ADMIN_EMAILS = ['nealconwayp@gmail.com', 'friedrich.duhn@icloud.com']
+        ADMIN_EMAILS = ['nealconwayp@gmail.com', 'friedrich.duhn@icloud.com', 'gielrigo@gmail.com']
         user_email = (user.email or '').lower().strip()
         is_admin = user_email in [e.lower() for e in ADMIN_EMAILS]
         
@@ -802,7 +802,7 @@ async def get_subscription_status(session_id: str = Cookie(None)):
         if not user:
             return {"subscription": None, "has_access": False}
         
-        ADMIN_EMAILS = ['nealconwayp@gmail.com', 'friedrich.duhn@icloud.com']
+        ADMIN_EMAILS = ['nealconwayp@gmail.com', 'friedrich.duhn@icloud.com', 'gielrigo@gmail.com']
         user_email = (user.email or '').lower().strip()
         print(f"Checking subscription for user: {user_email}")
         if user_email in [e.lower() for e in ADMIN_EMAILS]:
@@ -958,7 +958,7 @@ async def get_course_access(session_id: str = Cookie(None)):
         if not user:
             return {"has_access": False, "course_purchased": False}
         
-        ADMIN_EMAILS = ['nealconwayp@gmail.com', 'friedrich.duhn@icloud.com']
+        ADMIN_EMAILS = ['nealconwayp@gmail.com', 'friedrich.duhn@icloud.com', 'gielrigo@gmail.com']
         user_email = (user.email or '').lower().strip()
         if user_email in [e.lower() for e in ADMIN_EMAILS]:
             return {
