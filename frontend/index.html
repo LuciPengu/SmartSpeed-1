@@ -112,62 +112,20 @@
         </div>
 
         <div id="step-1" class="step active">
-            <div class="calc-hero">
-                <div class="calc-hero-icon">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/>
-                        <path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/>
-                        <path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"/>
-                    </svg>
-                </div>
-                <div class="calc-hero-text">
-                    <h2>Strike Calculator</h2>
-                    <p>Configure both fighters, upload footage, and get AI-powered impact analysis</p>
-                </div>
+            <div class="step-header">
+                <span class="step-number">1</span>
+                <h2>Fighter Configuration</h2>
             </div>
-
-            <div class="calc-steps-indicator">
-                <div class="calc-step-dot active" data-step="1">
-                    <span class="dot-num">1</span>
-                    <span class="dot-label">Configure</span>
-                </div>
-                <div class="calc-step-line"></div>
-                <div class="calc-step-dot" data-step="2">
-                    <span class="dot-num">2</span>
-                    <span class="dot-label">Upload</span>
-                </div>
-                <div class="calc-step-line"></div>
-                <div class="calc-step-dot" data-step="3">
-                    <span class="dot-num">3</span>
-                    <span class="dot-label">Screen</span>
-                </div>
-                <div class="calc-step-line"></div>
-                <div class="calc-step-dot" data-step="4">
-                    <span class="dot-num">4</span>
-                    <span class="dot-label">Results</span>
-                </div>
-            </div>
-
+            
             <div class="fighter-settings">
                 <div class="fighter-card">
                     <div class="fighter-card-header">
-                        <div class="fighter-avatar">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                                <circle cx="12" cy="7" r="4"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <h3>Fighter 1</h3>
-                            <span class="fighter-role">Red Corner</span>
-                        </div>
+                        <span class="fighter-icon">1</span>
+                        <h3>Fighter 1</h3>
                     </div>
                     <div class="fighter-inputs">
                         <div class="input-group">
-                            <label for="fighter1-skill">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                                Skill Level
-                            </label>
+                            <label for="fighter1-skill">Skill Level</label>
                             <select id="fighter1-skill" class="cyber-select">
                                 <option value="beginner">Beginner (Untrained)</option>
                                 <option value="amateur">Amateur</option>
@@ -176,50 +134,27 @@
                             </select>
                         </div>
                         <div class="input-group">
-                            <label for="fighter1-weight">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
-                                Weight (kg)
-                            </label>
+                            <label for="fighter1-weight">Weight (kg)</label>
                             <input type="number" id="fighter1-weight" class="cyber-input" min="40" max="200" value="75" step="0.5">
                         </div>
                         <div class="input-group">
-                            <label for="fighter1-intensity">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-                                Throwing Intensity
-                            </label>
-                            <div class="slider-row">
-                                <input type="range" id="fighter1-intensity" class="intensity-slider" min="10" max="100" value="70" step="5">
-                                <span class="intensity-value" id="fighter1-intensity-value">70%</span>
-                            </div>
+                            <label for="fighter1-intensity">Throwing Intensity (%)</label>
+                            <input type="range" id="fighter1-intensity" class="intensity-slider" min="10" max="100" value="70" step="5">
+                            <span class="intensity-value" id="fighter1-intensity-value">70%</span>
                         </div>
                     </div>
                 </div>
                 
-                <div class="vs-divider">
-                    <div class="vs-circle">
-                        <span>VS</span>
-                    </div>
-                </div>
+                <div class="vs-divider">VS</div>
                 
                 <div class="fighter-card">
                     <div class="fighter-card-header">
-                        <div class="fighter-avatar fighter-avatar-blue">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                                <circle cx="12" cy="7" r="4"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <h3>Fighter 2</h3>
-                            <span class="fighter-role">Blue Corner</span>
-                        </div>
+                        <span class="fighter-icon">2</span>
+                        <h3>Fighter 2</h3>
                     </div>
                     <div class="fighter-inputs">
                         <div class="input-group">
-                            <label for="fighter2-skill">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                                Skill Level
-                            </label>
+                            <label for="fighter2-skill">Skill Level</label>
                             <select id="fighter2-skill" class="cyber-select">
                                 <option value="beginner">Beginner (Untrained)</option>
                                 <option value="amateur">Amateur</option>
@@ -228,82 +163,49 @@
                             </select>
                         </div>
                         <div class="input-group">
-                            <label for="fighter2-weight">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
-                                Weight (kg)
-                            </label>
+                            <label for="fighter2-weight">Weight (kg)</label>
                             <input type="number" id="fighter2-weight" class="cyber-input" min="40" max="200" value="75" step="0.5">
                         </div>
                         <div class="input-group">
-                            <label for="fighter2-intensity">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-                                Throwing Intensity
-                            </label>
-                            <div class="slider-row">
-                                <input type="range" id="fighter2-intensity" class="intensity-slider" min="10" max="100" value="70" step="5">
-                                <span class="intensity-value" id="fighter2-intensity-value">70%</span>
-                            </div>
+                            <label for="fighter2-intensity">Throwing Intensity (%)</label>
+                            <input type="range" id="fighter2-intensity" class="intensity-slider" min="10" max="100" value="70" step="5">
+                            <span class="intensity-value" id="fighter2-intensity-value">70%</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="upload-section">
-                <div class="upload-card">
-                    <div class="upload-card-header">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M15 10l-4-4-4 4"/>
-                            <path d="M11 6v9"/>
-                            <path d="M4 20h16"/>
+                <details class="video-guidelines-dropdown">
+                    <summary class="guidelines-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
                         </svg>
-                        <h3>Upload Footage</h3>
+                        Video Guidelines
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </summary>
+                    <div class="guidelines-content">
+                        <div class="guideline-item"><strong>Duration:</strong> ~10 sec (300 frames)</div>
+                        <div class="guideline-item"><strong>Camera:</strong> Full body visible</div>
+                        <div class="guideline-item"><strong>Resolution:</strong> 720p+</div>
+                        <div class="guideline-item"><strong>FPS:</strong> 30+ (60 ideal)</div>
                     </div>
-                    <details class="video-guidelines-dropdown">
-                        <summary class="guidelines-toggle">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <line x1="12" y1="16" x2="12" y2="12"></line>
-                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                            </svg>
-                            Video Guidelines
-                            <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </summary>
-                        <div class="guidelines-content">
-                            <div class="guideline-item">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                                <span><strong>Duration:</strong> ~10 sec (300 frames)</span>
-                            </div>
-                            <div class="guideline-item">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
-                                <span><strong>Camera:</strong> Full body visible</span>
-                            </div>
-                            <div class="guideline-item">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="3"/></svg>
-                                <span><strong>Resolution:</strong> 720p+</span>
-                            </div>
-                            <div class="guideline-item">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-                                <span><strong>FPS:</strong> 30+ (60 ideal)</span>
-                            </div>
-                        </div>
-                    </details>
-                    <div class="upload-area" id="upload-area">
-                        <div class="upload-icon">
-                            <div class="upload-icon-circle">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                                    <polyline points="17 8 12 3 7 8"/>
-                                    <line x1="12" y1="3" x2="12" y2="15"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <p class="upload-main-text">Drop sparring footage here</p>
-                        <p class="upload-hint">or click to browse files</p>
-                        <div class="upload-formats">MP4, AVI, MOV, MKV</div>
-                        <input type="file" id="video-input" accept=".mp4,.avi,.mov,.mkv" hidden>
+                </details>
+                <div class="upload-area" id="upload-area">
+                    <div class="upload-icon">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
                     </div>
+                    <p>Drop sparring footage here</p>
+                    <p class="upload-hint">or click to select file</p>
+                    <input type="file" id="video-input" accept=".mp4,.avi,.mov,.mkv" hidden>
                 </div>
                 <div id="upload-progress" class="progress-container hidden">
                     <div class="analyzing-animation">
