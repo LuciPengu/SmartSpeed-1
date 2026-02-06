@@ -1050,6 +1050,122 @@ async def stripe_webhook(request: Request):
             pass
 
 
+@app.post("/api/sparring/log")
+async def log_sparring_session(request: Request, session_id: str = Cookie(None)):
+    if not session_id:
+        raise HTTPException(status_code=401, detail="Sign in required")
+    
+    db_gen = get_db()
+    db = next(db_gen)
+    
+    try:
+        from backend.database import OAuthSession, SparringSession
+        oauth_session = db.query(OAuthSession).filter(OAuthSession.session_id == session_id).first()
+        if not oauth_session:
+            raise HTTPException(status_code=401, detail="Invalid session")
+        
+        data = await request.json()
+        
+        from datetime import datetime as dt
+        session_date = data.get('date')
+        if session_date:
+            try:
+                session_date = dt.fromisoformat(session_date)
+            except:
+                session_date = dt.now()
+        else:
+            session_date = dt.now()
+        
+        sparring = SparringSession(
+            user_id=oauth_session.user_id,
+            date=session_date,
+            duration_minutes=data.get('duration_minutes', 0),
+            rounds=data.get('rounds', 0),
+            intensity=data.get('intensity', 5),
+            partner_weight=data.get('partner_weight'),
+            partner_skill=data.get('partner_skill'),
+            notes=data.get('notes', ''),
+            headshots_received=data.get('headshots_received', 0),
+            bodyshots_received=data.get('bodyshots_received', 0),
+        )
+        db.add(sparring)
+        db.commit()
+        
+        return {"success": True, "id": sparring.id}
+    finally:
+        try:
+            next(db_gen)
+        except StopIteration:
+            pass
+
+@app.get("/api/sparring/sessions")
+async def get_sparring_sessions(session_id: str = Cookie(None)):
+    if not session_id:
+        raise HTTPException(status_code=401, detail="Sign in required")
+    
+    db_gen = get_db()
+    db = next(db_gen)
+    
+    try:
+        from backend.database import OAuthSession, SparringSession
+        oauth_session = db.query(OAuthSession).filter(OAuthSession.session_id == session_id).first()
+        if not oauth_session:
+            raise HTTPException(status_code=401, detail="Invalid session")
+        
+        sessions = db.query(SparringSession).filter(
+            SparringSession.user_id == oauth_session.user_id
+        ).order_by(SparringSession.date.desc()).all()
+        
+        return [{
+            "id": s.id,
+            "date": s.date.isoformat() if s.date else None,
+            "duration_minutes": s.duration_minutes,
+            "rounds": s.rounds,
+            "intensity": s.intensity,
+            "partner_weight": s.partner_weight,
+            "partner_skill": s.partner_skill,
+            "notes": s.notes,
+            "headshots_received": s.headshots_received,
+            "bodyshots_received": s.bodyshots_received,
+        } for s in sessions]
+    finally:
+        try:
+            next(db_gen)
+        except StopIteration:
+            pass
+
+@app.delete("/api/sparring/sessions/{session_id_param}")
+async def delete_sparring_session(session_id_param: int, session_id: str = Cookie(None)):
+    if not session_id:
+        raise HTTPException(status_code=401, detail="Sign in required")
+    
+    db_gen = get_db()
+    db = next(db_gen)
+    
+    try:
+        from backend.database import OAuthSession, SparringSession
+        oauth_session = db.query(OAuthSession).filter(OAuthSession.session_id == session_id).first()
+        if not oauth_session:
+            raise HTTPException(status_code=401, detail="Invalid session")
+        
+        sparring = db.query(SparringSession).filter(
+            SparringSession.id == session_id_param,
+            SparringSession.user_id == oauth_session.user_id
+        ).first()
+        
+        if not sparring:
+            raise HTTPException(status_code=404, detail="Session not found")
+        
+        db.delete(sparring)
+        db.commit()
+        return {"success": True}
+    finally:
+        try:
+            next(db_gen)
+        except StopIteration:
+            pass
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=5000)

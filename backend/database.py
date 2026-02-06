@@ -94,6 +94,24 @@ class OAuthSession(Base):
     
     user = relationship("User")
 
+class SparringSession(Base):
+    __tablename__ = 'sparring_sessions'
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(String, ForeignKey('users.id'), nullable=False)
+    date = Column(DateTime, default=datetime.now)
+    duration_minutes = Column(Integer, default=0)
+    rounds = Column(Integer, default=0)
+    intensity = Column(Integer, default=5)
+    partner_weight = Column(Float, nullable=True)
+    partner_skill = Column(String, nullable=True)
+    notes = Column(Text, nullable=True)
+    headshots_received = Column(Integer, default=0)
+    bodyshots_received = Column(Integer, default=0)
+    created_at = Column(DateTime, default=datetime.now)
+    
+    user = relationship("User")
+
 engine = None
 SessionLocal = None
 

@@ -1635,18 +1635,19 @@ function escapeHtml(text) {
 
 // ===== Tab Navigation =====
 function initTabNavigation() {
-    const tabButtons = document.querySelectorAll('.tab-btn');
+    const navItems = document.querySelectorAll('.sidebar-nav-item');
     const tabContents = document.querySelectorAll('.tab-content');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    const hamburger = document.getElementById('hamburger-btn');
     
-    tabButtons.forEach(btn => {
+    navItems.forEach(btn => {
         btn.addEventListener('click', () => {
             const targetTab = btn.dataset.tab;
             
-            // Update button states
-            tabButtons.forEach(b => b.classList.remove('active'));
+            navItems.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             
-            // Update content visibility
             tabContents.forEach(content => {
                 content.classList.remove('active');
             });
@@ -1655,8 +1656,31 @@ function initTabNavigation() {
             if (targetContent) {
                 targetContent.classList.add('active');
             }
+
+            if (targetTab === 'sparring') {
+                loadSparringSessions();
+            }
+
+            if (window.innerWidth < 768) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+            }
         });
     });
+
+    if (hamburger) {
+        hamburger.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        });
+    }
+
+    if (overlay) {
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        });
+    }
 }
 
 // ===== Lesson Navigation =====
@@ -1706,8 +1730,451 @@ function toggleDeepDive(btn) {
     }
 }
 
+// ===== Sparring Tracker =====
+let sparringSessions = [];
+
+function getIntensityColor(intensity) {
+    if (intensity <= 3) return '#34d399';
+    if (intensity <= 6) return '#fbbf24';
+    return '#ef4444';
+}
+
+function updateSparringAuthState() {
+    const form = document.getElementById('sparring-form');
+    const authMsg = document.getElementById('sparring-auth-message');
+    if (!form || !authMsg) return;
+    if (currentUser) {
+        form.classList.remove('hidden');
+        authMsg.classList.add('hidden');
+    } else {
+        form.classList.add('hidden');
+        authMsg.classList.remove('hidden');
+    }
+}
+
+async function loadSparringSessions() {
+    updateSparringAuthState();
+    if (!currentUser) {
+        sparringSessions = [];
+        renderSparringChart([]);
+        renderSparringHistory([]);
+        return;
+    }
+    try {
+        const res = await fetch('/api/sparring/sessions', { credentials: 'include' });
+        if (!res.ok) throw new Error('Failed to load sessions');
+        const data = await res.json();
+        sparringSessions = data.sessions || data || [];
+        renderSparringChart(sparringSessions);
+        renderSparringHistory(sparringSessions);
+    } catch (err) {
+        console.error('Error loading sparring sessions:', err);
+        sparringSessions = [];
+        renderSparringChart([]);
+        renderSparringHistory([]);
+    }
+}
+
+async function logSparringSession() {
+    if (!currentUser) {
+        showToast('Please sign in to log sessions', 'warning');
+        return;
+    }
+
+    const btn = document.querySelector('.sparring-submit-btn');
+    btn.disabled = true;
+
+    const payload = {
+        date: document.getElementById('sparring-date').value,
+        duration: parseInt(document.getElementById('sparring-duration').value) || 0,
+        rounds: parseInt(document.getElementById('sparring-rounds').value) || 0,
+        intensity: parseInt(document.getElementById('sparring-intensity').value) || 5,
+        partner_weight: parseFloat(document.getElementById('sparring-partner-weight').value) || 75,
+        partner_skill: document.getElementById('sparring-partner-skill').value,
+        headshots_received: parseInt(document.getElementById('sparring-headshots').value) || 0,
+        bodyshots_received: parseInt(document.getElementById('sparring-bodyshots').value) || 0,
+        notes: document.getElementById('sparring-notes').value.trim()
+    };
+
+    if (!payload.date) {
+        showToast('Please select a date', 'error');
+        btn.disabled = false;
+        return;
+    }
+
+    try {
+        const res = await fetch('/api/sparring/log', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(payload)
+        });
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.detail || 'Failed to log session');
+        }
+        showToast('Session logged successfully!', 'success');
+        document.getElementById('sparring-notes').value = '';
+        document.getElementById('sparring-headshots').value = '0';
+        document.getElementById('sparring-bodyshots').value = '0';
+        await loadSparringSessions();
+    } catch (err) {
+        showToast(err.message || 'Error logging session', 'error');
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+async function deleteSparringSession(id) {
+    if (!confirm('Delete this sparring session?')) return;
+    try {
+        const res = await fetch(`/api/sparring/sessions/${id}`, {
+            method: 'DELETE',
+            credentials: 'include'
+        });
+        if (!res.ok) throw new Error('Failed to delete session');
+        showToast('Session deleted', 'success');
+        await loadSparringSessions();
+    } catch (err) {
+        showToast(err.message || 'Error deleting session', 'error');
+    }
+}
+
+function renderSparringChart(sessions) {
+    const canvas = document.getElementById('sparring-chart');
+    const emptyMsg = document.getElementById('sparring-chart-empty');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    const sorted = [...(sessions || [])].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    if (sorted.length === 0) {
+        canvas.classList.add('hidden');
+        if (emptyMsg) emptyMsg.classList.remove('hidden');
+        return;
+    }
+
+    canvas.classList.remove('hidden');
+    if (emptyMsg) emptyMsg.classList.add('hidden');
+
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.parentElement.getBoundingClientRect();
+    const w = rect.width;
+    const h = 280;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.scale(dpr, dpr);
+
+    ctx.clearRect(0, 0, w, h);
+
+    const padLeft = 45, padRight = 20, padTop = 20, padBottom = 50;
+    const chartW = w - padLeft - padRight;
+    const chartH = h - padTop - padBottom;
+
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    ctx.lineWidth = 1;
+    ctx.font = '10px Montserrat, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.textAlign = 'right';
+    for (let i = 0; i <= 10; i += 2) {
+        const y = padTop + chartH - (i / 10) * chartH;
+        ctx.beginPath();
+        ctx.moveTo(padLeft, y);
+        ctx.lineTo(padLeft + chartW, y);
+        ctx.stroke();
+        ctx.fillText(i.toString(), padLeft - 8, y + 4);
+    }
+
+    const maxHeadshots = Math.max(1, ...sorted.map(s => s.headshots_received || 0));
+    const barWidth = Math.max(8, Math.min(30, chartW / sorted.length - 4));
+
+    sorted.forEach((s, i) => {
+        const x = padLeft + (i / Math.max(1, sorted.length - 1)) * chartW;
+        const headshots = s.headshots_received || 0;
+        const barH = (headshots / maxHeadshots) * chartH * 0.6;
+        const bx = sorted.length === 1 ? padLeft + chartW / 2 : x;
+
+        ctx.fillStyle = 'rgba(239, 68, 68, 0.2)';
+        ctx.fillRect(bx - barWidth / 2, padTop + chartH - barH, barWidth, barH);
+        ctx.strokeStyle = 'rgba(239, 68, 68, 0.4)';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(bx - barWidth / 2, padTop + chartH - barH, barWidth, barH);
+    });
+
+    if (sorted.length > 1) {
+        ctx.beginPath();
+        ctx.lineWidth = 2.5;
+        sorted.forEach((s, i) => {
+            const x = padLeft + (i / (sorted.length - 1)) * chartW;
+            const y = padTop + chartH - ((s.intensity || 0) / 10) * chartH;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        });
+        ctx.strokeStyle = 'rgba(52, 211, 153, 0.6)';
+        ctx.stroke();
+    }
+
+    sorted.forEach((s, i) => {
+        const x = sorted.length === 1 ? padLeft + chartW / 2 : padLeft + (i / Math.max(1, sorted.length - 1)) * chartW;
+        const y = padTop + chartH - ((s.intensity || 0) / 10) * chartH;
+        const color = getIntensityColor(s.intensity || 0);
+
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, Math.PI * 2);
+        ctx.fillStyle = color;
+        ctx.fill();
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+    });
+
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.font = '9px Montserrat, sans-serif';
+    const maxLabels = Math.min(sorted.length, Math.floor(chartW / 60));
+    const step = Math.max(1, Math.ceil(sorted.length / maxLabels));
+    sorted.forEach((s, i) => {
+        if (i % step !== 0 && i !== sorted.length - 1) return;
+        const x = sorted.length === 1 ? padLeft + chartW / 2 : padLeft + (i / Math.max(1, sorted.length - 1)) * chartW;
+        const dateStr = new Date(s.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        ctx.save();
+        ctx.translate(x, padTop + chartH + 12);
+        ctx.rotate(-0.4);
+        ctx.fillText(dateStr, 0, 0);
+        ctx.restore();
+    });
+
+    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    ctx.font = '9px Montserrat, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillRect(padLeft + 10, padTop + 4, 8, 8);
+    ctx.fillStyle = 'rgba(239, 68, 68, 0.3)';
+    ctx.fillRect(padLeft + 10, padTop + 18, 8, 8);
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.fillText('Intensity', padLeft + 22, padTop + 12);
+    ctx.fillText('Headshots', padLeft + 22, padTop + 26);
+    ctx.fillStyle = 'rgba(52, 211, 153, 0.6)';
+    ctx.fillRect(padLeft + 10, padTop + 4, 8, 8);
+}
+
+function renderSparringHistory(sessions) {
+    const container = document.getElementById('sparring-history');
+    const emptyMsg = document.getElementById('sparring-history-empty');
+    if (!container) return;
+
+    const sorted = [...(sessions || [])].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    if (sorted.length === 0) {
+        container.innerHTML = '';
+        if (emptyMsg) {
+            container.appendChild(emptyMsg);
+            emptyMsg.classList.remove('hidden');
+        } else {
+            container.innerHTML = '<div class="sparring-chart-empty"><p>No sessions recorded yet.</p></div>';
+        }
+        return;
+    }
+
+    const emptyEl = container.querySelector('#sparring-history-empty');
+    container.innerHTML = '';
+
+    sorted.forEach(s => {
+        const color = getIntensityColor(s.intensity || 0);
+        const dateStr = new Date(s.date).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
+        const card = document.createElement('div');
+        card.className = 'sparring-session-card';
+        card.innerHTML = `
+            <div class="sparring-session-card-header">
+                <span class="sparring-session-date">${dateStr}</span>
+                <span class="sparring-session-intensity" style="background: ${color}22; color: ${color}; border: 1px solid ${color}44;">
+                    Intensity ${s.intensity || 0}/10
+                </span>
+            </div>
+            <div class="sparring-session-details">
+                <div class="sparring-detail-item">
+                    <span class="sparring-detail-label">Duration</span>
+                    <span class="sparring-detail-value">${s.duration || 0} min</span>
+                </div>
+                <div class="sparring-detail-item">
+                    <span class="sparring-detail-label">Rounds</span>
+                    <span class="sparring-detail-value">${s.rounds || 0}</span>
+                </div>
+                <div class="sparring-detail-item">
+                    <span class="sparring-detail-label">Partner</span>
+                    <span class="sparring-detail-value">${s.partner_weight || '—'}kg · ${s.partner_skill || '—'}</span>
+                </div>
+                <div class="sparring-detail-item">
+                    <span class="sparring-detail-label">Headshots</span>
+                    <span class="sparring-detail-value" style="color: ${(s.headshots_received || 0) > 10 ? '#ef4444' : 'inherit'}">${s.headshots_received || 0}</span>
+                </div>
+                <div class="sparring-detail-item">
+                    <span class="sparring-detail-label">Bodyshots</span>
+                    <span class="sparring-detail-value">${s.bodyshots_received || 0}</span>
+                </div>
+            </div>
+            ${s.notes ? `<div class="sparring-session-notes">"${s.notes}"</div>` : ''}
+            <button class="sparring-delete-btn" onclick="deleteSparringSession(${s.id})" title="Delete session">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+            </button>
+        `;
+        container.appendChild(card);
+    });
+}
+
+function initSparringTab() {
+    const dateInput = document.getElementById('sparring-date');
+    if (dateInput) {
+        dateInput.value = new Date().toISOString().split('T')[0];
+    }
+
+    const slider = document.getElementById('sparring-intensity');
+    const label = document.getElementById('sparring-intensity-value');
+    if (slider && label) {
+        slider.addEventListener('input', () => {
+            label.textContent = slider.value;
+            label.style.color = getIntensityColor(parseInt(slider.value));
+        });
+        label.style.color = getIntensityColor(parseInt(slider.value));
+    }
+
+    window.addEventListener('resize', () => {
+        if (sparringSessions.length > 0 && document.getElementById('sparring-tab').classList.contains('active')) {
+            renderSparringChart(sparringSessions);
+        }
+    });
+}
+
+function initGuideSearch() {
+    const input = document.getElementById('guide-search-input');
+    const resultsContainer = document.getElementById('guide-search-results');
+    const clearBtn = document.getElementById('guide-search-clear');
+    if (!input || !resultsContainer) return;
+
+    let debounceTimer = null;
+
+    const lessonNames = {};
+    document.querySelectorAll('.lesson-nav-btn').forEach(btn => {
+        lessonNames[btn.getAttribute('data-lesson')] = btn.textContent.trim();
+    });
+
+    function getTextNodes(el) {
+        let text = '';
+        el.childNodes.forEach(node => {
+            if (node.nodeType === Node.TEXT_NODE) {
+                text += node.textContent;
+            } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName !== 'SCRIPT' && node.tagName !== 'STYLE') {
+                text += getTextNodes(node);
+            }
+        });
+        return text;
+    }
+
+    function performSearch(query) {
+        query = query.trim();
+        if (!query) {
+            resultsContainer.classList.add('hidden');
+            resultsContainer.classList.remove('visible');
+            clearBtn.classList.add('hidden');
+            return;
+        }
+
+        clearBtn.classList.remove('hidden');
+        const results = [];
+        const lowerQuery = query.toLowerCase();
+        const lessons = document.querySelectorAll('.lesson-content');
+
+        lessons.forEach(lesson => {
+            const lessonId = lesson.id.replace('lesson-', '');
+            const lessonName = lessonNames[lessonId] || 'Lesson ' + lessonId;
+            const fullText = getTextNodes(lesson);
+            const lowerText = fullText.toLowerCase();
+            let searchPos = 0;
+
+            while (results.length < 10) {
+                const idx = lowerText.indexOf(lowerQuery, searchPos);
+                if (idx === -1) break;
+
+                const snippetStart = Math.max(0, idx - 60);
+                const snippetEnd = Math.min(fullText.length, idx + query.length + 80);
+                let snippet = fullText.substring(snippetStart, snippetEnd).trim();
+
+                if (snippetStart > 0) snippet = '...' + snippet;
+                if (snippetEnd < fullText.length) snippet = snippet + '...';
+
+                const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const highlighted = snippet.replace(new RegExp(escapedQuery, 'gi'), match => `<mark>${match}</mark>`);
+
+                results.push({
+                    lessonId,
+                    lessonName,
+                    snippet: highlighted,
+                    matchIndex: idx
+                });
+
+                searchPos = idx + query.length;
+            }
+        });
+
+        if (results.length === 0) {
+            resultsContainer.innerHTML = '<div class="guide-search-no-results">No results found</div>';
+        } else {
+            resultsContainer.innerHTML = results.map(r => `
+                <div class="guide-search-result-item" data-lesson="${r.lessonId}">
+                    <div class="guide-search-result-lesson">${r.lessonName}</div>
+                    <div class="guide-search-result-snippet">${r.snippet}</div>
+                </div>
+            `).join('');
+        }
+
+        resultsContainer.classList.remove('hidden');
+        requestAnimationFrame(() => resultsContainer.classList.add('visible'));
+    }
+
+    input.addEventListener('input', () => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => performSearch(input.value), 300);
+    });
+
+    clearBtn.addEventListener('click', () => {
+        input.value = '';
+        resultsContainer.classList.add('hidden');
+        resultsContainer.classList.remove('visible');
+        clearBtn.classList.add('hidden');
+    });
+
+    resultsContainer.addEventListener('click', (e) => {
+        const item = e.target.closest('.guide-search-result-item');
+        if (!item) return;
+        const lessonId = item.getAttribute('data-lesson');
+        const btn = document.querySelector(`.lesson-nav-btn[data-lesson="${lessonId}"]`);
+        if (btn) btn.click();
+        resultsContainer.classList.add('hidden');
+        resultsContainer.classList.remove('visible');
+        input.value = '';
+        clearBtn.classList.add('hidden');
+        const lessonEl = document.getElementById('lesson-' + lessonId);
+        if (lessonEl) {
+            setTimeout(() => lessonEl.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.guide-search-container')) {
+            resultsContainer.classList.add('hidden');
+            resultsContainer.classList.remove('visible');
+        }
+    });
+}
+
 // Initialize tab and lesson navigation on page load
 document.addEventListener('DOMContentLoaded', () => {
     initTabNavigation();
     initLessonNavigation();
+    initSparringTab();
+    initGuideSearch();
 });

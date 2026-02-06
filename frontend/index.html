@@ -10,72 +10,91 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="header-content">
-                <div class="header-left">
-                    <img src="/static/favicon.png" alt="Hitsmart Logo" class="header-logo">
-                    <div class="header-text">
-                        <h1>HITSMART</h1>
-                        <p class="subtitle">Advanced Combat Analysis System</p>
-                    </div>
+    <button class="hamburger-btn" id="hamburger-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </button>
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-top">
+            <div class="sidebar-brand">
+                <img src="/static/favicon.png" alt="Hitsmart Logo" class="sidebar-logo">
+                <div class="sidebar-brand-text">
+                    <h1>HITSMART</h1>
+                    <p class="subtitle">Combat Analysis</p>
                 </div>
-                <div class="header-right">
-                    <div id="user-section" class="user-section">
-                        <button id="login-btn" class="btn login-btn">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="12" cy="7" r="4"></circle>
+            </div>
+            <div class="sidebar-nav">
+                <button class="sidebar-nav-item active" data-tab="calculator">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+                        <line x1="8" y1="6" x2="16" y2="6"></line>
+                        <line x1="8" y1="10" x2="16" y2="10"></line>
+                        <line x1="8" y1="14" x2="12" y2="14"></line>
+                    </svg>
+                    <span>Strike Calculator</span>
+                </button>
+                <button class="sidebar-nav-item" data-tab="course">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                    </svg>
+                    <span>Concussion Guide</span>
+                </button>
+                <button class="sidebar-nav-item" data-tab="sparring">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                        <line x1="6" y1="1" x2="6" y2="4"></line>
+                        <line x1="10" y1="1" x2="10" y2="4"></line>
+                        <line x1="14" y1="1" x2="14" y2="4"></line>
+                    </svg>
+                    <span>Sparring Tracker</span>
+                </button>
+            </div>
+        </div>
+        <div class="sidebar-bottom">
+            <div id="user-section" class="user-section">
+                <button id="login-btn" class="btn login-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span>Sign In</span>
+                </button>
+                <div id="user-logged-in" class="user-logged-in hidden">
+                    <img id="user-avatar" class="user-avatar" src="" alt="User">
+                    <span id="user-name"></span>
+                    <div class="sidebar-user-actions">
+                        <button id="history-btn" class="btn history-btn" title="View History">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
                             </svg>
-                            <span>Sign In</span>
                         </button>
-                        <div id="user-logged-in" class="user-logged-in hidden">
-                            <img id="user-avatar" class="user-avatar" src="" alt="User">
-                            <span id="user-name"></span>
-                            <button id="history-btn" class="btn history-btn" title="View History">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                            </button>
-                            <button id="manage-sub-btn" class="btn manage-sub-btn hidden" onclick="manageSubscription()" title="Manage Subscription">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-                                    <line x1="1" y1="10" x2="23" y2="10"></line>
-                                </svg>
-                            </button>
-                            <button id="logout-btn" class="btn logout-btn" title="Sign Out">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                                    <polyline points="16 17 21 12 16 7"></polyline>
-                                    <line x1="21" y1="12" x2="9" y2="12"></line>
-                                </svg>
-                            </button>
-                        </div>
+                        <button id="manage-sub-btn" class="btn manage-sub-btn hidden" onclick="manageSubscription()" title="Manage Subscription">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                                <line x1="1" y1="10" x2="23" y2="10"></line>
+                            </svg>
+                        </button>
+                        <button id="logout-btn" class="btn logout-btn" title="Sign Out">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </div>
-        </header>
+        </div>
+    </nav>
 
-        <!-- Tab Navigation -->
-        <nav class="main-tabs">
-            <button class="tab-btn active" data-tab="calculator">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="4" y="2" width="16" height="20" rx="2"></rect>
-                    <line x1="8" y1="6" x2="16" y2="6"></line>
-                    <line x1="8" y1="10" x2="16" y2="10"></line>
-                    <line x1="8" y1="14" x2="12" y2="14"></line>
-                </svg>
-                Strike Calculator
-            </button>
-            <button class="tab-btn" data-tab="course">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-                </svg>
-                Concussion Guide
-            </button>
-        </nav>
+    <div class="container">
 
         <!-- Calculator Tab -->
         <div id="calculator-tab" class="tab-content active">
@@ -399,7 +418,24 @@
 
                 <!-- Course Content (shown when purchased) -->
                 <div id="course-content-wrapper">
-                <!-- Lesson Navigation -->
+
+                <div class="guide-search-container">
+                    <div class="guide-search-bar">
+                        <svg class="guide-search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" id="guide-search-input" class="guide-search-input" placeholder="Search the guide..." autocomplete="off">
+                        <button id="guide-search-clear" class="guide-search-clear hidden" aria-label="Clear search">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="guide-search-results" class="guide-search-results hidden"></div>
+                </div>
+
                 <!-- Lesson Navigation -->
                 <div class="lesson-nav">
                     <button class="lesson-nav-btn active" data-lesson="1">1. What is a Concussion</button>
@@ -825,10 +861,6 @@
                                 <li><strong>Waste Clearing:</strong> Your brain only cleans out "trash" (toxins) while you sleep. If you aren't sleeping, your brain stays "dirty" and inflamed. [6]</li>
                             </ul>
                             
-                            <div class="lesson-image">
-                                <img src="https://journals.sagepub.com/cms/10.1177/00368504231189536/asset/24d4b080-0626-4cc3-917c-af0100a0961a/assets/images/large/10.1177_00368504231189536-fig1.jpg" alt="Sleep and brain health" loading="lazy">
-                                <p class="image-credit">Image: SAGE Journals</p>
-                            </div>
                             
                             <h5>6. The Hidden Hormone Drop</h5>
                             <p>The pituitary gland (the "master gland") sits in a fragile spot in your skull. When your brain moves, the stalks of this gland can stretch or tear. [32]</p>
@@ -2510,10 +2542,6 @@
                                 <li><strong>Research:</strong> Creatine is safe but should be avoided by those with severe kidney disease. It may cause temporary water retention [16].</li>
                             </ul>
                             
-                            <div class="lesson-image">
-                                <img src="https://onlinelibrary.wiley.com/doi/10.1080/17461391.2018.1500644" alt="Creatine Research" loading="lazy">
-                                <p class="image-caption">Creatine can help with both prevention and recovery!</p>
-                            </div>
                             
                             <p><strong>N-Acetyl Cysteine (NAC):</strong></p>
                             <ul>
@@ -4095,6 +4123,142 @@
                 </div><!-- End course-content-wrapper -->
             </div>
         </div><!-- End Course Tab -->
+
+        <div id="sparring-tab" class="tab-content">
+            <div class="sparring-section">
+                <div class="step">
+                    <div class="step-header">
+                        <span class="step-number">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                            </svg>
+                        </span>
+                        <h2>Log Sparring Session</h2>
+                    </div>
+
+                    <div id="sparring-auth-message" class="sparring-auth-message hidden">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <p>Please <strong>sign in</strong> to log and track your sparring sessions.</p>
+                    </div>
+
+                    <form id="sparring-form" class="sparring-form" onsubmit="event.preventDefault(); logSparringSession();">
+                        <div class="sparring-form-grid">
+                            <div class="sparring-form-row">
+                                <div class="input-group">
+                                    <label for="sparring-date">Date</label>
+                                    <input type="date" id="sparring-date" class="cyber-input" required>
+                                </div>
+                                <div class="input-group">
+                                    <label for="sparring-duration">Duration (min)</label>
+                                    <input type="number" id="sparring-duration" class="cyber-input" min="1" max="300" value="30" required>
+                                </div>
+                                <div class="input-group">
+                                    <label for="sparring-rounds">Rounds</label>
+                                    <input type="number" id="sparring-rounds" class="cyber-input" min="1" max="50" value="5" required>
+                                </div>
+                            </div>
+
+                            <div class="input-group sparring-intensity-group">
+                                <label for="sparring-intensity">Intensity: <span id="sparring-intensity-value" class="sparring-intensity-label">5</span>/10</label>
+                                <input type="range" id="sparring-intensity" class="sparring-intensity-slider" min="1" max="10" value="5" step="1">
+                                <div class="sparring-intensity-labels">
+                                    <span>Light</span>
+                                    <span>Moderate</span>
+                                    <span>War</span>
+                                </div>
+                            </div>
+
+                            <div class="sparring-form-row">
+                                <div class="input-group">
+                                    <label for="sparring-partner-weight">Partner Weight (kg)</label>
+                                    <input type="number" id="sparring-partner-weight" class="cyber-input" min="30" max="200" value="75" step="0.5">
+                                </div>
+                                <div class="input-group">
+                                    <label for="sparring-partner-skill">Partner Skill Level</label>
+                                    <select id="sparring-partner-skill" class="cyber-select">
+                                        <option value="Beginner">Beginner</option>
+                                        <option value="Amateur">Amateur</option>
+                                        <option value="Professional" selected>Professional</option>
+                                        <option value="Elite">Elite</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="sparring-form-row">
+                                <div class="input-group">
+                                    <label for="sparring-headshots">Headshots Received</label>
+                                    <input type="number" id="sparring-headshots" class="cyber-input" min="0" max="500" value="0">
+                                </div>
+                                <div class="input-group">
+                                    <label for="sparring-bodyshots">Bodyshots Received</label>
+                                    <input type="number" id="sparring-bodyshots" class="cyber-input" min="0" max="500" value="0">
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="sparring-notes">Notes</label>
+                                <textarea id="sparring-notes" class="cyber-input sparring-notes-input" rows="3" placeholder="How did the session go? Any techniques practiced?"></textarea>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary sparring-submit-btn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 5v14"></path>
+                                <path d="M5 12h14"></path>
+                            </svg>
+                            Log Session
+                        </button>
+                    </form>
+                </div>
+
+                <div class="step">
+                    <div class="step-header">
+                        <span class="step-number">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                            </svg>
+                        </span>
+                        <h2>Intensity Over Time</h2>
+                    </div>
+                    <div class="sparring-chart-container">
+                        <canvas id="sparring-chart"></canvas>
+                        <div id="sparring-chart-empty" class="sparring-chart-empty hidden">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                            </svg>
+                            <p>No sparring data yet. Log your first session above!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-header">
+                        <span class="step-number">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </span>
+                        <h2>Session History</h2>
+                    </div>
+                    <div id="sparring-history" class="sparring-history-list">
+                        <div id="sparring-history-empty" class="sparring-chart-empty">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            <p>No sessions recorded yet.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         
         <!-- Welcome Modal -->
         <div id="welcome-modal" class="modal hidden">
