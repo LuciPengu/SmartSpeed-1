@@ -2987,6 +2987,93 @@ body::before {
 }
 
 /* ===== Lesson Navigation ===== */
+/* ===== Free Articles Section ===== */
+.free-articles-section {
+    margin-bottom: 2rem;
+}
+
+.free-articles-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.free-articles-header h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem;
+    color: var(--text-primary);
+}
+
+.free-articles-header p {
+    width: 100%;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: -0.25rem;
+}
+
+.free-articles-badge {
+    background: linear-gradient(135deg, var(--primary), #059669);
+    color: #000;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    padding: 0.3rem 0.7rem;
+    border-radius: 6px;
+}
+
+.free-articles-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.free-article-btn {
+    padding: 0.6rem 1rem;
+    background: transparent;
+    border: 1px solid var(--border-glow);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.free-article-btn:hover {
+    background: var(--bg-glass-hover);
+    border-color: var(--primary-border);
+    color: var(--text-primary);
+}
+
+.free-article-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #000;
+    font-weight: 600;
+}
+
+.free-article-content {
+    display: none;
+}
+
+.free-article-content.active {
+    display: block;
+    animation: fadeIn 0.4s ease;
+}
+
+.source-citation {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: 0.5rem;
+}
+
 .lesson-nav {
     display: flex;
     flex-wrap: wrap;

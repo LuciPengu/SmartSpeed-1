@@ -1683,6 +1683,30 @@ function initTabNavigation() {
     }
 }
 
+// ===== Free Article Navigation =====
+function initFreeArticleNavigation() {
+    const articleButtons = document.querySelectorAll('.free-article-btn');
+    const articleContents = document.querySelectorAll('.free-article-content');
+
+    articleButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetArticle = btn.dataset.article;
+
+            articleButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            articleContents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            const targetContent = document.getElementById(`article-${targetArticle}`);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
+        });
+    });
+}
+
 // ===== Lesson Navigation =====
 function initLessonNavigation() {
     const lessonButtons = document.querySelectorAll('.lesson-nav-btn');
@@ -2174,6 +2198,7 @@ function initGuideSearch() {
 // Initialize tab and lesson navigation on page load
 document.addEventListener('DOMContentLoaded', () => {
     initTabNavigation();
+    initFreeArticleNavigation();
     initLessonNavigation();
     initSparringTab();
     initGuideSearch();
