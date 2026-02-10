@@ -1816,7 +1816,6 @@ async function logSparringSession() {
         partner_weight: parseFloat(document.getElementById('sparring-partner-weight').value) || 75,
         partner_skill: document.getElementById('sparring-partner-skill').value,
         headshots_received: parseInt(document.getElementById('sparring-headshots').value) || 0,
-        bodyshots_received: parseInt(document.getElementById('sparring-bodyshots').value) || 0,
         notes: document.getElementById('sparring-notes').value.trim()
     };
 
@@ -1840,7 +1839,6 @@ async function logSparringSession() {
         showToast('Session logged successfully!', 'success');
         document.getElementById('sparring-notes').value = '';
         document.getElementById('sparring-headshots').value = '0';
-        document.getElementById('sparring-bodyshots').value = '0';
         await loadSparringSessions();
     } catch (err) {
         showToast(err.message || 'Error logging session', 'error');
@@ -2030,12 +2028,8 @@ function renderSparringHistory(sessions) {
                     <span class="sparring-detail-value">${s.partner_weight || '—'}kg · ${s.partner_skill || '—'}</span>
                 </div>
                 <div class="sparring-detail-item">
-                    <span class="sparring-detail-label">Headshots</span>
+                    <span class="sparring-detail-label">Approx. Headshots</span>
                     <span class="sparring-detail-value" style="color: ${(s.headshots_received || 0) > 10 ? '#ef4444' : 'inherit'}">${s.headshots_received || 0}</span>
-                </div>
-                <div class="sparring-detail-item">
-                    <span class="sparring-detail-label">Bodyshots</span>
-                    <span class="sparring-detail-value">${s.bodyshots_received || 0}</span>
                 </div>
             </div>
             ${s.notes ? `<div class="sparring-session-notes">"${s.notes}"</div>` : ''}
