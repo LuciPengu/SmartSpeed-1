@@ -2914,6 +2914,48 @@ body::before {
     border-color: rgba(52, 211, 153, 0.3);
 }
 
+.onboarding-free-cards {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.onboarding-free-card {
+    flex: 1;
+    max-width: 260px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-glow);
+    border-radius: 16px;
+    padding: 1.5rem 1.25rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.onboarding-free-card:hover {
+    border-color: rgba(16, 185, 129, 0.4);
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateY(-2px);
+}
+
+.onboarding-free-card .onboarding-feature-icon {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.onboarding-free-card h3 {
+    color: var(--primary);
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.onboarding-free-card p {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+}
+
 .onboarding-pricing {
     display: flex;
     gap: 1rem;
@@ -5402,6 +5444,16 @@ img {
 
     .onboarding-feature {
         padding: 1.25rem 0.5rem 0.75rem;
+    }
+
+    .onboarding-free-cards {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .onboarding-free-card {
+        max-width: 100%;
+        width: 100%;
     }
 
     .onboarding-pricing {
