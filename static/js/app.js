@@ -913,15 +913,24 @@ function initializeAuth() {
     showWelcomeModalIfFirstVisit();
 }
 
+let onboardingStep = 1;
+const ONBOARDING_TOTAL_STEPS = 5;
+
 function showWelcomeModalIfFirstVisit() {
     const hasSeenWelcome = localStorage.getItem('hitsmart_welcome_seen');
     if (!hasSeenWelcome) {
         setTimeout(() => {
-            const welcomeModal = document.getElementById('welcome-modal');
-            if (welcomeModal) {
-                welcomeModal.classList.remove('hidden');
-            }
+            showOnboarding();
         }, 500);
+    }
+}
+
+function showOnboarding() {
+    onboardingStep = 1;
+    updateOnboardingStep();
+    const welcomeModal = document.getElementById('welcome-modal');
+    if (welcomeModal) {
+        welcomeModal.classList.remove('hidden');
     }
 }
 
@@ -931,6 +940,45 @@ function closeWelcomeModal() {
         welcomeModal.classList.add('hidden');
     }
     localStorage.setItem('hitsmart_welcome_seen', 'true');
+}
+
+function nextOnboardingStep() {
+    if (onboardingStep < ONBOARDING_TOTAL_STEPS) {
+        onboardingStep++;
+        updateOnboardingStep();
+    }
+}
+
+function prevOnboardingStep() {
+    if (onboardingStep > 1) {
+        onboardingStep--;
+        updateOnboardingStep();
+    }
+}
+
+function goToOnboardingStep(step) {
+    onboardingStep = step;
+    updateOnboardingStep();
+}
+
+function updateOnboardingStep() {
+    document.querySelectorAll('.onboarding-step').forEach(s => s.classList.remove('active'));
+    const currentStep = document.querySelector(`.onboarding-step[data-step="${onboardingStep}"]`);
+    if (currentStep) currentStep.classList.add('active');
+
+    document.querySelectorAll('.onboarding-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i + 1 === onboardingStep);
+    });
+
+    const backBtn = document.querySelector('.onboarding-back-btn');
+    const nextBtn = document.querySelector('.onboarding-next-btn');
+    if (backBtn) backBtn.style.visibility = onboardingStep === 1 ? 'hidden' : 'visible';
+    if (nextBtn) nextBtn.style.display = onboardingStep === ONBOARDING_TOTAL_STEPS ? 'none' : 'inline-flex';
+}
+
+function restartOnboarding() {
+    localStorage.removeItem('hitsmart_welcome_seen');
+    showOnboarding();
 }
 
 function loadUserFromStorage() {

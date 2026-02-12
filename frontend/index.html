@@ -64,6 +64,14 @@
                     </svg>
                     <span>Sparring Tracker</span>
                 </button>
+                <button class="sidebar-nav-item tour-replay-btn" onclick="restartOnboarding()" title="Replay tour">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    <span>Tour</span>
+                </button>
             </div>
         </div>
         <div class="sidebar-bottom">
@@ -5764,16 +5772,29 @@
             </div>
         </div>
         
-        <!-- Welcome Modal -->
+        <!-- Welcome Modal (Onboarding) -->
         <div id="welcome-modal" class="modal hidden">
-            <div class="modal-content welcome-modal-content">
-                <div class="modal-header">
-                    <h2>Welcome to Hitsmart</h2>
-                    <button onclick="closeWelcomeModal()" class="close-btn">&times;</button>
+            <div class="modal-content onboarding-modal-content">
+                <button onclick="closeWelcomeModal()" class="onboarding-close-btn">&times;</button>
+
+                <div class="onboarding-step" data-step="1">
+                    <div class="onboarding-hero">
+                        <div class="onboarding-hero-icon">
+                            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="1.5">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                                <path d="M2 17l10 5 10-5"></path>
+                                <path d="M2 12l10 5 10-5"></path>
+                            </svg>
+                        </div>
+                        <h2 class="onboarding-title">Welcome to Hitsmart</h2>
+                        <p class="onboarding-subtitle">Your AI-powered combat safety companion</p>
+                        <p class="onboarding-desc">Analyze sparring footage, track brain health, and take control of your recovery — all in one place.</p>
+                    </div>
                 </div>
-                <div class="welcome-modal-body">
-                    <div class="welcome-section">
-                        <div class="welcome-icon">
+
+                <div class="onboarding-step" data-step="2">
+                    <div class="onboarding-feature">
+                        <div class="onboarding-feature-icon">
                             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="1.5">
                                 <rect x="4" y="2" width="16" height="20" rx="2"></rect>
                                 <line x1="8" y1="6" x2="16" y2="6"></line>
@@ -5781,29 +5802,93 @@
                                 <line x1="8" y1="14" x2="12" y2="14"></line>
                             </svg>
                         </div>
-                        <div class="welcome-text">
-                            <h3>Strike Calculator</h3>
-                            <p>Upload your sparring or fight footage to analyze punch impacts. Our AI detects strikes, estimates force based on fighter weight and skill level, and calculates cumulative brain injury risk. Complete a SCAT5-based concussion screening and get personalized AI insights.</p>
-                            <p class="welcome-note"><strong>How to use:</strong> Configure both fighters, upload your video, select the impacts to analyze, then complete the assessment.</p>
-                        </div>
+                        <h2 class="onboarding-title">Strike Calculator</h2>
+                        <p class="onboarding-desc">Upload sparring or fight footage and let our AI detect every punch impact. Get force estimates based on fighter weight and skill level, plus a SCAT5-based concussion screening with personalized insights.</p>
+                        <div class="onboarding-badge">Requires Hitsmart Pro subscription</div>
                     </div>
-                    <div class="welcome-divider"></div>
-                    <div class="welcome-section">
-                        <div class="welcome-icon">
+                </div>
+
+                <div class="onboarding-step" data-step="3">
+                    <div class="onboarding-feature">
+                        <div class="onboarding-feature-icon">
                             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="1.5">
                                 <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
                                 <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
                             </svg>
                         </div>
-                        <div class="welcome-text">
-                            <h3>Concussion Guide</h3>
-                            <p>A comprehensive 11-lesson educational guide covering everything you need to know about concussion recovery. Learn about brain physiology, nervous system healing, nutrition, sleep optimization, neck rehabilitation, and visual/vestibular therapy.</p>
-                            <p class="welcome-note"><strong>How to use:</strong> Work through each lesson at your own pace. Each lesson has a "Simple Explanation" for quick understanding and a "Deep Dive" for detailed research.</p>
-                        </div>
+                        <h2 class="onboarding-title">Concussion Guide</h2>
+                        <p class="onboarding-desc">A comprehensive 11-lesson course covering brain physiology, nervous system healing, nutrition, sleep optimization, neck rehab, and visual/vestibular therapy. Work through at your own pace with simple explanations and deep dives.</p>
+                        <div class="onboarding-badge">One-time purchase</div>
                     </div>
                 </div>
-                <div class="welcome-modal-footer">
-                    <button class="btn-primary" onclick="closeWelcomeModal()">Got It, Let's Go!</button>
+
+                <div class="onboarding-step" data-step="4">
+                    <div class="onboarding-feature">
+                        <div class="onboarding-feature-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="1.5">
+                                <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                                <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                                <line x1="6" y1="1" x2="6" y2="4"></line>
+                                <line x1="10" y1="1" x2="10" y2="4"></line>
+                                <line x1="14" y1="1" x2="14" y2="4"></line>
+                            </svg>
+                        </div>
+                        <h2 class="onboarding-title">Sparring Tracker</h2>
+                        <p class="onboarding-desc">Log your sparring sessions and track cumulative head impact over time. Monitor your exposure, spot trends, and make smarter decisions about when to rest and when to train.</p>
+                        <div class="onboarding-badge onboarding-badge-free">Free</div>
+                    </div>
+                </div>
+
+                <div class="onboarding-step" data-step="5">
+                    <h2 class="onboarding-title" style="text-align:center;margin-bottom:1.25rem;">Unlock Everything</h2>
+                    <div class="onboarding-pricing">
+                        <div class="onboarding-price-card">
+                            <div class="onboarding-price-header">
+                                <h3>Hitsmart Pro</h3>
+                                <div class="onboarding-price">$9.99<span>/month</span></div>
+                                <div class="onboarding-trial">7-day free trial</div>
+                            </div>
+                            <ul class="onboarding-features">
+                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>Unlimited video uploads</li>
+                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>AI strike analysis</li>
+                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>Injury tracking</li>
+                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>SCAT5 screening</li>
+                            </ul>
+                            <button class="onboarding-price-btn" onclick="startSubscription()">Start Free Trial</button>
+                        </div>
+                        <div class="onboarding-price-card">
+                            <div class="onboarding-price-header">
+                                <h3>Concussion Guide</h3>
+                                <div class="onboarding-price">$29.99<span> one-time</span></div>
+                            </div>
+                            <ul class="onboarding-features">
+                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>11 in-depth lessons</li>
+                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>Includes 1 month free Pro</li>
+                            </ul>
+                            <button class="onboarding-price-btn onboarding-price-btn-alt" onclick="purchaseCourse()">Get the Guide</button>
+                        </div>
+                    </div>
+                    <div class="onboarding-skip">
+                        <a href="#" onclick="closeWelcomeModal(); return false;">Skip for now</a>
+                    </div>
+                </div>
+
+                <div class="onboarding-nav">
+                    <button class="onboarding-back-btn" onclick="prevOnboardingStep()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                        Back
+                    </button>
+                    <div class="onboarding-dots">
+                        <span class="onboarding-dot active" onclick="goToOnboardingStep(1)"></span>
+                        <span class="onboarding-dot" onclick="goToOnboardingStep(2)"></span>
+                        <span class="onboarding-dot" onclick="goToOnboardingStep(3)"></span>
+                        <span class="onboarding-dot" onclick="goToOnboardingStep(4)"></span>
+                        <span class="onboarding-dot" onclick="goToOnboardingStep(5)"></span>
+                    </div>
+                    <button class="onboarding-next-btn" onclick="nextOnboardingStep()">
+                        Next
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
                 </div>
             </div>
         </div>
