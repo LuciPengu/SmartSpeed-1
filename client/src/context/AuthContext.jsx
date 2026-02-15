@@ -17,7 +17,7 @@ export function AuthProvider({ children }) {
       const res = await fetch('/api/stripe/subscription', { credentials: 'include' });
       if (res.ok) {
         const data = await res.json();
-        setHasActiveSubscription(data.has_active_subscription || false);
+        setHasActiveSubscription(data.has_access || false);
       }
     } catch (err) {
       console.error('Subscription check failed:', err);
