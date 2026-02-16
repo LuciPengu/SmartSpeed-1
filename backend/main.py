@@ -12,10 +12,7 @@ import json
 import secrets
 from datetime import datetime, timedelta
 
-from backend.video_analyzer import analyze_video
-from backend.risk_calculator import calculate_brain_injury_risk
 from backend.concussion_assessment import get_assessment_questions, evaluate_assessment
-from backend.ai_summary import generate_ai_summary_stream, generate_ai_summary
 from backend.database import init_db, get_db, User, InjurySession, ImpactRecord
 from backend import auth
 from backend import stripe_client
@@ -23,6 +20,10 @@ from backend import stripe_client
 init_db()
 
 app = FastAPI(title="Hitsmart Strike Calculator", version="1.0.0")
+
+@app.get("/api/health")
+async def health_check():
+    return {"status": "ok"}
 
 app.add_middleware(
     CORSMiddleware,
@@ -181,6 +182,7 @@ async def upload_video(
         buffer.write(file_content)
     
     try:
+        from backend.video_analyzer import analyze_video
         result = analyze_video(filepath)
         
         result['fighter_settings'] = settings
@@ -239,6 +241,7 @@ async def calculate_risk(request: RiskCalculationRequest):
             'fighter2': {'skill': request.fighter_settings.fighter2.skill, 'weight': request.fighter_settings.fighter2.weight}
         }
     
+    from backend.risk_calculator import calculate_brain_injury_risk
     risk_result = calculate_brain_injury_risk(selected_impacts, fighter_settings)
     
     return risk_result
@@ -281,6 +284,7 @@ class AISummaryRequest(BaseModel):
 @app.post("/api/ai-summary/stream")
 async def stream_ai_summary(request: AISummaryRequest):
     def event_generator():
+        from backend.ai_summary import generate_ai_summary_stream
         for chunk in generate_ai_summary_stream(request.risk_data, request.fighter_settings):
             yield f"data: {json.dumps({'text': chunk})}\n\n"
         yield "data: [DONE]\n\n"
@@ -298,6 +302,7 @@ async def stream_ai_summary(request: AISummaryRequest):
 
 @app.post("/api/ai-summary")
 async def get_ai_summary(request: AISummaryRequest):
+    from backend.ai_summary import generate_ai_summary
     summary = generate_ai_summary(request.risk_data, request.fighter_settings)
     return {"summary": summary}
 

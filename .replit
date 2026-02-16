@@ -1,5 +1,5 @@
 entrypoint = "main.py"
-modules = ["python-3.11", "postgresql-16"]
+modules = ["python-3.11", "postgresql-16", "nodejs-20"]
 
 [nix]
 channel = "stable-25_05"
@@ -12,9 +12,9 @@ language = "python3"
 requiredFiles = [".replit", "replit.nix"]
 
 [deployment]
-run = ["python", "-m", "uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port=5000"]
-deploymentTarget = "vm"
-build = ["pip", "install", "-r", "requirements.txt"]
+run = ["bash", "-c", "python -m uvicorn backend.main:app --host 0.0.0.0 --port 5000 --timeout-keep-alive 120"]
+deploymentTarget = "autoscale"
+build = ["bash", "-c", "cd client && npm install && npm run build"]
 
 [agent]
 expertMode = true
@@ -30,23 +30,27 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Hitsmart Strike Calculator"
+args = "Hitsmart App"
 
 [[workflows.workflow]]
-name = "Hitsmart Strike Calculator"
+name = "Hitsmart App"
 author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python -m uvicorn backend.main:app --host 0.0.0.0 --port 5000 --reload"
-waitForPort = 5000
 
 [workflows.workflow.metadata]
 outputType = "webview"
 
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "BACKEND_PORT=5001 python -m uvicorn backend.main:app --host 0.0.0.0 --port 5001 --reload & sleep 2 && cd client && npm run dev"
+waitForPort = 5000
+
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[[ports]]
+localPort = 5001
+externalPort = 3000
 
 [userenv]
 
