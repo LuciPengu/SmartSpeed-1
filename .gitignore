@@ -146,13 +146,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Node.js
-node_modules/
-client/dist/
-client/node_modules/
-.npm
-*.tsbuildinfo
-
 # pytype static type analyzer
 .pytype/
 

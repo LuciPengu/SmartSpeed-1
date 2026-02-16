@@ -105,10 +105,6 @@ class AssessmentRequest(BaseModel):
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root():
-    react_index = os.path.join("client", "dist", "index.html")
-    if os.path.exists(react_index):
-        with open(react_index, "r") as f:
-            return f.read()
     with open("frontend/index.html", "r") as f:
         return f.read()
 
@@ -1170,28 +1166,6 @@ async def delete_sparring_session(session_id_param: int, session_id: str = Cooki
             pass
 
 
-react_dist = os.path.join("client", "dist")
-if os.path.exists(react_dist):
-    react_assets = os.path.join(react_dist, "assets")
-    if os.path.exists(react_assets):
-        app.mount("/assets", StaticFiles(directory=react_assets), name="react-assets")
-
-@app.get("/{full_path:path}")
-async def catch_all(full_path: str):
-    react_dist_dir = os.path.join("client", "dist")
-    static_file = os.path.join(react_dist_dir, full_path)
-    if full_path and os.path.exists(static_file) and os.path.isfile(static_file):
-        import mimetypes
-        content_type = mimetypes.guess_type(static_file)[0] or "application/octet-stream"
-        with open(static_file, "rb") as f:
-            return Response(content=f.read(), media_type=content_type)
-    react_index = os.path.join(react_dist_dir, "index.html")
-    if os.path.exists(react_index):
-        with open(react_index, "r") as f:
-            return HTMLResponse(content=f.read())
-    return HTMLResponse(content="<h1>Not Found</h1>", status_code=404)
-
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.environ.get("BACKEND_PORT", "5001"))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    uvicorn.run(app, host="0.0.0.0", port=5000)
